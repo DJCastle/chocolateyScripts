@@ -1,0 +1,93 @@
+name: Build manifest.json
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Create build script
+        shell: bash
+        run: |
+          mkdir -p scripts
+          cat > scripts/build-manifest.js <<'EOF'
+          const fs = require('fs/promises');
+
+          const repo = process.env.GITHUB_REPOSITORY || '';
+          const [owner, name] = repo.split('/');
+          const branch = process.env.BRANCH || 'main';
+
+          async function gh(url, opts = {}) {
+            const res = await fetch(url, {
+              ...opts,
+              headers: {
+                'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github+json',
+                ...(opts.headers || {})
+              }
+            });
+            if (!res.ok) throw new Error(`${res.status} ${res.statusText}: ${await res.text()}`);
+            return res.json();
+          }
+
+          async function listRoot() {
+            const contents = await gh(`https://api.github.com/repos/${owner}/${name}/contents?ref=${branch}`);
+            const files = Array.isArray(contents) ? contents.filter(x => x.type === 'file' && !x.name.startsWith('.')) : [];
+            const items = [];
+            for (const f of files) {
+              const commits = await gh(`https://api.github.com/repos/${owner}/${name}/commits?path=${encodeURIComponent(f.path)}&sha=${branch}&per_page=1`);
+              const last = Array.isArray(commits) && commits[0];
+              items.push({
+                name: f.name,
+                path: f.path,
+                html_url: f.html_url,
+                raw_url: f.download_url,
+                updated: last ? last.commit.committer.date : null,
+                sha: last ? last.sha?.slice(0,7) : null
+              });
+            }
+            items.sort((a,b) => new Date(b.updated || 0) - new Date(a.updated || 0));
+            return items;
+          }
+
+          (async () => {
+            const items = await listRoot();
+            const manifest = {
+              repo: { owner, name, branch },
+              generated_at: new Date().toISOString(),
+              items
+            };
+            await fs.writeFile('manifest.json', JSON.stringify(manifest, null, 2), 'utf8');
+            console.log(`Wrote manifest.json with ${items.length} items`);
+          })();
+          EOF
+
+      - name: Build manifest
+        run: node scripts/build-manifest.js
+        env:
+          BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit manifest.json if changed
+        run: |
+          if [[ -n "$(git status --porcelain manifest.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add manifest.json
+            git commit -m "Update manifest.json [skip ci]"
+            git push
+          else
+            echo "No changes to manifest.json"
+          fi
