@@ -4,8 +4,56 @@
     "name": "chocolateyScripts",
     "branch": "main"
   },
-  "generated_at": "2025-09-27T21:54:57.234Z",
+  "generated_at": "2025-09-27T22:00:53.435Z",
   "items": [
+    {
+      "name": "README.md",
+      "path": "README.md",
+      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/README.md",
+      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/README.md",
+      "updated": "2025-09-27T22:00:39Z",
+      "sha": "6c9dc10"
+    },
+    {
+      "name": "auto-update-chocolatey.ps1",
+      "path": "auto-update-chocolatey.ps1",
+      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/auto-update-chocolatey.ps1",
+      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/auto-update-chocolatey.ps1",
+      "updated": "2025-09-27T22:00:39Z",
+      "sha": "c0ef5b3"
+    },
+    {
+      "name": "cleanup-chocolatey.ps1",
+      "path": "cleanup-chocolatey.ps1",
+      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/cleanup-chocolatey.ps1",
+      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/cleanup-chocolatey.ps1",
+      "updated": "2025-09-27T22:00:39Z",
+      "sha": "c0ef5b3"
+    },
+    {
+      "name": "install-chocolatey.ps1",
+      "path": "install-chocolatey.ps1",
+      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/install-chocolatey.ps1",
+      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/install-chocolatey.ps1",
+      "updated": "2025-09-27T22:00:39Z",
+      "sha": "c0ef5b3"
+    },
+    {
+      "name": "install-essential-apps.ps1",
+      "path": "install-essential-apps.ps1",
+      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/install-essential-apps.ps1",
+      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/install-essential-apps.ps1",
+      "updated": "2025-09-27T22:00:39Z",
+      "sha": "c0ef5b3"
+    },
+    {
+      "name": "manifest.json",
+      "path": "manifest.json",
+      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/manifest.json",
+      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/manifest.json",
+      "updated": "2025-09-27T21:54:57Z",
+      "sha": "1181e54"
+    },
     {
       "name": "library.config.json",
       "path": "library.config.json",
@@ -15,58 +63,10 @@
       "sha": "ae337c1"
     },
     {
-      "name": "manifest.json",
-      "path": "manifest.json",
-      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/manifest.json",
-      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/manifest.json",
-      "updated": "2025-09-26T03:15:47Z",
-      "sha": "3cb7882"
-    },
-    {
       "name": "LICENSE",
       "path": "LICENSE",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/LICENSE",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/LICENSE",
-      "updated": "2025-07-08T22:52:18Z",
-      "sha": "1556751"
-    },
-    {
-      "name": "README.md",
-      "path": "README.md",
-      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/README.md",
-      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/README.md",
-      "updated": "2025-07-08T22:52:18Z",
-      "sha": "1556751"
-    },
-    {
-      "name": "auto-update-chocolatey.ps1",
-      "path": "auto-update-chocolatey.ps1",
-      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/auto-update-chocolatey.ps1",
-      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/auto-update-chocolatey.ps1",
-      "updated": "2025-07-08T22:52:18Z",
-      "sha": "1556751"
-    },
-    {
-      "name": "cleanup-chocolatey.ps1",
-      "path": "cleanup-chocolatey.ps1",
-      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/cleanup-chocolatey.ps1",
-      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/cleanup-chocolatey.ps1",
-      "updated": "2025-07-08T22:52:18Z",
-      "sha": "1556751"
-    },
-    {
-      "name": "install-chocolatey.ps1",
-      "path": "install-chocolatey.ps1",
-      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/install-chocolatey.ps1",
-      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/install-chocolatey.ps1",
-      "updated": "2025-07-08T22:52:18Z",
-      "sha": "1556751"
-    },
-    {
-      "name": "install-essential-apps.ps1",
-      "path": "install-essential-apps.ps1",
-      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/install-essential-apps.ps1",
-      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/install-essential-apps.ps1",
       "updated": "2025-07-08T22:52:18Z",
       "sha": "1556751"
     }
