@@ -1,0 +1,37 @@
+{
+  "include": ["*.ps1"],
+  "exclude": [
+    "README.md",
+    "readme.md",
+    "LICENSE",
+    "LICENSE.md",
+    "*.md",
+    "*.txt",
+    ".*"
+  ],
+  "order": [
+    "install.ps1",
+    "setup.ps1",
+    "bootstrap.ps1",
+    "update.ps1",
+    "choco-install.ps1",
+    "choco-setup.ps1"
+  ],
+  "hidden": [],
+  "titles": {
+    "install.ps1": "Install (Windows / Chocolatey)",
+    "setup.ps1": "Setup (Windows / Chocolatey)",
+    "bootstrap.ps1": "Bootstrap (Windows)",
+    "update.ps1": "Update (Windows)",
+    "choco-install.ps1": "Chocolatey: Install",
+    "choco-setup.ps1": "Chocolatey: Setup"
+  },
+  "descriptions": {
+    "install.ps1": "Primary Chocolatey installer for Windows packages and tools.",
+    "setup.ps1": "Configures a Windows environment using Chocolatey packages.",
+    "bootstrap.ps1": "Prepares a clean Windows machine for installs (Admin, TLS, policy).",
+    "update.ps1": "Updates installed packages and performs maintenance.",
+    "choco-install.ps1": "Installs Chocolatey packages listed in the script.",
+    "choco-setup.ps1": "Applies Chocolatey-specific configuration and sources."
+  }
+}
