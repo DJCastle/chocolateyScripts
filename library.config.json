@@ -1,15 +1,15 @@
 {
-  "include": ["*.ps1"],
+  "include": ["README.md", "*.ps1"],
   "exclude": [
-    "README.md",
-    "readme.md",
     "LICENSE",
     "LICENSE.md",
-    "*.md",
     "*.txt",
-    ".*"
+    ".*",
+    "manifest.json",
+    "library.config.json"
   ],
   "order": [
+    "README.md",
     "install-chocolatey.ps1",
     "install-essential-apps.ps1",
     "auto-update-chocolatey.ps1",
@@ -17,15 +17,17 @@
   ],
   "hidden": [],
   "titles": {
-    "install-chocolatey.ps1": "Install Chocolatey",
-    "install-essential-apps.ps1": "Install Essential Apps",
-    "auto-update-chocolatey.ps1": "Auto-Update Chocolatey",
-    "cleanup-chocolatey.ps1": "Cleanup Chocolatey"
+    "README.md": "📚 Documentation & Getting Started",
+    "install-chocolatey.ps1": "🍫 Install Chocolatey",
+    "install-essential-apps.ps1": "📦 Install Essential Apps",
+    "auto-update-chocolatey.ps1": "🔄 Auto-Update Chocolatey",
+    "cleanup-chocolatey.ps1": "🧹 Cleanup Chocolatey"
   },
   "descriptions": {
-    "install-chocolatey.ps1": "Installs Chocolatey package manager with proper configuration and health checks.",
-    "install-essential-apps.ps1": "Installs essential Windows applications including browsers, development tools, and utilities.",
-    "auto-update-chocolatey.ps1": "Automatically updates Chocolatey and packages when connected to specific WiFi and on power.",
-    "cleanup-chocolatey.ps1": "Performs comprehensive cleanup of old package versions, cache, and orphaned dependencies."
+    "README.md": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively.",
+    "install-chocolatey.ps1": "Installs Chocolatey package manager with proper configuration and health checks. Essential first step for Windows package management.",
+    "install-essential-apps.ps1": "Batch installer for essential Windows applications using Chocolatey. Installs productivity, development, utility apps automatically.",
+    "auto-update-chocolatey.ps1": "Automatically updates Chocolatey and packages when connected to specific WiFi and on power. Includes smart scheduling and safety checks.",
+    "cleanup-chocolatey.ps1": "Comprehensive Chocolatey maintenance script. Removes old package versions, clears caches, and optimizes disk usage."
   }
 }
