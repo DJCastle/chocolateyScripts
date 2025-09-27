@@ -60,41 +60,16 @@ jobs:
 
             const items = [];
             for (const f of files) {
-              // Check if file should be included
-              let shouldInclude = false;
-              for (const pattern of config.include) {
-                if (pattern === f.name) {
-                  shouldInclude = true;
-                  break;
+              // Simple filtering - include README.md and .ps1 files, exclude others
+              if (f.name === 'README.md' || f.name.endsWith('.ps1')) {
+                // Skip if in exclude list
+                const excludePatterns = ['LICENSE', 'manifest.json', 'library.config.json'];
+                if (excludePatterns.some(pattern => f.name.includes(pattern))) {
+                  continue;
                 }
-                if (pattern.includes('*')) {
-                  const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
-                  if (regex.test(f.name)) {
-                    shouldInclude = true;
-                    break;
-                  }
-                }
+              } else {
+                continue; // Skip files that aren't README.md or .ps1
               }
-
-              if (!shouldInclude) continue;
-
-              // Check if file should be excluded
-              let shouldExclude = false;
-              for (const pattern of config.exclude) {
-                if (pattern === f.name) {
-                  shouldExclude = true;
-                  break;
-                }
-                if (pattern.includes('*')) {
-                  const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
-                  if (regex.test(f.name)) {
-                    shouldExclude = true;
-                    break;
-                  }
-                }
-              }
-
-              if (shouldExclude) continue;
 
               const commits = await gh(`https://api.github.com/repos/${owner}/${name}/commits?path=${encodeURIComponent(f.path)}&sha=${branch}&per_page=1`);
               const last = Array.isArray(commits) && commits[0];
