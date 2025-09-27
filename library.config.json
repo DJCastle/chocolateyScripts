@@ -10,28 +10,22 @@
     ".*"
   ],
   "order": [
-    "install.ps1",
-    "setup.ps1",
-    "bootstrap.ps1",
-    "update.ps1",
-    "choco-install.ps1",
-    "choco-setup.ps1"
+    "install-chocolatey.ps1",
+    "install-essential-apps.ps1",
+    "auto-update-chocolatey.ps1",
+    "cleanup-chocolatey.ps1"
   ],
   "hidden": [],
   "titles": {
-    "install.ps1": "Install (Windows / Chocolatey)",
-    "setup.ps1": "Setup (Windows / Chocolatey)",
-    "bootstrap.ps1": "Bootstrap (Windows)",
-    "update.ps1": "Update (Windows)",
-    "choco-install.ps1": "Chocolatey: Install",
-    "choco-setup.ps1": "Chocolatey: Setup"
+    "install-chocolatey.ps1": "Install Chocolatey",
+    "install-essential-apps.ps1": "Install Essential Apps",
+    "auto-update-chocolatey.ps1": "Auto-Update Chocolatey",
+    "cleanup-chocolatey.ps1": "Cleanup Chocolatey"
   },
   "descriptions": {
-    "install.ps1": "Primary Chocolatey installer for Windows packages and tools.",
-    "setup.ps1": "Configures a Windows environment using Chocolatey packages.",
-    "bootstrap.ps1": "Prepares a clean Windows machine for installs (Admin, TLS, policy).",
-    "update.ps1": "Updates installed packages and performs maintenance.",
-    "choco-install.ps1": "Installs Chocolatey packages listed in the script.",
-    "choco-setup.ps1": "Applies Chocolatey-specific configuration and sources."
+    "install-chocolatey.ps1": "Installs Chocolatey package manager with proper configuration and health checks.",
+    "install-essential-apps.ps1": "Installs essential Windows applications including browsers, development tools, and utilities.",
+    "auto-update-chocolatey.ps1": "Automatically updates Chocolatey and packages when connected to specific WiFi and on power.",
+    "cleanup-chocolatey.ps1": "Performs comprehensive cleanup of old package versions, cache, and orphaned dependencies."
   }
 }
