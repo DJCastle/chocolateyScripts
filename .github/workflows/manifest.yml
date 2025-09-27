@@ -53,29 +53,21 @@ jobs:
               if (configFile && configFile.content) {
                 const configContent = atob(configFile.content.replace(/\s/g, ''));
                 config = JSON.parse(configContent);
-                console.log('Loaded library config:', config);
               }
             } catch (e) {
-              console.log('No library.config.json found, using defaults:', e.message);
+              console.log('No library.config.json found, using defaults');
             }
 
             const items = [];
-            console.log('Processing files:', files.map(f => f.name));
-            console.log('Config:', JSON.stringify(config, null, 2));
-
             for (const f of files) {
               // Simple filtering - just include .ps1 files and exclude common files
               if (!f.name.endsWith('.ps1')) {
-                console.log(`Skipping ${f.name} - not a .ps1 file`);
                 continue;
               }
-
-              console.log(`Processing ${f.name}`);
 
               // Skip if in exclude list
               const excludePatterns = ['README.md', 'LICENSE', 'manifest.json', 'library.config.json'];
               if (excludePatterns.some(pattern => f.name.includes(pattern))) {
-                console.log(`Skipping ${f.name} - in exclude list`);
                 continue;
               }
 
