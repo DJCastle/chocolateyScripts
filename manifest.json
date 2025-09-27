@@ -4,7 +4,7 @@
     "name": "chocolateyScripts",
     "branch": "main"
   },
-  "generated_at": "2025-09-27T22:08:58.585Z",
+  "generated_at": "2025-09-27T22:12:44.810Z",
   "items": [
     {
       "name": "install-chocolatey.ps1",
