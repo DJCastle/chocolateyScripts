@@ -60,26 +60,41 @@ jobs:
 
             const items = [];
             for (const f of files) {
-              // Apply include/exclude filters from config
-              const shouldInclude = config.include.length === 0 || config.include.some(pattern => {
-                if (pattern === f.name) return true; // exact match
+              // Check if file should be included
+              let shouldInclude = false;
+              for (const pattern of config.include) {
+                if (pattern === f.name) {
+                  shouldInclude = true;
+                  break;
+                }
                 if (pattern.includes('*')) {
                   const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
-                  return regex.test(f.name);
+                  if (regex.test(f.name)) {
+                    shouldInclude = true;
+                    break;
+                  }
                 }
-                return false;
-              });
+              }
 
-              const shouldExclude = config.exclude.some(pattern => {
-                if (pattern === f.name) return true; // exact match
+              if (!shouldInclude) continue;
+
+              // Check if file should be excluded
+              let shouldExclude = false;
+              for (const pattern of config.exclude) {
+                if (pattern === f.name) {
+                  shouldExclude = true;
+                  break;
+                }
                 if (pattern.includes('*')) {
                   const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
-                  return regex.test(f.name);
+                  if (regex.test(f.name)) {
+                    shouldExclude = true;
+                    break;
+                  }
                 }
-                return false;
-              });
+              }
 
-              if (!shouldInclude || shouldExclude) continue;
+              if (shouldExclude) continue;
 
               const commits = await gh(`https://api.github.com/repos/${owner}/${name}/commits?path=${encodeURIComponent(f.path)}&sha=${branch}&per_page=1`);
               const last = Array.isArray(commits) && commits[0];
