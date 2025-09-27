@@ -1,47 +1,17 @@
 #Requires -Version 5.1
 
-###############################################################################
-# 🛠️ Chocolatey Installer Script for Windows
-# ------------------------------------------
-# This script installs Chocolatey on Windows and ensures:
-#   - Chocolatey is properly installed and configured
-#   - PowerShell execution policy is set correctly
-#   - It runs `choco doctor` for a health check
-#   - Logs all activity to $env:USERPROFILE\Logs\ChocolateyInstall.log
-#
-# ✅ Safe to run multiple times — it skips install if Chocolatey is already present
-#
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Open PowerShell as Administrator
-# 2. Navigate to the script directory:
-#      cd C:\path\to\chocolateyScripts
-# 3. Set execution policy (if needed):
-#      Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-# 4. Run the script:
-#      .\install-chocolatey.ps1
-#
-# 📁 Log output is saved to:
-#      $env:USERPROFILE\Logs\ChocolateyInstall.log
-#
-# ℹ️ Compatible with:
-#   - Windows 10, Windows 11
-#   - PowerShell 5.1 or higher
-#   - Administrator privileges required
-#
-# 🚨 Notes and Warnings:
-# - You must run PowerShell as Administrator
-# - After installation, restart PowerShell or run:
-#     refreshenv
-#
-# 🧪 Troubleshooting:
-# - Check the log file if you don't see Chocolatey working:
-#     $env:USERPROFILE\Logs\ChocolateyInstall.log
-#
-# 🖥️ Windows Features:
-# - Automatically sets PowerShell execution policy
-# - Configures Chocolatey environment variables
-# - Handles Windows-specific installation requirements
-###############################################################################
+<#
+.SYNOPSIS
+    Installs Chocolatey package manager for Windows.
+
+.DESCRIPTION
+    This script installs Chocolatey with proper configuration and runs health checks.
+    Safe to run multiple times - skips installation if already present.
+
+.NOTES
+    Requires Administrator privileges.
+    Logs to: $env:USERPROFILE\Logs\ChocolateyInstall.log
+#>
 
 # Set up logging
 $LogPath = "$env:USERPROFILE\Logs"

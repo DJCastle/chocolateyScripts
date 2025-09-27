@@ -1,42 +1,17 @@
 #Requires -Version 5.1
 
-###############################################################################
-# 🛠️ Essential Apps Installer Script for Windows
-# ----------------------------------------------
-# This script installs essential applications using Chocolatey:
-#   - Google Chrome (Web browser)
-#   - Mozilla Firefox (Web browser)
-#   - Microsoft Edge (Web browser)
-#   - Visual Studio Code (Code editor)
-#   - Notepad++ (Text editor)
-#   - 7-Zip (File compression)
-#   - VLC Media Player (Media player)
-#   - Discord (Communication)
-#   - Steam (Gaming platform)
-#   - Windows Terminal (Terminal emulator)
-#
-# ✅ Safe to run multiple times — it skips apps that are already installed
-# ✅ Logs all activity for troubleshooting
-# ✅ Provides progress feedback
-#
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Make sure Chocolatey is installed first:
-#      .\install-chocolatey.ps1
-# 2. Run this script:
-#      .\install-essential-apps.ps1
-#
-# 📁 Log output is saved to:
-#      $env:USERPROFILE\Logs\EssentialAppsInstall.log
-#
-# ℹ️ Requirements:
-#   - Chocolatey must be installed
-#   - Windows with Administrator privileges
-#
-# 🚨 Notes:
-# - Some apps may require manual setup after installation
-# - You may be prompted for confirmation during installation
-# - Large downloads may take time depending on your internet speed
-###############################################################################
+<#
+.SYNOPSIS
+    Installs essential Windows applications using Chocolatey.
+
+.DESCRIPTION
+    Installs browsers, development tools, utilities, and communication apps.
+    Safe to run multiple times - skips already installed applications.
+
+.NOTES
+    Requires Chocolatey to be installed first.
+    Logs to: $env:USERPROFILE\Logs\EssentialAppsInstall.log
+#>
 
 # Set up logging
 $LogPath = "$env:USERPROFILE\Logs"

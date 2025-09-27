@@ -1,43 +1,17 @@
 #Requires -Version 5.1
 
-###############################################################################
-# 🔄 Auto Update Chocolatey Script for Windows
-# -------------------------------------------
-# This script automatically updates Chocolatey and installed applications
-# with smart conditions and notifications:
-#
-# ✅ CONDITIONS:
-#   - Must be connected to "CastleEstates" WiFi network
-#   - Must be plugged into power (not on battery)
-#   - Runs in background with email notifications
-#
-# ✅ FEATURES:
-#   - Updates Chocolatey itself
-#   - Updates all installed packages
-#   - Sends email notifications with results
-#   - Logs all activity for troubleshooting
-#   - Safe to run multiple times
-#
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Make sure Chocolatey is installed first:
-#      .\install-chocolatey.ps1
-# 2. Run manually:
-#      .\auto-update-chocolatey.ps1
-# 3. Set up automatic execution (see README for Task Scheduler setup)
-#
-# 📁 Log output is saved to:
-#      $env:USERPROFILE\Logs\AutoUpdateChocolatey.log
-#
-# 📧 NOTIFICATIONS:
-# - Uses Windows built-in email functionality
-# - Sends detailed reports with logs
-# - Requires email configuration in Windows
-#
-# ℹ️ Requirements:
-#   - Chocolatey must be installed
-#   - Windows with Administrator privileges
-#   - Email configured in Windows Mail app
-###############################################################################
+<#
+.SYNOPSIS
+    Automatically updates Chocolatey and installed packages with conditions.
+
+.DESCRIPTION
+    Updates Chocolatey and packages when connected to specific WiFi and on power.
+    Sends email notifications with results.
+
+.NOTES
+    Requires specific WiFi network and power connection.
+    Logs to: $env:USERPROFILE\Logs\AutoUpdateChocolatey.log
+#>
 
 # Set up logging
 $LogPath = "$env:USERPROFILE\Logs"

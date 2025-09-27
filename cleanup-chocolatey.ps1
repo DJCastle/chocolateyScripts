@@ -1,35 +1,17 @@
 #Requires -Version 5.1
 
-###############################################################################
-# 🧹 Chocolatey Cleanup Script for Windows
-# ----------------------------------------
-# This script performs comprehensive Chocolatey cleanup and maintenance:
-#
-# ✅ CLEANUP FEATURES:
-#   - Removes old versions of packages
-#   - Cleans up download cache
-#   - Removes orphaned dependencies
-#   - Runs choco doctor for health check
-#   - Logs all cleanup activities
-#
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Make sure Chocolatey is installed first:
-#      .\install-chocolatey.ps1
-# 2. Run cleanup:
-#      .\cleanup-chocolatey.ps1
-#
-# 📁 Log output is saved to:
-#      $env:USERPROFILE\Logs\ChocolateyCleanup.log
-#
-# ℹ️ Requirements:
-#   - Chocolatey must be installed
-#   - Windows with Administrator privileges
-#
-# 🚨 Notes:
-# - This script will remove old versions of packages
-# - It's safe to run multiple times
-# - Large cleanup operations may take time
-###############################################################################
+<#
+.SYNOPSIS
+    Performs comprehensive Chocolatey cleanup and maintenance.
+
+.DESCRIPTION
+    Removes old package versions, cleans cache, removes orphaned dependencies,
+    and runs health checks.
+
+.NOTES
+    Safe to run multiple times.
+    Logs to: $env:USERPROFILE\Logs\ChocolateyCleanup.log
+#>
 
 # Set up logging
 $LogPath = "$env:USERPROFILE\Logs"
