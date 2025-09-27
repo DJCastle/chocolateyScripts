@@ -4,15 +4,23 @@
     "name": "chocolateyScripts",
     "branch": "main"
   },
-  "generated_at": "2025-09-26T03:15:47.909Z",
+  "generated_at": "2025-09-27T21:54:57.234Z",
   "items": [
+    {
+      "name": "library.config.json",
+      "path": "library.config.json",
+      "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/library.config.json",
+      "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/library.config.json",
+      "updated": "2025-09-27T21:54:41Z",
+      "sha": "ae337c1"
+    },
     {
       "name": "manifest.json",
       "path": "manifest.json",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/manifest.json",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/manifest.json",
-      "updated": "2025-09-26T03:14:41Z",
-      "sha": "a6160cf"
+      "updated": "2025-09-26T03:15:47Z",
+      "sha": "3cb7882"
     },
     {
       "name": "LICENSE",
