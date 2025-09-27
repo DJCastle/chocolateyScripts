@@ -60,16 +60,26 @@ jobs:
 
             const items = [];
             for (const f of files) {
-              // Simple filtering - just include .ps1 files and exclude common files
-              if (!f.name.endsWith('.ps1')) {
-                continue;
-              }
+              // Apply include/exclude filters from config
+              const shouldInclude = config.include.length === 0 || config.include.some(pattern => {
+                if (pattern === f.name) return true; // exact match
+                if (pattern.includes('*')) {
+                  const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
+                  return regex.test(f.name);
+                }
+                return false;
+              });
 
-              // Skip if in exclude list
-              const excludePatterns = ['README.md', 'LICENSE', 'manifest.json', 'library.config.json'];
-              if (excludePatterns.some(pattern => f.name.includes(pattern))) {
-                continue;
-              }
+              const shouldExclude = config.exclude.some(pattern => {
+                if (pattern === f.name) return true; // exact match
+                if (pattern.includes('*')) {
+                  const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
+                  return regex.test(f.name);
+                }
+                return false;
+              });
+
+              if (!shouldInclude || shouldExclude) continue;
 
               const commits = await gh(`https://api.github.com/repos/${owner}/${name}/commits?path=${encodeURIComponent(f.path)}&sha=${branch}&per_page=1`);
               const last = Array.isArray(commits) && commits[0];
