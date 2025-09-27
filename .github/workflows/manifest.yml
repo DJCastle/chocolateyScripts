@@ -125,6 +125,15 @@ jobs:
             git add manifest.json
             git commit -m "Update manifest.json [skip ci]"
             git push
+            echo "MANIFEST_UPDATED=true" >> $GITHUB_ENV
           else
             echo "No changes to manifest.json"
+            echo "MANIFEST_UPDATED=false" >> $GITHUB_ENV
           fi
+
+      - name: Purge CDN cache
+        if: env.MANIFEST_UPDATED == 'true'
+        run: |
+          echo "Purging CDN cache for updated manifest..."
+          curl -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/manifest.json" || echo "CDN purge failed (non-critical)"
+          curl -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main" || echo "CDN repo purge failed (non-critical)"
