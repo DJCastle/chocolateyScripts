@@ -4,7 +4,7 @@
     "name": "chocolateyScripts",
     "branch": "main"
   },
-  "generated_at": "2025-09-27T22:38:28.832Z",
+  "generated_at": "2025-09-28T00:00:45.807Z",
   "items": [
     {
       "name": "README.md",
@@ -23,7 +23,7 @@
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/install-chocolatey.ps1",
       "updated": "2025-09-27T22:00:39Z",
       "sha": "c0ef5b3",
-      "title": "ð« Install Chocolatey",
+      "title": "ð« Install Chocolatey Package Manager",
       "description": "Installs Chocolatey package manager with proper configuration and health checks. Essential first step for Windows package management."
     },
     {
@@ -33,7 +33,7 @@
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/install-essential-apps.ps1",
       "updated": "2025-09-27T22:00:39Z",
       "sha": "c0ef5b3",
-      "title": "ð¦ Install Essential Apps",
+      "title": "ð» Install Essential Windows Apps",
       "description": "Batch installer for essential Windows applications using Chocolatey. Installs productivity, development, utility apps automatically."
     },
     {
@@ -43,7 +43,7 @@
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/auto-update-chocolatey.ps1",
       "updated": "2025-09-27T22:00:39Z",
       "sha": "c0ef5b3",
-      "title": "ð Auto-Update Chocolatey",
+      "title": "â¡ Auto-Update Chocolatey & Packages",
       "description": "Automatically updates Chocolatey and packages when connected to specific WiFi and on power. Includes smart scheduling and safety checks."
     },
     {
@@ -53,7 +53,7 @@
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/cleanup-chocolatey.ps1",
       "updated": "2025-09-27T22:00:39Z",
       "sha": "c0ef5b3",
-      "title": "ð§¹ Cleanup Chocolatey",
+      "title": "ð§¹ Cleanup & Maintenance",
       "description": "Comprehensive Chocolatey maintenance script. Removes old package versions, clears caches, and optimizes disk usage."
     }
   ]
