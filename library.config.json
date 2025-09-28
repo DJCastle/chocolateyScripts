@@ -18,10 +18,10 @@
   "hidden": [],
   "titles": {
     "README.md": "📚 Documentation & Getting Started",
-    "install-chocolatey.ps1": "🍫 Install Chocolatey",
-    "install-essential-apps.ps1": "📦 Install Essential Apps",
-    "auto-update-chocolatey.ps1": "🔄 Auto-Update Chocolatey",
-    "cleanup-chocolatey.ps1": "🧹 Cleanup Chocolatey"
+    "install-chocolatey.ps1": "🍫 Install Chocolatey Package Manager",
+    "install-essential-apps.ps1": "💻 Install Essential Windows Apps",
+    "auto-update-chocolatey.ps1": "⚡ Auto-Update Chocolatey & Packages",
+    "cleanup-chocolatey.ps1": "🧹 Cleanup & Maintenance"
   },
   "descriptions": {
     "README.md": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively.",
