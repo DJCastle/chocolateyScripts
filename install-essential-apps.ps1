@@ -162,7 +162,9 @@ function Main {
         @{Name="VLC Media Player"; Package="vlc"; Display="VLC Media Player"},
         @{Name="Discord"; Package="discord"; Display="Discord"},
         @{Name="Steam"; Package="steam"; Display="Steam"},
-        @{Name="Windows Terminal"; Package="microsoft-windows-terminal"; Display="Windows Terminal"}
+        @{Name="Windows Terminal"; Package="microsoft-windows-terminal"; Display="Windows Terminal"},
+        @{Name="PowerShell Core"; Package="powershell-core"; Display="PowerShell 7+"},
+        @{Name="Git"; Package="git"; Display="Git"}
     )
     
     $installedApps = @()

@@ -134,13 +134,14 @@ function Send-EmailNotification {
 # Function to check WiFi network with retry
 function Test-WifiNetwork {
     $retryCount = 0
-    
+
     while ($retryCount -lt $MaxRetries) {
         try {
-            $wifi = Get-NetAdapter | Where-Object { $_.Status -eq "Up" -and $_.InterfaceDescription -like "*Wi-Fi*" }
+            # Try modern method first (Windows 10/11)
+            $wifi = Get-NetAdapter | Where-Object { $_.Status -eq "Up" -and ($_.InterfaceDescription -like "*Wi-Fi*" -or $_.InterfaceDescription -like "*Wireless*") }
             if ($wifi) {
-                $currentNetwork = (netsh wlan show interfaces | Select-String "SSID" | Select-Object -First 1) -replace ".*:\s*", ""
-                
+                $currentNetwork = (netsh wlan show interfaces | Select-String "^\s*SSID\s*:" | Select-Object -First 1) -replace ".*:\s*", ""
+
                 if ($currentNetwork -eq $WifiNetwork) {
                     Write-Success "Connected to $WifiNetwork WiFi"
                     return $true
@@ -150,30 +151,37 @@ function Test-WifiNetwork {
                 }
             }
             else {
-                Write-Warning "No WiFi adapter found"
+                Write-Warning "No WiFi adapter found or no WiFi connection active"
             }
         }
         catch {
             Write-Warning "Could not check WiFi network: $($_.Exception.Message)"
         }
-        
+
         $retryCount++
-        
+
         if ($retryCount -lt $MaxRetries) {
             Write-Status "Retrying in $RetryDelay seconds... (attempt $retryCount/$MaxRetries)"
             Start-Sleep $RetryDelay
         }
     }
-    
+
     return $false
 }
 
 # Function to check if plugged into power
 function Test-PowerStatus {
     try {
-        $powerStatus = Get-WmiObject -Class Win32_Battery | Select-Object -First 1
+        # Try modern CIM method first (preferred for Windows 10/11)
+        $powerStatus = Get-CimInstance -ClassName Win32_Battery -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($null -eq $powerStatus) {
+            # Fallback to WMI if CIM not available
+            $powerStatus = Get-WmiObject -Class Win32_Battery -ErrorAction SilentlyContinue | Select-Object -First 1
+        }
+
         if ($powerStatus) {
-            if ($powerStatus.BatteryStatus -eq 1) {
+            # BatteryStatus: 1 = Discharging, 2 = AC, 3 = Fully Charged, 4-11 = various charging states
+            if ($powerStatus.BatteryStatus -ge 2) {
                 Write-Success "Device is plugged into power"
                 return $true
             }

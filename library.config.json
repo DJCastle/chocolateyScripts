@@ -1,5 +1,5 @@
 {
-  "include": ["README.md", "*.ps1"],
+  "include": ["README.md", "*.ps1", "*.json", "*.md"],
   "exclude": [
     "LICENSE",
     "LICENSE.md",
@@ -10,24 +10,48 @@
   ],
   "order": [
     "README.md",
+    "GETTING_STARTED.md",
+    "config.json",
+    "validate-setup.ps1",
     "install-chocolatey.ps1",
     "install-essential-apps.ps1",
     "auto-update-chocolatey.ps1",
-    "cleanup-chocolatey.ps1"
+    "cleanup-chocolatey.ps1",
+    "health-check.ps1",
+    "backup-packages.ps1",
+    "setup-scheduled-tasks.ps1",
+    "Send-ToastNotification.ps1",
+    "CHANGELOG.md"
   ],
   "hidden": [],
   "titles": {
-    "README.md": "📚 Documentation & Getting Started",
+    "README.md": "📚 Documentation & Quick Start",
+    "GETTING_STARTED.md": "🚀 Comprehensive Setup Guide",
+    "config.json": "⚙️ Configuration File",
+    "validate-setup.ps1": "✅ Validate Setup & Configuration",
     "install-chocolatey.ps1": "🍫 Install Chocolatey Package Manager",
     "install-essential-apps.ps1": "💻 Install Essential Windows Apps",
     "auto-update-chocolatey.ps1": "⚡ Auto-Update Chocolatey & Packages",
-    "cleanup-chocolatey.ps1": "🧹 Cleanup & Maintenance"
+    "cleanup-chocolatey.ps1": "🧹 Cleanup & Maintenance",
+    "health-check.ps1": "🏥 Health Check & Diagnostics",
+    "backup-packages.ps1": "💾 Backup & Restore Packages",
+    "setup-scheduled-tasks.ps1": "⏰ Setup Scheduled Tasks",
+    "Send-ToastNotification.ps1": "🔔 Toast Notification Helper",
+    "CHANGELOG.md": "📝 Version History & Release Notes"
   },
   "descriptions": {
-    "README.md": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively.",
+    "README.md": "Project overview, quick start guide, and script reference. Start here for a high-level introduction to all available features and commands.",
+    "GETTING_STARTED.md": "Comprehensive step-by-step guide for new users. Covers installation, configuration, automation setup, best practices, and troubleshooting.",
+    "config.json": "Centralized configuration file for all scripts. Customize WiFi networks, email settings, backup locations, notification preferences, and scheduling options.",
+    "validate-setup.ps1": "Validation tool that checks all scripts, configuration files, system requirements, and Chocolatey installation. Run this first to ensure everything is ready.",
     "install-chocolatey.ps1": "Installs Chocolatey package manager with proper configuration and health checks. Essential first step for Windows package management.",
-    "install-essential-apps.ps1": "Batch installer for essential Windows applications using Chocolatey. Installs productivity, development, utility apps automatically.",
+    "install-essential-apps.ps1": "Batch installer for essential Windows applications using Chocolatey. Installs browsers, development tools, utilities, and more automatically.",
     "auto-update-chocolatey.ps1": "Automatically updates Chocolatey and packages when connected to specific WiFi and on power. Includes smart scheduling and safety checks.",
-    "cleanup-chocolatey.ps1": "Comprehensive Chocolatey maintenance script. Removes old package versions, clears caches, and optimizes disk usage."
+    "cleanup-chocolatey.ps1": "Comprehensive Chocolatey maintenance script. Removes old package versions, clears caches, and optimizes disk usage.",
+    "health-check.ps1": "Comprehensive diagnostics tool. Checks installation health, system requirements, outdated packages, disk usage, and configuration issues.",
+    "backup-packages.ps1": "Backup and restore your Chocolatey package list. Perfect for migrating to new machines or disaster recovery scenarios.",
+    "setup-scheduled-tasks.ps1": "Interactive wizard to create Windows scheduled tasks for automated updates and maintenance. Set custom schedules easily.",
+    "Send-ToastNotification.ps1": "Helper script for sending modern Windows 10/11 Toast notifications. Used by other scripts for user notifications.",
+    "CHANGELOG.md": "Complete version history with detailed release notes. Documents all changes, new features, bug fixes, and breaking changes since v1.0."
   }
 }

@@ -184,7 +184,7 @@ function Main {
         
         Write-Success "Chocolatey setup complete at $(Get-Date)"
         return
-    fi
+    }
     
     # Set execution policy
     Set-ExecutionPolicySafe
