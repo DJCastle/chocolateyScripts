@@ -4,15 +4,15 @@
     "name": "chocolateyScripts",
     "branch": "main"
   },
-  "generated_at": "2026-02-14T19:23:06.863Z",
+  "generated_at": "2026-02-14T19:31:57.673Z",
   "items": [
     {
       "name": "README.md",
       "path": "README.md",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/README.md",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/README.md",
-      "updated": "2026-02-14T19:19:40Z",
-      "sha": "9865bef",
+      "updated": "2026-02-14T19:31:44Z",
+      "sha": "5ff325b",
       "title": "📚 Documentation & Quick Start",
       "description": "Project overview, quick start guide, and script reference. Start here for a high-level introduction to all available features and commands."
     },
@@ -21,8 +21,8 @@
       "path": "GETTING_STARTED.md",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/GETTING_STARTED.md",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/GETTING_STARTED.md",
-      "updated": "2026-02-14T19:19:40Z",
-      "sha": "9865bef",
+      "updated": "2026-02-14T19:31:44Z",
+      "sha": "5ff325b",
       "title": "🚀 Comprehensive Setup Guide",
       "description": "Comprehensive step-by-step guide for new users. Covers installation, configuration, automation setup, best practices, and troubleshooting."
     },
@@ -31,8 +31,8 @@
       "path": "config.example.json",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/config.example.json",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/config.example.json",
-      "updated": "2026-02-14T19:19:40Z",
-      "sha": "9865bef",
+      "updated": "2026-02-14T19:31:44Z",
+      "sha": "5ff325b",
       "title": "⚙️ Configuration File",
       "description": "Centralized configuration file for all scripts. Customize WiFi networks, email settings, backup locations, notification preferences, and scheduling options."
     },
@@ -61,8 +61,8 @@
       "path": "install-essential-apps.ps1",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/install-essential-apps.ps1",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/install-essential-apps.ps1",
-      "updated": "2026-02-14T19:19:40Z",
-      "sha": "9865bef",
+      "updated": "2026-02-14T19:31:44Z",
+      "sha": "5ff325b",
       "title": "💻 Install Essential Windows Apps",
       "description": "Batch installer for essential Windows applications using Chocolatey. Installs browsers, development tools, utilities, and more automatically."
     },
@@ -71,8 +71,8 @@
       "path": "auto-update-chocolatey.ps1",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/auto-update-chocolatey.ps1",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/auto-update-chocolatey.ps1",
-      "updated": "2026-02-14T19:19:40Z",
-      "sha": "9865bef",
+      "updated": "2026-02-14T19:31:44Z",
+      "sha": "5ff325b",
       "title": "⚡ Auto-Update Chocolatey & Packages",
       "description": "Automatically updates Chocolatey and packages when connected to specific WiFi and on power. Includes smart scheduling and safety checks."
     },
@@ -91,8 +91,8 @@
       "path": "health-check.ps1",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/health-check.ps1",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/health-check.ps1",
-      "updated": "2026-02-14T19:19:40Z",
-      "sha": "9865bef",
+      "updated": "2026-02-14T19:31:44Z",
+      "sha": "5ff325b",
       "title": "🏥 Health Check & Diagnostics",
       "description": "Comprehensive diagnostics tool. Checks installation health, system requirements, outdated packages, disk usage, and configuration issues."
     },
@@ -111,8 +111,8 @@
       "path": "setup-scheduled-tasks.ps1",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/setup-scheduled-tasks.ps1",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/setup-scheduled-tasks.ps1",
-      "updated": "2026-02-14T19:19:40Z",
-      "sha": "9865bef",
+      "updated": "2026-02-14T19:31:44Z",
+      "sha": "5ff325b",
       "title": "⏰ Setup Scheduled Tasks",
       "description": "Interactive wizard to create Windows scheduled tasks for automated updates and maintenance. Set custom schedules easily."
     },
@@ -121,8 +121,8 @@
       "path": "Send-ToastNotification.ps1",
       "html_url": "https://github.com/DJCastle/chocolateyScripts/blob/main/Send-ToastNotification.ps1",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/Send-ToastNotification.ps1",
-      "updated": "2026-02-14T19:19:40Z",
-      "sha": "9865bef",
+      "updated": "2026-02-14T19:31:44Z",
+      "sha": "5ff325b",
       "title": "🔔 Toast Notification Helper",
       "description": "Helper script for sending modern Windows 10/11 Toast notifications. Used by other scripts for user notifications."
     },
