@@ -1,0 +1,61 @@
+# Logs
+*.log
+Logs/
+
+# Claude Code project instructions (local only)
+CLAUDE.md
+
+# User-specific configuration (contains sensitive data)
+config.json
+config.local.json
+
+# Backup files
+*.backup
+*.bak
+*~
+
+# Windows thumbnail cache
+Thumbs.db
+
+# macOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# PowerShell artifacts
+*.ps1~
+*.psm1~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Chocolatey cache (if scripts run locally)
+.chocolatey/
+
+# Personal backup directory (users should configure their own)
+ChocolateyBackups/
+
+# IDE and editor files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Test outputs
+test-results/
+coverage/
+
+# Node modules (for CI/CD)
+node_modules/
+package-lock.json
+
+# Environment files
+.env
+.env.local
+*.env
+
+# Sensitive data
+*password*
+*secret*
+*credentials*

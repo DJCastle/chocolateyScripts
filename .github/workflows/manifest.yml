@@ -1,0 +1,151 @@
+name: Build manifest.json
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Create build script
+        shell: bash
+        run: |
+          mkdir -p scripts
+          cat > scripts/build-manifest.js <<'EOF'
+          const fs = require('fs/promises');
+
+          const repo = process.env.GITHUB_REPOSITORY || '';
+          const [owner, name] = repo.split('/');
+          const branch = process.env.BRANCH || 'main';
+
+          async function gh(url, opts = {}) {
+            const res = await fetch(url, {
+              ...opts,
+              headers: {
+                'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github+json',
+                ...(opts.headers || {})
+              }
+            });
+            if (!res.ok) throw new Error(`${res.status} ${res.statusText}: ${await res.text()}`);
+            return res.json();
+          }
+
+          async function listRoot() {
+            const contents = await gh(`https://api.github.com/repos/${owner}/${name}/contents?ref=${branch}`);
+            const files = Array.isArray(contents) ? contents.filter(x => x.type === 'file' && !x.name.startsWith('.')) : [];
+
+            // Load library config if it exists
+            let config = { include: [], exclude: [], order: [], titles: {}, descriptions: {} };
+            try {
+              const configFile = await gh(`https://api.github.com/repos/${owner}/${name}/contents/library.config.json?ref=${branch}`);
+              if (configFile && configFile.content) {
+                const configContent = Buffer.from(configFile.content, 'base64').toString('utf8');
+                config = JSON.parse(configContent);
+              }
+            } catch (e) {
+              console.log('No library.config.json found, using defaults');
+            }
+
+            // Build exclude list from config
+            const excludeList = (config.exclude || []).filter(p => !p.startsWith('*'));
+            const excludeExts = (config.exclude || []).filter(p => p.startsWith('*.')).map(p => p.slice(1));
+
+            function shouldInclude(name) {
+              // Check explicit excludes
+              if (excludeList.includes(name)) return false;
+              if (name === 'CNAME') return false;
+              // Check extension excludes
+              for (const ext of excludeExts) {
+                if (name.endsWith(ext)) return false;
+              }
+              // Check includes from config
+              const includes = config.include || ['README.md', '*.ps1'];
+              for (const pattern of includes) {
+                if (pattern === name) return true;
+                if (pattern.startsWith('*.') && name.endsWith(pattern.slice(1))) return true;
+              }
+              return false;
+            }
+
+            const items = [];
+            for (const f of files) {
+              if (!shouldInclude(f.name)) continue;
+
+              const commits = await gh(`https://api.github.com/repos/${owner}/${name}/commits?path=${encodeURIComponent(f.path)}&sha=${branch}&per_page=1`);
+              const last = Array.isArray(commits) && commits[0];
+
+              items.push({
+                name: f.name,
+                path: f.path,
+                html_url: f.html_url,
+                raw_url: f.download_url,
+                updated: last ? last.commit.committer.date : null,
+                sha: last ? last.sha?.slice(0,7) : null,
+                title: config.titles[f.name] || f.name,
+                description: config.descriptions[f.name] || null
+              });
+            }
+
+            // Sort by config order first, then by update date
+            items.sort((a, b) => {
+              const aOrder = config.order.indexOf(a.name);
+              const bOrder = config.order.indexOf(b.name);
+              if (aOrder !== -1 && bOrder !== -1) return aOrder - bOrder;
+              if (aOrder !== -1) return -1;
+              if (bOrder !== -1) return 1;
+              return new Date(b.updated || 0) - new Date(a.updated || 0);
+            });
+
+            return items;
+          }
+
+          (async () => {
+            const items = await listRoot();
+            const manifest = {
+              repo: { owner, name, branch },
+              generated_at: new Date().toISOString(),
+              items
+            };
+            await fs.writeFile('manifest.json', JSON.stringify(manifest, null, 2), 'utf8');
+            console.log(`Wrote manifest.json with ${items.length} items`);
+          })();
+          EOF
+
+      - name: Build manifest
+        run: node scripts/build-manifest.js
+        env:
+          BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit manifest.json if changed
+        run: |
+          if [[ -n "$(git status --porcelain manifest.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add manifest.json
+            git commit -m "Update manifest.json [skip ci]"
+            git push
+            echo "MANIFEST_UPDATED=true" >> $GITHUB_ENV
+          else
+            echo "No changes to manifest.json"
+            echo "MANIFEST_UPDATED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Purge CDN cache
+        if: env.MANIFEST_UPDATED == 'true'
+        run: |
+          echo "Purging CDN cache for updated manifest..."
+          curl -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/manifest.json" || echo "CDN purge failed (non-critical)"
+          curl -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main" || echo "CDN repo purge failed (non-critical)"

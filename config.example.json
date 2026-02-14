@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Chocolatey Scripts Configuration - Copy this file to config.json and customize for your environment",
+
+  "wifiNetwork": "YOUR_WIFI_NAME",
+  "emailAddress": "your-email@example.com",
+  "smtpServer": "smtp.gmail.com",
+  "smtpPort": 587,
+  "maxRetries": 3,
+  "retryDelaySeconds": 300,
+  "logPath": "%USERPROFILE%\\Logs",
+
+  "notifications": {
+    "enableEmailNotifications": false,
+    "enableToastNotifications": true,
+    "notifyOnSuccess": true,
+    "notifyOnError": true,
+    "notifyOnWarning": false
+  },
+
+  "autoUpdateSchedule": {
+    "enabled": false,
+    "time": "03:00",
+    "days": ["Sunday", "Wednesday"],
+    "requireWifi": true,
+    "requirePower": true
+  },
+
+  "cleanupSchedule": {
+    "enabled": false,
+    "frequency": "Monthly",
+    "keepVersions": 2
+  },
+
+  "backupSettings": {
+    "backupPath": "%USERPROFILE%\\Documents\\ChocolateyBackups",
+    "autoBackupBeforeUpdate": true,
+    "keepBackups": 5,
+    "compressBackups": false
+  },
+
+  "packagePreferences": {
+    "usePreReleasePackages": false,
+    "ignorePinnedPackages": true,
+    "skipDependencies": false
+  },
+
+  "advanced": {
+    "parallelDownloads": 4,
+    "cacheLocation": "default",
+    "useSystemProxy": true,
+    "timeoutSeconds": 3600
+  }
+}

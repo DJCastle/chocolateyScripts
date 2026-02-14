@@ -1,0 +1,6 @@
+# Exclude meta files from "Download ZIP" archive
+# Site files live on the gh-pages branch (not in main)
+.github/            export-ignore
+manifest.json       export-ignore
+library.config.json export-ignore
+.gitattributes      export-ignore
