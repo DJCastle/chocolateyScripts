@@ -59,21 +59,20 @@ function Send-ToastNotification {
         # App ID for notification
         $AppId = "Chocolatey.PackageManager"
 
-        # Icon based on type
-        $iconUri = switch ($Type) {
-            "Success" { "https://raw.githubusercontent.com/chocolatey/choco/master/docs/images/chocolatey-icon.png" }
-            "Warning" { "https://raw.githubusercontent.com/chocolatey/choco/master/docs/images/chocolatey-icon.png" }
-            "Error"   { "https://raw.githubusercontent.com/chocolatey/choco/master/docs/images/chocolatey-icon.png" }
-            default   { "https://raw.githubusercontent.com/chocolatey/choco/master/docs/images/chocolatey-icon.png" }
-        }
+        # Icon URL
+        $iconUri = "https://raw.githubusercontent.com/chocolatey/choco/main/docs/images/chocolatey-icon.png"
+
+        # XML-escape parameters to prevent injection
+        $safeTitle = [System.Security.SecurityElement]::Escape($Title)
+        $safeMessage = [System.Security.SecurityElement]::Escape($Message)
 
         # Create XML template for toast
         $toastXml = @"
 <toast>
     <visual>
         <binding template="ToastGeneric">
-            <text>$Title</text>
-            <text>$Message</text>
+            <text>$safeTitle</text>
+            <text>$safeMessage</text>
             <image placement="appLogoOverride" hint-crop="circle" src="$iconUri"/>
         </binding>
     </visual>

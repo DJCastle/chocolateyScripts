@@ -45,13 +45,13 @@ function Write-Success {
     Add-Content -Path $LogFile -Value "[SUCCESS] $Message"
 }
 
-function Write-Warning {
+function Write-LogWarning {
     param([string]$Message)
     Write-Host "[WARNING] $Message" -ForegroundColor $Yellow
     Add-Content -Path $LogFile -Value "[WARNING] $Message"
 }
 
-function Write-Error {
+function Write-LogError {
     param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor $Red
     Add-Content -Path $LogFile -Value "[ERROR] $Message"
@@ -79,7 +79,7 @@ function New-AutoUpdateTask {
     # Remove existing task if present
     $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
     if ($existingTask) {
-        Write-Warning "Removing existing task: $taskName"
+        Write-LogWarning "Removing existing task: $taskName"
         Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
     }
 
@@ -130,7 +130,7 @@ function New-AutoUpdateTask {
         return $true
     }
     catch {
-        Write-Error "Failed to create scheduled task: $($_.Exception.Message)"
+        Write-LogError "Failed to create scheduled task: $($_.Exception.Message)"
         return $false
     }
 }
@@ -149,7 +149,7 @@ function New-CleanupTask {
     # Remove existing task if present
     $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
     if ($existingTask) {
-        Write-Warning "Removing existing task: $taskName"
+        Write-LogWarning "Removing existing task: $taskName"
         Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
     }
 
@@ -199,7 +199,7 @@ function New-CleanupTask {
         return $true
     }
     catch {
-        Write-Error "Failed to create scheduled task: $($_.Exception.Message)"
+        Write-LogError "Failed to create scheduled task: $($_.Exception.Message)"
         return $false
     }
 }
@@ -227,7 +227,7 @@ function Show-ExistingTasks {
         Write-Host ""
     }
     else {
-        Write-Warning "No existing Chocolatey scheduled tasks found"
+        Write-LogWarning "No existing Chocolatey scheduled tasks found"
     }
 }
 
@@ -244,7 +244,7 @@ function Remove-AllChocolateyTasks {
                 Write-Success "Removed task: $($task.TaskName)"
             }
             catch {
-                Write-Error "Failed to remove task $($task.TaskName): $($_.Exception.Message)"
+                Write-LogError "Failed to remove task $($task.TaskName): $($_.Exception.Message)"
             }
         }
     }
@@ -263,8 +263,8 @@ function Main {
 
     # Check if running as Administrator
     if (-not (Test-Administrator)) {
-        Write-Error "This script must be run as Administrator."
-        Write-Error "Please right-click PowerShell and select 'Run as Administrator'."
+        Write-LogError "This script must be run as Administrator."
+        Write-LogError "Please right-click PowerShell and select 'Run as Administrator'."
         exit 1
     }
 
@@ -342,7 +342,7 @@ function Main {
             exit 0
         }
         default {
-            Write-Warning "Invalid choice"
+            Write-LogWarning "Invalid choice"
             exit 1
         }
     }

@@ -173,6 +173,9 @@ All scripts log to `%USERPROFILE%\Logs\`:
 - `EssentialAppsInstall.log`
 - `AutoUpdateChocolatey.log`
 - `ChocolateyCleanup.log`
+- `ChocolateyHealthCheck.log`
+- `ChocolateyBackup.log`
+- `ScheduledTaskSetup.log`
 
 ## Security Best Practices
 

@@ -354,7 +354,7 @@ function Test-DiskUsage {
 function Test-ScheduledTasks {
     Write-Section "Scheduled Tasks"
 
-    $tasks = Get-ScheduledTask | Where-Object { $_.TaskName -like "*Chocolatey*" } -ErrorAction SilentlyContinue
+    $tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -like "*Chocolatey*" }
 
     if ($tasks) {
         Write-Success "Found $($tasks.Count) Chocolatey scheduled task(s):"

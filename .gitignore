@@ -58,4 +58,5 @@ package-lock.json
 # Sensitive data
 *password*
 *secret*
-*credentials*
+*credential*
+smtp-credential.xml

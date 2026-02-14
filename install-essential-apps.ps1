@@ -138,7 +138,7 @@ function Main {
     # Update Chocolatey before installing
     Write-Status "Updating Chocolatey..."
     try {
-        choco upgrade all -y | Tee-Object -FilePath $LogFile -Append
+        choco upgrade chocolatey -y | Tee-Object -FilePath $LogFile -Append
         if ($LASTEXITCODE -eq 0) {
             Write-Success "Chocolatey updated successfully"
         }

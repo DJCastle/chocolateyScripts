@@ -492,7 +492,7 @@ This prevents accidentally committing your WiFi name, email, or SMTP credentials
 - **[powershell-scripting-tutorial.md](powershell-scripting-tutorial.md)** - PowerShell scripting tutorial with examples from this project
 - **[safety-and-best-practices.md](safety-and-best-practices.md)** - Safety guide and best practices for these scripts
 - **Chocolatey Documentation**: https://docs.chocolatey.org/
-- **PowerShell Documentation**: https://docs.microsoft.com/powershell/
+- **PowerShell Documentation**: https://learn.microsoft.com/en-us/powershell/
 - **Package Search**: https://community.chocolatey.org/packages
 - **This Project**: https://github.com/DJCastle/chocolateyScripts
 

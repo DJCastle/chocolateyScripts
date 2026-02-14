@@ -108,16 +108,16 @@ function Send-EmailNotification {
     <div class="header">
         <h2>🔄 Auto Update Chocolatey Report</h2>
         <p><strong>Date:</strong> $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</p>
-        <p><strong>Computer:</strong> $env:COMPUTERNAME</p>
+        <p><strong>Computer:</strong> $([System.Net.WebUtility]::HtmlEncode($env:COMPUTERNAME))</p>
     </div>
-    
+
     <div>
         $Body
     </div>
-    
+
     <div class="log">
         <h3>📋 Recent Log Entries:</h3>
-        <pre>$(Get-Content $LogFile -Tail 20 | Out-String)</pre>
+        <pre>$([System.Net.WebUtility]::HtmlEncode((Get-Content $LogFile -Tail 20 | Out-String)))</pre>
     </div>
     
     <hr>
