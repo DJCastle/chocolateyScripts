@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chocolatey Scripts - Windows Package Management Automation</title>
+  <meta name="description" content="PowerShell scripts for automating Chocolatey package management on Windows. Install, update, backup, and maintain your Windows applications effortlessly.">
+  <meta name="keywords" content="chocolatey, windows, package manager, powershell, automation, scripts, windows 10, windows 11, choco install, software management">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Chocolatey Scripts - Windows Package Management Automation">
+  <meta property="og:description" content="PowerShell scripts for effortless Chocolatey package management on Windows 10 & 11. Install apps, automate updates, backup packages, and keep your system healthy.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Chocolatey Scripts - Windows Package Management Automation">
+  <meta name="twitter:description" content="PowerShell scripts for effortless Chocolatey package management on Windows 10 & 11. Install, update, backup, and maintain your apps.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Chocolatey Scripts",
+    "description": "PowerShell scripts for automating Chocolatey package management on Windows. Install, update, backup, and maintain your Windows applications effortlessly.",
+    "url": "https://chocolateyscripts.codecraftedapps.com",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Windows 10, Windows 11",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "CodeCraftedApps",
+      "url": "https://codecraftedapps.com"
+    },
+    "isAccessibleForFree": true,
+    "license": "https://github.com/DJCastle/chocolateyScripts/blob/main/LICENSE"
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" onclick="document.querySelector('.site-nav').classList.toggle('open')">&#9776;</button>
+      <nav class="site-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <h1>Windows Package Management,<br><span>Automated.</span></h1>
+        <p class="tagline">PowerShell scripts for effortless Chocolatey package management on Windows 10 &amp; 11.</p>
+        <p class="sub-tagline">Install apps, automate updates, backup packages, and keep your system healthy.</p>
+        <div class="hero-badges">
+          <span class="hero-badge">&#127851; Chocolatey Powered</span>
+          <span class="hero-badge">&#9889; PowerShell 5.1+</span>
+          <span class="hero-badge">&#128187; Windows 10/11</span>
+        </div>
+        <div class="hero-actions">
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener" class="btn-primary">&#128196; View on GitHub</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts/archive/refs/heads/main.zip" class="btn-secondary">&#11015; Download ZIP</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- What is Chocolatey -->
+    <section class="section" style="padding-top: 0; padding-bottom: 20px;">
+      <div class="container">
+        <div class="choco-info">
+          <p><strong>What is Chocolatey?</strong> Chocolatey is a free, open-source package manager for Windows &mdash; like an app store for your command line. Instead of searching the web and clicking through installers, you run one command and Chocolatey handles the rest.</p>
+          <div class="choco-info-links">
+            <a href="https://chocolatey.org" target="_blank" rel="noopener">chocolatey.org</a>
+            <a href="https://docs.chocolatey.org" target="_blank" rel="noopener">Documentation</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="disclaimer">
+          <h3>&#9888;&#65039; Important Notice</h3>
+          <p>These scripts modify system settings including PowerShell execution policies, Windows scheduled tasks, and installed applications. Always review scripts before running them with administrator privileges. You are responsible for understanding what each script does before execution. See the <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/README.md" target="_blank" rel="noopener">README</a> for full documentation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Use -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">How to Use</h2>
+        <p class="section-subtitle">Get started in minutes with just a few PowerShell commands.</p>
+        <div class="instructions-grid">
+          <div class="instruction-card">
+            <h3>1. Clone the Repository</h3>
+            <p>Download the scripts to your local machine.</p>
+            <div class="code-block">
+              <span class="comment"># Clone with Git</span><br>
+              <span class="command">git clone https://github.com/DJCastle/chocolateyScripts.git</span><br>
+              <span class="command">cd chocolateyScripts</span><br><br>
+              <span class="comment"># Or download and extract the ZIP</span>
+            </div>
+          </div>
+          <div class="instruction-card">
+            <h3>2. Set Execution Policy</h3>
+            <p>Allow PowerShell to run local scripts.</p>
+            <div class="code-block">
+              <span class="comment"># Run as Administrator</span><br>
+              <span class="command">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</span>
+            </div>
+          </div>
+          <div class="instruction-card">
+            <h3>3. Install &amp; Configure</h3>
+            <p>Run the installer and essential apps scripts.</p>
+            <div class="code-block">
+              <span class="comment"># Install Chocolatey</span><br>
+              <span class="command">.\install-chocolatey.ps1</span><br><br>
+              <span class="comment"># Install essential apps</span><br>
+              <span class="command">.\install-essential-apps.ps1</span>
+            </div>
+          </div>
+          <div class="instruction-card">
+            <h3>4. Automate &amp; Maintain</h3>
+            <p>Set up automated updates and health checks.</p>
+            <div class="code-block">
+              <span class="comment"># Health check</span><br>
+              <span class="command">.\health-check.ps1</span><br><br>
+              <span class="comment"># Schedule automatic maintenance</span><br>
+              <span class="command">.\setup-scheduled-tasks.ps1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scripts Library -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Scripts Library</h2>
+        <p class="section-subtitle">Browse and download individual scripts from the repository.</p>
+        <div class="scripts-grid" id="scripts-grid">
+          <div class="loading">Loading scripts from repository...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Features</h2>
+        <p class="section-subtitle">Everything you need to manage Chocolatey on Windows.</p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">&#127851;</div>
+            <h3>One-Click Install</h3>
+            <p>Install Chocolatey and 12+ essential apps with a single script. Chrome, VS Code, Git, and more.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">&#9889;</div>
+            <h3>Smart Auto-Updates</h3>
+            <p>Conditional updates that only run when on WiFi and plugged into power. Safe and intelligent.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">&#128190;</div>
+            <h3>Backup &amp; Restore</h3>
+            <p>Export your package list to JSON. Restore on a new machine in minutes. Perfect for migrations.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">&#128137;</div>
+            <h3>Health Diagnostics</h3>
+            <p>Comprehensive system checks for Chocolatey installation, outdated packages, and disk usage.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">&#128344;</div>
+            <h3>Scheduled Tasks</h3>
+            <p>Interactive wizard to set up Windows Task Scheduler for hands-free maintenance.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">&#128276;</div>
+            <h3>Toast Notifications</h3>
+            <p>Modern Windows 10/11 notifications for update results. Know what happened without checking logs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Requirements -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Requirements</h2>
+        <p class="section-subtitle">What you need to get started.</p>
+        <ul class="requirements-list">
+          <li><span class="req-dot"></span> Windows 10 or Windows 11</li>
+          <li><span class="req-dot"></span> PowerShell 5.1+ (PowerShell 7+ recommended)</li>
+          <li><span class="req-dot"></span> Administrator privileges</li>
+          <li><span class="req-dot"></span> Internet connection</li>
+          <li><span class="req-dot"></span> 10 GB+ free disk space recommended</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">About</h2>
+        <p class="about-text">
+          Chocolatey Scripts is an open-source project by <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a> designed to simplify Windows package management for developers, IT professionals, and power users. Whether you're setting up a new machine or maintaining an existing one, these scripts help you get the job done quickly and reliably.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="footer-copyright">&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+        <nav class="footer-links">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="mailto:choco@codecraftedapps.com">Contact</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    const MANIFEST_URL = 'https://cdn.jsdelivr.net/gh/DJCastle/chocolateyScripts@main/manifest.json';
+    const grid = document.getElementById('scripts-grid');
+
+    function esc(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str || ''));
+      return div.innerHTML;
+    }
+
+    function safeUrl(url) {
+      if (!url || typeof url !== 'string') return '#';
+      try { var u = new URL(url); return u.protocol === 'https:' ? url : '#'; }
+      catch (e) { return '#'; }
+    }
+
+    function badge(name) {
+      if (name.endsWith('.ps1')) return ['Script', 'badge-script'];
+      if (name.endsWith('.md'))  return ['Docs', 'badge-docs'];
+      if (name.endsWith('.json')) return ['Config', 'badge-config'];
+      return ['File', 'badge-file'];
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      var d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    async function loadManifest() {
+      try {
+        var res = await fetch(MANIFEST_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to load manifest');
+        var data = await res.json();
+        renderCards(data.items || []);
+      } catch (err) {
+        grid.innerHTML = '<div class="error-state">Could not load scripts. <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener">View on GitHub instead.</a></div>';
+      }
+    }
+
+    function renderCards(items) {
+      if (!items.length) {
+        grid.innerHTML = '<div class="loading">No scripts found.</div>';
+        return;
+      }
+      grid.innerHTML = items.map(function (item) {
+        var lbl = badge(item.name);
+        return '<div class="card">' +
+          '<div class="card-header">' +
+            '<span class="card-title">' + esc(item.title || item.name) + '</span>' +
+            '<span class="card-badge ' + lbl[1] + '">' + lbl[0] + '</span>' +
+          '</div>' +
+          (item.description ? '<p class="card-desc">' + esc(item.description) + '</p>' : '') +
+          (item.updated ? '<p class="card-meta">Updated ' + esc(formatDate(item.updated)) + (item.sha ? ' &middot; ' + esc(item.sha) : '') + '</p>' : '') +
+          '<div class="card-actions">' +
+            '<a href="' + safeUrl(item.html_url) + '" target="_blank" rel="noopener" class="btn-view">View</a>' +
+            '<a href="' + safeUrl(item.raw_url) + '" target="_blank" rel="noopener" class="btn-raw">Raw</a>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    loadManifest();
+  })();
+  </script>
+
+</body>
+</html>

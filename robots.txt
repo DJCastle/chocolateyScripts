@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chocolateyscripts.codecraftedapps.com/sitemap.xml
