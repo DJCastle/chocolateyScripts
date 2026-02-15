@@ -140,10 +140,7 @@ button:focus-visible {
 .hero {
   text-align: center;
   padding: 80px 0 60px;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, var(--accent-glow), transparent),
-    radial-gradient(ellipse 60% 80% at 20% 60%, rgba(92, 159, 216, 0.06), transparent),
-    radial-gradient(ellipse 60% 80% at 80% 60%, rgba(139, 92, 246, 0.04), transparent);
+  background: linear-gradient(to bottom, var(--accent-glow), transparent);
   /* To swap in a real banner image:
      background: linear-gradient(to bottom, rgba(10,14,20,0.55), var(--bg-primary)),
                  url('../images/hero-banner.jpg') center/cover no-repeat; */
@@ -639,8 +636,7 @@ button:focus-visible {
 .page-header {
   text-align: center;
   padding: 60px 0 40px;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, var(--accent-glow), transparent);
+  background: linear-gradient(to bottom, var(--accent-glow), transparent);
   /* To swap in a real banner image:
      background: linear-gradient(to bottom, rgba(10,14,20,0.6), var(--bg-primary)),
                  url('../images/page-banner.jpg') center/cover no-repeat; */
