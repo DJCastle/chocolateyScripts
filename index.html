@@ -55,6 +55,7 @@
   </script>
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="site-header">
     <div class="container">
@@ -70,7 +71,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
 
     <!-- Hero -->
     <section class="hero">
@@ -91,7 +92,7 @@
     </section>
 
     <!-- What is Chocolatey -->
-    <section class="section" style="padding-top: 0; padding-bottom: 20px;">
+    <section class="section reveal" style="padding-top: 0; padding-bottom: 20px;">
       <div class="container">
         <div class="choco-info">
           <p><strong>What is Chocolatey?</strong> Chocolatey is a free, open-source package manager for Windows &mdash; like an app store for your command line. Instead of searching the web and clicking through installers, you run one command and Chocolatey handles the rest.</p>
@@ -104,7 +105,7 @@
     </section>
 
     <!-- Disclaimer -->
-    <section class="section" style="padding-top: 0;">
+    <section class="section reveal" style="padding-top: 0;">
       <div class="container">
         <div class="disclaimer">
           <h3>&#9888;&#65039; Important Notice</h3>
@@ -114,7 +115,7 @@
     </section>
 
     <!-- How to Use -->
-    <section class="section">
+    <section class="section reveal">
       <div class="container">
         <h2 class="section-title">How to Use</h2>
         <p class="section-subtitle">Get started in minutes with just a few PowerShell commands.</p>
@@ -162,7 +163,7 @@
     </section>
 
     <!-- Scripts Library -->
-    <section class="section">
+    <section class="section reveal">
       <div class="container">
         <h2 class="section-title">Scripts Library</h2>
         <p class="section-subtitle">Browse and download individual scripts from the repository.</p>
@@ -173,7 +174,7 @@
     </section>
 
     <!-- Features -->
-    <section class="section">
+    <section class="section reveal">
       <div class="container">
         <h2 class="section-title">Features</h2>
         <p class="section-subtitle">Everything you need to manage Chocolatey on Windows.</p>
@@ -213,7 +214,7 @@
     </section>
 
     <!-- Requirements -->
-    <section class="section">
+    <section class="section reveal">
       <div class="container">
         <h2 class="section-title">Requirements</h2>
         <p class="section-subtitle">What you need to get started.</p>
@@ -228,7 +229,7 @@
     </section>
 
     <!-- About -->
-    <section class="section">
+    <section class="section reveal">
       <div class="container">
         <h2 class="section-title">About</h2>
         <p class="about-text">
@@ -239,20 +240,32 @@
 
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <div class="footer-content">
-        <p class="footer-copyright">&copy; 2026 CodeCraftedApps. All rights reserved.</p>
-        <nav class="footer-links">
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Links</h4>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
           <a href="mailto:choco@codecraftedapps.com">Contact</a>
+        </div>
+        <div class="footer-column">
+          <h4>Connect</h4>
           <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
-        </nav>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
       </div>
     </div>
   </footer>
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
 
   <script>
   (function () {
@@ -334,6 +347,35 @@
         nav.classList.remove('open');
       }
     });
+
+    // Scroll reveal
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    // Back to top
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
   })();
   </script>
 

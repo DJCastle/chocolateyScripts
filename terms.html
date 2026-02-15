@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="site-header">
     <div class="container">
@@ -43,7 +44,10 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span class="separator">/</span>Terms of Service
+    </nav>
 
     <div class="page-header">
       <div class="container">
@@ -52,7 +56,7 @@
       </div>
     </div>
 
-    <section class="content-section">
+    <section class="content-section reveal">
       <div class="container">
         <div class="content-body">
 
@@ -146,20 +150,32 @@
 
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <div class="footer-content">
-        <p class="footer-copyright">&copy; 2026 CodeCraftedApps. All rights reserved.</p>
-        <nav class="footer-links">
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Links</h4>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
           <a href="mailto:choco@codecraftedapps.com">Contact</a>
+        </div>
+        <div class="footer-column">
+          <h4>Connect</h4>
           <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
-        </nav>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
       </div>
     </div>
   </footer>
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
 
   <script>
   (function() {
@@ -174,6 +190,35 @@
         nav.classList.remove('open');
       }
     });
+
+    // Scroll reveal
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    // Back to top
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
   })();
   </script>
 
