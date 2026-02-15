@@ -19,6 +19,7 @@
   <meta name="twitter:title" content="Terms of Service - Chocolatey Scripts">
   <meta name="twitter:description" content="Terms of Service for Chocolatey Scripts by CodeCraftedApps.">
   <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -31,13 +32,13 @@
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
-      <button class="nav-toggle" aria-label="Toggle navigation menu" onclick="document.querySelector('.site-nav').classList.toggle('open')">&#9776;</button>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
       <nav class="site-nav" aria-label="Main navigation">
         <a href="index.html">Home</a>
         <a href="privacy.html">Privacy</a>
         <a href="terms.html" class="active">Terms</a>
-        <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a>
+        <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
       </nav>
     </div>
   </header>
@@ -69,7 +70,7 @@
           </ul>
 
           <h2>Open Source License</h2>
-          <p>The scripts and source code are released under the <strong>MIT License</strong>. You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software, subject to the conditions of the MIT License. The full license text is available in the <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/LICENSE" target="_blank" rel="noopener">LICENSE</a> file.</p>
+          <p>The scripts and source code are released under the <strong>MIT License</strong>. You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software, subject to the conditions of the MIT License. The full license text is available in the <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">LICENSE</a> file.</p>
 
           <h2>Use at Your Own Risk</h2>
           <p>These scripts interact with your Windows operating system and installed software. By using these scripts, you acknowledge and agree that:</p>
@@ -100,9 +101,9 @@
           <h2>Third-Party Software</h2>
           <p>The scripts interact with third-party software and services, including but not limited to:</p>
           <ul>
-            <li><strong>Chocolatey</strong> - Subject to its own <a href="https://chocolatey.org/license" target="_blank" rel="noopener">license</a> and terms</li>
+            <li><strong>Chocolatey</strong> - Subject to its own <a href="https://chocolatey.org/license" target="_blank" rel="noopener noreferrer">license</a> and terms</li>
             <li><strong>Software packages</strong> - Each package installed via Chocolatey has its own license and terms</li>
-            <li><strong>GitHub</strong> - Subject to <a href="https://docs.github.com/en/site-policy/github-terms/github-terms-of-service" target="_blank" rel="noopener">GitHub's Terms of Service</a></li>
+            <li><strong>GitHub</strong> - Subject to <a href="https://docs.github.com/en/site-policy/github-terms/github-terms-of-service" target="_blank" rel="noopener noreferrer">GitHub's Terms of Service</a></li>
           </ul>
           <p>We are not responsible for the functionality, security, or terms of any third-party software installed by these scripts. You are responsible for complying with all applicable licenses for software installed on your system.</p>
 
@@ -136,7 +137,7 @@
           <p>If you have questions about these Terms of Service, you can reach us at:</p>
           <ul>
             <li>Email: <a href="mailto:choco@codecraftedapps.com">choco@codecraftedapps.com</a></li>
-            <li>GitHub: <a href="https://github.com/DJCastle/chocolateyScripts/issues" target="_blank" rel="noopener">Open an issue</a></li>
+            <li>GitHub: <a href="https://github.com/DJCastle/chocolateyScripts/issues" target="_blank" rel="noopener noreferrer">Open an issue</a></li>
           </ul>
 
         </div>
@@ -153,12 +154,28 @@
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
           <a href="mailto:choco@codecraftedapps.com">Contact</a>
-          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
         </nav>
       </div>
     </div>
   </footer>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+  })();
+  </script>
 
 </body>
 </html>

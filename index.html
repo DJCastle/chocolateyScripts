@@ -22,6 +22,7 @@
   <meta name="twitter:description" content="PowerShell scripts for effortless Chocolatey package management on Windows 10 & 11. Install, update, backup, and maintain your apps.">
   <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
   <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -58,13 +59,13 @@
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
-      <button class="nav-toggle" aria-label="Toggle navigation menu" onclick="document.querySelector('.site-nav').classList.toggle('open')">&#9776;</button>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
       <nav class="site-nav" aria-label="Main navigation">
         <a href="index.html" class="active">Home</a>
         <a href="privacy.html">Privacy</a>
         <a href="terms.html">Terms</a>
-        <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a>
+        <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
       </nav>
     </div>
   </header>
@@ -83,7 +84,7 @@
           <span class="hero-badge">&#128187; Windows 10/11</span>
         </div>
         <div class="hero-actions">
-          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener" class="btn-primary">&#128196; View on GitHub</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer" class="btn-primary">&#128196; View on GitHub</a>
           <a href="https://github.com/DJCastle/chocolateyScripts/archive/refs/heads/main.zip" class="btn-secondary">&#11015; Download ZIP</a>
         </div>
       </div>
@@ -95,8 +96,8 @@
         <div class="choco-info">
           <p><strong>What is Chocolatey?</strong> Chocolatey is a free, open-source package manager for Windows &mdash; like an app store for your command line. Instead of searching the web and clicking through installers, you run one command and Chocolatey handles the rest.</p>
           <div class="choco-info-links">
-            <a href="https://chocolatey.org" target="_blank" rel="noopener">chocolatey.org</a>
-            <a href="https://docs.chocolatey.org" target="_blank" rel="noopener">Documentation</a>
+            <a href="https://chocolatey.org" target="_blank" rel="noopener noreferrer">chocolatey.org</a>
+            <a href="https://docs.chocolatey.org" target="_blank" rel="noopener noreferrer">Documentation</a>
           </div>
         </div>
       </div>
@@ -107,7 +108,7 @@
       <div class="container">
         <div class="disclaimer">
           <h3>&#9888;&#65039; Important Notice</h3>
-          <p>These scripts modify system settings including PowerShell execution policies, Windows scheduled tasks, and installed applications. Always review scripts before running them with administrator privileges. You are responsible for understanding what each script does before execution. See the <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/README.md" target="_blank" rel="noopener">README</a> for full documentation.</p>
+          <p>These scripts modify system settings including PowerShell execution policies, Windows scheduled tasks, and installed applications. Always review scripts before running them with administrator privileges. You are responsible for understanding what each script does before execution. See the <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/README.md" target="_blank" rel="noopener noreferrer">README</a> for full documentation.</p>
         </div>
       </div>
     </section>
@@ -231,7 +232,7 @@
       <div class="container">
         <h2 class="section-title">About</h2>
         <p class="about-text">
-          Chocolatey Scripts is an open-source project by <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a> designed to simplify Windows package management for developers, IT professionals, and power users. Whether you're setting up a new machine or maintaining an existing one, these scripts help you get the job done quickly and reliably.
+          Chocolatey Scripts is an open-source project by <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a> designed to simplify Windows package management for developers, IT professionals, and power users. Whether you're setting up a new machine or maintaining an existing one, these scripts help you get the job done quickly and reliably.
         </p>
       </div>
     </section>
@@ -246,8 +247,8 @@
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
           <a href="mailto:choco@codecraftedapps.com">Contact</a>
-          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
         </nav>
       </div>
     </div>
@@ -290,7 +291,7 @@
         var data = await res.json();
         renderCards(data.items || []);
       } catch (err) {
-        grid.innerHTML = '<div class="error-state">Could not load scripts. <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener">View on GitHub instead.</a></div>';
+        grid.innerHTML = '<div class="error-state">Could not load scripts. <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">View on GitHub instead.</a></div>';
       }
     }
 
@@ -309,14 +310,30 @@
           (item.description ? '<p class="card-desc">' + esc(item.description) + '</p>' : '') +
           (item.updated ? '<p class="card-meta">Updated ' + esc(formatDate(item.updated)) + (item.sha ? ' &middot; ' + esc(item.sha) : '') + '</p>' : '') +
           '<div class="card-actions">' +
-            '<a href="' + safeUrl(item.html_url) + '" target="_blank" rel="noopener" class="btn-view">View</a>' +
-            '<a href="' + safeUrl(item.raw_url) + '" target="_blank" rel="noopener" class="btn-raw">Raw</a>' +
+            '<a href="' + safeUrl(item.html_url) + '" target="_blank" rel="noopener noreferrer" class="btn-view">View</a>' +
+            '<a href="' + safeUrl(item.raw_url) + '" target="_blank" rel="noopener noreferrer" class="btn-raw">Raw</a>' +
           '</div>' +
         '</div>';
       }).join('');
     }
 
     loadManifest();
+  })();
+  </script>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
   })();
   </script>
 
