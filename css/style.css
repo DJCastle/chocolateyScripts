@@ -63,6 +63,18 @@ body {
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+/* Very faint background image — barely visible watermark effect */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url('../chocbackgroundsite.png') center / cover no-repeat;
+  opacity: 0.03;
+  z-index: 0;
+  pointer-events: none;
 }
 
 main {
