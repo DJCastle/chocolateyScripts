@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - Chocolatey Scripts</title>
+  <meta name="description" content="Frequently asked questions about Chocolatey, the Chocolatey Scripts toolkit, and troubleshooting common issues on Windows.">
+  <meta name="keywords" content="chocolatey faq, chocolatey troubleshooting, powershell execution policy, choco not found, package manager windows, chocolatey scripts help">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/faq.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FAQ - Chocolatey Scripts">
+  <meta property="og:description" content="Frequently asked questions about Chocolatey, the Chocolatey Scripts toolkit, and troubleshooting common issues on Windows.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/faq.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="FAQ - Chocolatey Scripts">
+  <meta name="twitter:description" content="Frequently asked questions about Chocolatey and the Chocolatey Scripts toolkit.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Structured Data - FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Chocolatey?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Chocolatey is a free, open-source package manager for Windows. It works like apt on Linux or Homebrew on macOS, letting you install, update, and manage software from the command line. Instead of downloading installers from the web, you run a single command like 'choco install googlechrome' and Chocolatey handles the rest."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Chocolatey safe to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, Chocolatey is widely trusted in the Windows ecosystem and is used by individual developers, IT teams, and enterprises. Packages in the Chocolatey Community Repository go through a moderation process. However, you should always review what you install and prefer packages from trusted maintainers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between 'choco install' and 'choco upgrade'?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "'choco install' is used to install a package for the first time. 'choco upgrade' updates an already-installed package to the latest version. You can also run 'choco upgrade all' to update every installed package at once, which is exactly what the auto-update script automates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What versions of Windows are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Chocolatey supports Windows 7 and later, but these scripts are designed for and tested on Windows 10 and Windows 11. You need PowerShell 5.1 or later (included with Windows 10/11) and administrator privileges to run the scripts."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are these scripts safe to run on my computer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The scripts are open-source and every line of code is available for review on GitHub. They include safety features like confirmation prompts, dry-run modes, and detailed logging. That said, they do modify system settings (execution policies, scheduled tasks, installed software), so you should always read through a script before running it with administrator privileges."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does the validate-setup script do?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The validate-setup script checks that Chocolatey is properly installed, verifies that all expected scripts are present, confirms scheduled tasks are configured correctly, and ensures the environment is ready for automated maintenance. Think of it as a pre-flight checklist for your entire setup."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I customize which apps get installed?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The install-essential-apps script reads from a configurable list of packages. You can edit the script or the associated configuration to add, remove, or change which applications are installed. The script is designed to be easily customizable."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do the scripts work on both Windows 10 and Windows 11?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. All scripts are tested on both Windows 10 and Windows 11. Features like toast notifications use the Windows notification system that is available on both operating systems."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if a script fails partway through?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Each script includes error handling and logging. If something goes wrong, the script writes details to a log file in your %USERPROFILE%\\Logs directory. Most scripts are designed to be safe to re-run — they pick up where they left off or skip steps that are already complete."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "I get an execution policy error when running a script. How do I fix it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Open PowerShell as Administrator and run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser. This allows locally-created scripts to run while still blocking unsigned scripts downloaded from the internet. You only need to do this once."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Chocolatey is not found after running the install script. What should I do?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Close and reopen your PowerShell window (or terminal) after installation. Chocolatey adds itself to the system PATH, but existing sessions may not pick up the change until they are restarted. If the problem persists, check that C:\\ProgramData\\chocolatey\\bin is in your PATH environment variable."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "A package fails to install. What can I try?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "First, make sure you are running PowerShell as Administrator. Then try running 'choco install <package> --force' to retry the installation. If it still fails, check the Chocolatey log at C:\\ProgramData\\chocolatey\\logs\\chocolatey.log for detailed error messages. The package may also be temporarily unavailable from the repository."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "The auto-update script says WiFi is not detected. Why?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The auto-update script checks for a WiFi connection before downloading updates to avoid using metered or cellular connections. If you are on a wired Ethernet connection, the script may not detect it as WiFi. You can modify the connectivity check in the script or bypass it if you know your connection is suitable for updates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I stop or remove a scheduled task created by the scripts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Open Task Scheduler (search for it in the Start menu), navigate to the task under the Chocolatey Scripts folder, right-click it, and choose Disable or Delete. You can also use PowerShell: Unregister-ScheduledTask -TaskName \"TaskName\" -Confirm:$false. The setup-scheduled-tasks script documents the exact task names it creates."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="guides.html">Guides</a>
+        <a href="scripts.html">Scripts</a>
+        <a href="faq.html" class="active">FAQ</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span class="separator">/</span>FAQ
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Frequently Asked Questions</h1>
+        <p>Answers to common questions about Chocolatey and these scripts.</p>
+      </div>
+    </div>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+
+          <!-- About Chocolatey -->
+          <h2 class="faq-category">About Chocolatey</h2>
+
+          <details class="faq-item">
+            <summary class="faq-question">What is Chocolatey?</summary>
+            <div class="faq-answer">
+              <p>Chocolatey is a free, open-source package manager for Windows. It works like <code>apt</code> on Linux or Homebrew on macOS, letting you install, update, and manage software from the command line. Instead of downloading installers from the web and clicking through setup wizards, you run a single command like <code>choco install googlechrome</code> and Chocolatey handles the rest.</p>
+              <p>Learn more at <a href="https://chocolatey.org" target="_blank" rel="noopener noreferrer">chocolatey.org</a>.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Is Chocolatey safe to use?</summary>
+            <div class="faq-answer">
+              <p>Yes, Chocolatey is widely trusted in the Windows ecosystem and is used by individual developers, IT teams, and enterprises around the world. Packages in the <a href="https://community.chocolatey.org/packages" target="_blank" rel="noopener noreferrer">Chocolatey Community Repository</a> go through a moderation process that includes automated checks and human review.</p>
+              <p>As with any package manager, you should always review what you install and prefer packages from trusted maintainers with high download counts.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What is the difference between <code>choco install</code> and <code>choco upgrade</code>?</summary>
+            <div class="faq-answer">
+              <p><code>choco install</code> is used to install a package for the first time. <code>choco upgrade</code> updates an already-installed package to the latest version. You can also run <code>choco upgrade all</code> to update every installed package at once, which is exactly what the auto-update script automates.</p>
+              <p>If you run <code>choco install</code> on a package that is already installed, Chocolatey will tell you the package is already present and take no action.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What versions of Windows are supported?</summary>
+            <div class="faq-answer">
+              <p>Chocolatey itself supports Windows 7 and later, but these scripts are designed for and tested on <strong>Windows 10</strong> and <strong>Windows 11</strong>. You need PowerShell 5.1 or later (included with Windows 10/11) and administrator privileges to run the scripts.</p>
+              <p>PowerShell 7+ is recommended for the best experience but is not required.</p>
+            </div>
+          </details>
+
+          <!-- About These Scripts -->
+          <h2 class="faq-category">About These Scripts</h2>
+
+          <details class="faq-item">
+            <summary class="faq-question">Are these scripts safe to run on my computer?</summary>
+            <div class="faq-answer">
+              <p>The scripts are fully open-source and every line of code is available for review on <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>. They include safety features like confirmation prompts, dry-run modes, and detailed logging.</p>
+              <p>That said, they do modify system settings (execution policies, scheduled tasks, installed software), so you should always read through a script before running it with administrator privileges. See our <a href="safety-best-practices.html">Safety &amp; Best Practices</a> guide for more details.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What does the validate-setup script do?</summary>
+            <div class="faq-answer">
+              <p>The <code>validate-setup.ps1</code> script checks that Chocolatey is properly installed, verifies that all expected scripts are present, confirms scheduled tasks are configured correctly, and ensures the environment is ready for automated maintenance.</p>
+              <p>Think of it as a pre-flight checklist for your entire setup. It reports any issues it finds so you can fix them before they cause problems.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Can I customize which apps get installed?</summary>
+            <div class="faq-answer">
+              <p>Yes. The <code>install-essential-apps.ps1</code> script reads from a configurable list of packages. You can edit the script or the associated configuration to add, remove, or change which applications are installed. The script is designed to be easily customizable.</p>
+              <p>Browse the <a href="https://community.chocolatey.org/packages" target="_blank" rel="noopener noreferrer">Chocolatey package directory</a> to find package names for software you want to include.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Do the scripts work on both Windows 10 and Windows 11?</summary>
+            <div class="faq-answer">
+              <p>Yes. All scripts are tested on both Windows 10 and Windows 11. Features like toast notifications use the Windows notification system that is available on both operating systems. The scheduled tasks functionality also works identically on both versions.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What happens if a script fails partway through?</summary>
+            <div class="faq-answer">
+              <p>Each script includes error handling and logging. If something goes wrong, the script writes details to a log file in your <code>%USERPROFILE%\Logs</code> directory. Most scripts are designed to be safe to re-run &mdash; they pick up where they left off or skip steps that are already complete.</p>
+              <p>Check the log file for the specific error message. If you need help, you can <a href="https://github.com/DJCastle/chocolateyScripts/issues" target="_blank" rel="noopener noreferrer">open an issue on GitHub</a> with the relevant log output.</p>
+            </div>
+          </details>
+
+          <!-- Troubleshooting -->
+          <h2 class="faq-category">Troubleshooting</h2>
+
+          <details class="faq-item">
+            <summary class="faq-question">I get an execution policy error when running a script. How do I fix it?</summary>
+            <div class="faq-answer">
+              <p>Open PowerShell as Administrator and run:</p>
+              <p><code>Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</code></p>
+              <p>This allows locally-created scripts to run while still blocking unsigned scripts downloaded from the internet. You only need to do this once. If you are in an enterprise environment, your IT administrator may manage execution policies via Group Policy.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Chocolatey is not found after running the install script. What should I do?</summary>
+            <div class="faq-answer">
+              <p>Close and reopen your PowerShell window (or terminal) after installation. Chocolatey adds itself to the system PATH, but existing sessions may not pick up the change until they are restarted.</p>
+              <p>If the problem persists, verify that <code>C:\ProgramData\chocolatey\bin</code> is in your PATH environment variable. You can check by running <code>$env:PATH -split ';'</code> in PowerShell and looking for the Chocolatey path in the output.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">A package fails to install. What can I try?</summary>
+            <div class="faq-answer">
+              <p>First, make sure you are running PowerShell as Administrator. Then try running <code>choco install &lt;package&gt; --force</code> to retry the installation. If it still fails, check the Chocolatey log at <code>C:\ProgramData\chocolatey\logs\chocolatey.log</code> for detailed error messages.</p>
+              <p>Common causes include network issues, insufficient disk space, or the package being temporarily unavailable from the repository. You can also try <code>choco install &lt;package&gt; --force --ignore-checksums</code> as a last resort, though this bypasses an important security check.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">The auto-update script says WiFi is not detected. Why?</summary>
+            <div class="faq-answer">
+              <p>The auto-update script checks for a WiFi connection before downloading updates to avoid using metered or cellular connections. If you are on a wired Ethernet connection, the script may not detect it as WiFi and will skip the update.</p>
+              <p>You can modify the connectivity check in the script to also allow Ethernet connections, or bypass the check entirely if you know your connection is suitable for downloading updates.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">How do I stop or remove a scheduled task created by the scripts?</summary>
+            <div class="faq-answer">
+              <p>Open Task Scheduler (search for it in the Start menu), navigate to the task under the Chocolatey Scripts folder, right-click it, and choose <strong>Disable</strong> or <strong>Delete</strong>.</p>
+              <p>You can also use PowerShell:</p>
+              <p><code>Unregister-ScheduledTask -TaskName "TaskName" -Confirm:$false</code></p>
+              <p>The <code>setup-scheduled-tasks.ps1</code> script documents the exact task names it creates, so you know which tasks to look for.</p>
+            </div>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="container">
+        <div class="callout callout-info">
+          <span class="callout-icon">&#128172;</span>
+          <div class="callout-content">
+            <p><strong>Still have questions?</strong> Check the <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub repository</a> for the latest documentation, or <a href="contact.html">get in touch</a> and we will be happy to help.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="guides.html">Guides</a>
+          <a href="scripts.html">Scripts</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>

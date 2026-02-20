@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toast Notifications - Chocolatey Scripts</title>
+  <meta name="description" content="Send Windows 10/11 toast notifications from PowerShell scripts. A helper function used by other Chocolatey Scripts for visual feedback.">
+  <meta name="keywords" content="chocolatey, toast notification, windows notification, powershell, windows 10, windows 11, alert, helper function">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/scripts/send-toast-notification.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Toast Notifications - Chocolatey Scripts">
+  <meta property="og:description" content="Send Windows 10/11 toast notifications from PowerShell scripts. A helper function used by other Chocolatey Scripts for visual feedback.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/scripts/send-toast-notification.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Toast Notifications - Chocolatey Scripts">
+  <meta name="twitter:description" content="Send Windows 10/11 toast notifications from PowerShell scripts.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Toast Notifications
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Toast Notifications</h1>
+        <p>Send Windows 10/11 toast notifications from PowerShell scripts.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">Send-ToastNotification.ps1</span>
+          <span class="script-meta-item">Helper</span>
+          <span class="script-meta-item">Windows 10/11</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/Send-ToastNotification.ps1" class="btn-primary" target="_blank" rel="noopener noreferrer">Download Script</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/Send-ToastNotification.ps1" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="content-body">
+
+          <h2>What This Script Does</h2>
+
+          <p>The <code>Send-ToastNotification.ps1</code> script is a helper function that provides a clean, reusable interface for displaying Windows 10 and Windows 11 toast notifications from PowerShell. Toast notifications are the modern notification pop-ups that appear in the lower-right corner of the Windows desktop (or in the notification center on newer builds), providing non-intrusive visual feedback to the user. This script is used internally by other scripts in the Chocolatey Scripts toolkit, particularly the auto-update script, to communicate results and status information without requiring the user to actively monitor a console window.</p>
+
+          <p>Unlike the other scripts in the toolkit that are designed to be run directly, <code>Send-ToastNotification.ps1</code> is structured as a PowerShell function that is dot-sourced (imported) by other scripts. When another script in the toolkit needs to display a notification, it imports this function and calls it with the appropriate parameters. This design pattern avoids duplicating notification logic across multiple scripts and ensures consistent notification behavior throughout the toolkit. If you want to customize how notifications look or behave, you only need to modify this single file.</p>
+
+          <p>The function accepts four parameters that control the content and appearance of the notification. The <code>Title</code> parameter sets the bold heading text at the top of the notification, typically identifying which script or operation generated the notification. The <code>Message</code> parameter provides the body text with detailed information, such as the number of packages updated or a summary of errors encountered. The <code>Type</code> parameter controls the visual style of the notification, accepting values of Info, Success, Warning, or Error. Each type corresponds to a different visual treatment, helping users quickly distinguish between routine informational messages and notifications that require attention.</p>
+
+          <p>Under the hood, the function uses the Windows Runtime (WinRT) <code>Windows.UI.Notifications</code> API to create and display toast notifications. This is the same API that native Windows applications use for their notifications, which means the notifications generated by this function look and behave identically to notifications from any other Windows application. They appear in the notification center, respect the user's notification settings (including Do Not Disturb mode), and can be dismissed or interacted with in the standard way. The function loads the required WinRT assemblies at runtime, so there are no additional dependencies to install.</p>
+
+          <p>The notification XML template used by the function follows the standard Windows toast notification schema. This schema defines the structure of the notification content, including the text elements, optional images, and interactive elements. The current implementation uses a clean two-line text layout with the title on the first line and the message on the second, which provides good readability without being overly complex. The notification is configured with a standard duration (approximately 5 seconds of visibility before moving to the notification center), which balances visibility with non-intrusiveness.</p>
+
+          <p>One important technical consideration is that toast notifications require an application identity to be registered with the Windows notification system. The function uses the PowerShell application identity by default, which means notifications appear as coming from PowerShell in the notification center. This is appropriate for a scripting toolkit where PowerShell is the execution environment. The application identity also determines which icon appears alongside the notification, so users will see the PowerShell icon in their notification area when these notifications are displayed.</p>
+
+          <p>The Type parameter influences how the notification content is formatted to provide visual cues about the nature of the message. Success notifications typically indicate that an operation completed without issues, such as when all packages are successfully updated. Warning notifications indicate that an operation completed but with some issues that may need attention, such as when most packages updated successfully but one or two failed. Error notifications indicate a significant problem that prevented the operation from completing, such as a network failure that blocked all updates. Info notifications are used for neutral informational messages that do not indicate a problem.</p>
+
+          <p>Error handling in this function is deliberately silent. If a notification fails to display for any reason (such as the notification service being disabled, the system running a version of Windows that does not support WinRT notifications, or a permissions issue), the function catches the error and returns without throwing an exception. This is intentional because toast notifications are a supplementary feedback mechanism, not a critical operation. The parent scripts that call this function should not fail or alter their behavior just because a notification could not be displayed. The actual results of maintenance operations are always logged to files regardless of whether the notification succeeds.</p>
+
+          <p>The function is designed to work exclusively on Windows 10 and Windows 11. Earlier versions of Windows do not support the WinRT notification API, and attempting to use it on those systems would produce errors. The function includes a version check at the start that verifies the operating system supports toast notifications before attempting to create one. On unsupported systems, the function returns silently, allowing the parent scripts to run without modification on older Windows versions even though notifications will not be displayed.</p>
+
+          <p>For users who want to use this notification function in their own PowerShell scripts beyond the Chocolatey Scripts toolkit, the function can be imported independently. Simply dot-source the script file in your PowerShell session or script, and the <code>Send-ToastNotification</code> function becomes available for use. This makes it a versatile utility for any PowerShell automation project that would benefit from user-facing notifications, whether it involves Chocolatey or not. The function's simple parameter interface makes it straightforward to integrate into any workflow.</p>
+
+          <p>The notification system plays a particularly important role in the context of scheduled tasks. When the auto-update or cleanup scripts run via Task Scheduler in the background, there is no console window for the user to monitor. Without notifications, the user would have no way of knowing that maintenance ran or what the outcome was unless they proactively checked the log files. Toast notifications bridge this gap by providing immediate visual feedback when a user is logged in. If the user is not logged in when the scheduled task runs, the notification simply does not display, and the results remain available in the log files for later review.</p>
+
+          <h2>Usage</h2>
+
+          <p>The function is typically imported and called from other scripts rather than run directly.</p>
+
+          <pre><code># Import the function (dot-source)
+. .\Send-ToastNotification.ps1
+
+# Display an informational notification
+Send-ToastNotification -Title "Chocolatey Update" `
+    -Message "Checking for package updates..." `
+    -Type Info
+
+# Display a success notification
+Send-ToastNotification -Title "Update Complete" `
+    -Message "All 24 packages are up to date." `
+    -Type Success
+
+# Display a warning notification
+Send-ToastNotification -Title "Update Completed with Warnings" `
+    -Message "22 packages updated, 2 failed. Check logs for details." `
+    -Type Warning
+
+# Display an error notification
+Send-ToastNotification -Title "Update Failed" `
+    -Message "Network error prevented package updates. Will retry next run." `
+    -Type Error</code></pre>
+
+          <h2>Parameters</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>-Title</code></td><td>String</td><td>Yes</td><td>The bold heading text displayed at the top of the notification.</td></tr>
+              <tr><td><code>-Message</code></td><td>String</td><td>Yes</td><td>The body text with detailed information about the event.</td></tr>
+              <tr><td><code>-Type</code></td><td>String</td><td>No</td><td>The notification style: <code>Info</code>, <code>Success</code>, <code>Warning</code>, or <code>Error</code>. Defaults to <code>Info</code>.</td></tr>
+            </tbody>
+          </table>
+
+          <h2>What Gets Changed</h2>
+
+          <ul>
+            <li><strong>Windows notifications</strong> &mdash; Displays a toast notification in the Windows notification center. No files or settings are modified.</li>
+            <li><strong>No persistent changes</strong> &mdash; This function is purely for display purposes and does not write to disk, modify settings, or alter system state.</li>
+          </ul>
+
+          <h2>Related Scripts</h2>
+
+          <div class="hub-grid">
+            <a href="auto-update-chocolatey.html" class="hub-card">
+              <h3>Auto-Update Chocolatey</h3>
+              <p>The primary consumer of toast notifications, reporting update results to the user.</p>
+            </a>
+            <a href="setup-scheduled-tasks.html" class="hub-card">
+              <h3>Scheduled Tasks Setup</h3>
+              <p>Scheduled tasks run in the background and rely on toast notifications for user feedback.</p>
+            </a>
+            <a href="health-check.html" class="hub-card">
+              <h3>Health Diagnostics</h3>
+              <p>Can optionally use toast notifications to display health check summary results.</p>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>

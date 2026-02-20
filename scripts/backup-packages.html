@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backup &amp; Restore - Chocolatey Scripts</title>
+  <meta name="description" content="Export your installed Chocolatey package list for backup or migration to another Windows machine. Restore packages from a JSON backup file.">
+  <meta name="keywords" content="chocolatey, backup, restore, package list, migration, json export, windows, powershell, disaster recovery">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/scripts/backup-packages.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Backup &amp; Restore - Chocolatey Scripts">
+  <meta property="og:description" content="Export your installed Chocolatey package list for backup or migration to another Windows machine. Restore packages from a JSON backup file.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/scripts/backup-packages.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Backup &amp; Restore - Chocolatey Scripts">
+  <meta name="twitter:description" content="Export your installed Chocolatey package list for backup or migration to another Windows machine.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Backup &amp; Restore
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Backup &amp; Restore</h1>
+        <p>Export your installed package list for backup or migration to another machine.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">backup-packages.ps1</span>
+          <span class="script-meta-item">Utility</span>
+          <span class="script-meta-item">Windows 10/11</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/backup-packages.ps1" class="btn-primary" target="_blank" rel="noopener noreferrer">Download Script</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/backup-packages.ps1" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="content-body">
+
+          <h2>What This Script Does</h2>
+
+          <p>The <code>backup-packages.ps1</code> script provides a complete backup and restore solution for your Chocolatey package inventory. It addresses one of the most common challenges in Windows system management: reproducing your exact software environment on a new machine or recovering it after a system reinstallation. Rather than trying to remember every application you had installed and manually reinstalling each one, this script captures your entire package list in a structured JSON file that can be used to restore all packages in a single operation.</p>
+
+          <p>The script operates in two distinct modes controlled by the <code>-Action</code> parameter: Backup mode and Restore mode. In Backup mode, the script queries Chocolatey for a complete list of all installed packages, including their current version numbers, and exports this information to a JSON file. In Restore mode, the script reads a previously created backup file and installs every package listed in it, effectively recreating the software environment from the backup. This dual-mode design means a single script handles the entire backup-restore lifecycle.</p>
+
+          <p>When running in Backup mode, the script collects significantly more information than just package names. For each installed package, the backup file records the package identifier (the name used to install it via Chocolatey), the currently installed version number, whether the package is pinned (protected from automatic updates), and the date the backup was created. This metadata is important for several reasons. The version numbers allow you to restore packages at the exact versions you had installed rather than whatever the latest version happens to be at restore time, which is particularly valuable if you need to maintain specific versions for compatibility reasons. The pinned status ensures that any packages you had intentionally locked to a specific version remain locked after restoration.</p>
+
+          <p>The JSON format was chosen for the backup file because it is human-readable, easily editable, and supported by virtually every programming language and tool. You can open a backup file in any text editor to review its contents, manually add or remove packages before restoring, or write your own scripts that consume the backup data. The JSON structure also makes it straightforward to compare two backup files to see what has changed between backups, which is useful for tracking software changes over time or auditing differences between machines.</p>
+
+          <p>By default, backup files are stored in the <code>%USERPROFILE%\Documents\ChocolateyBackups\</code> directory with a filename that includes the date and time of the backup, such as <code>ChocolateyBackup_2026-02-20_143022.json</code>. This naming convention makes it easy to identify when each backup was created and to maintain multiple backup files as a history of your package inventory at different points in time. The backup directory is created automatically if it does not exist. You can override the default location by specifying a custom path with the <code>-BackupFile</code> parameter, which is useful if you want to save backups to a network share, cloud-synced folder, or external drive.</p>
+
+          <p>The Restore mode is where the real power of this script becomes apparent. When you point it at a backup file, it reads the package list and begins installing each package using Chocolatey. The restore process handles several edge cases intelligently. If a package in the backup is already installed on the target machine, the script skips it rather than attempting a redundant installation. If a specific version recorded in the backup is no longer available in the Chocolatey repository (which can happen with older packages), the script falls back to installing the latest available version and logs the version discrepancy. If a package fails to install, the error is logged and the script continues with the remaining packages, ensuring that one problematic package does not block the restoration of your entire software library.</p>
+
+          <p>The migration use case is perhaps the most compelling scenario for this script. When setting up a new computer, the typical workflow involves hours of downloading and installing applications, configuring each one, and trying to remember everything you had on your old machine. With this backup and restore system, the workflow becomes much simpler: run a backup on your old machine, transfer the JSON file to your new machine (via USB drive, email, cloud storage, or any other method), install Chocolatey on the new machine using <code>install-chocolatey.ps1</code>, and then run a restore. The entire software environment from your old machine will be reproduced on the new one, typically in a fraction of the time it would take to reinstall everything manually.</p>
+
+          <p>Disaster recovery is another important use case. If your system drive fails or becomes corrupted, having a recent package backup means you can rebuild your software environment quickly after reinstalling Windows. For this reason, it is recommended to store backup files in a location that is separate from your system drive, such as an external drive, network share, or cloud storage service. Some users configure a scheduled task to create weekly or monthly backups automatically, ensuring they always have a recent package list available for recovery.</p>
+
+          <p>The script also serves as a documentation tool. Even if you never need to restore from a backup, having a JSON file that lists every Chocolatey-managed application on your system is valuable for inventory purposes. IT departments can use these backup files to document the standard software configuration for different roles, compare the software installed on different machines, or create a baseline configuration that new machines should be set up with. The structured JSON format makes it easy to process these files programmatically for reporting and analysis.</p>
+
+          <p>Error handling in the backup process is straightforward since the operation is essentially read-only: querying the list of installed packages and writing a JSON file. The restore process has more robust error handling, with per-package logging of success and failure states, a summary report at the end showing how many packages were restored, how many were already present, and how many failed. The script exits with a success code when all packages are restored and a specific error code when one or more packages could not be installed, making it suitable for use in automated workflows where the exit code needs to be checked.</p>
+
+          <p>All operations are logged to <code>%USERPROFILE%\Logs\ChocolateyBackup.log</code>, including the full list of packages included in each backup, the path where the backup file was saved, and detailed per-package results during restore operations. The log file provides a complete audit trail of all backup and restore activities, which is useful for troubleshooting and for verifying that backup and restore operations completed successfully.</p>
+
+          <h2>Usage</h2>
+
+          <h3>Creating a Backup</h3>
+
+          <pre><code># Create a backup with the default filename and location
+.\backup-packages.ps1 -Action Backup
+
+# Create a backup at a custom location
+.\backup-packages.ps1 -Action Backup -BackupFile "D:\Backups\my-packages.json"</code></pre>
+
+          <h3>Restoring from a Backup</h3>
+
+          <pre><code># Restore from the most recent backup (requires Administrator)
+.\backup-packages.ps1 -Action Restore
+
+# Restore from a specific backup file
+.\backup-packages.ps1 -Action Restore -BackupFile "D:\Backups\my-packages.json"</code></pre>
+
+          <h2>Parameters</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>-Action</code></td><td>String</td><td>Yes</td><td>The operation to perform: <code>Backup</code> or <code>Restore</code>.</td></tr>
+              <tr><td><code>-BackupFile</code></td><td>String</td><td>No</td><td>Custom path for the backup file. Defaults to <code>%USERPROFILE%\Documents\ChocolateyBackups\</code> with a timestamped filename.</td></tr>
+            </tbody>
+          </table>
+
+          <h2>What Gets Changed</h2>
+
+          <ul>
+            <li><strong>Backup mode</strong> &mdash; Creates a JSON file containing the list of all installed Chocolatey packages and their versions. No system changes.</li>
+            <li><strong>Restore mode</strong> &mdash; Installs all packages listed in the backup file via Chocolatey, modifying program files and system PATH as needed.</li>
+            <li><strong>Backup directory</strong> &mdash; Creates <code>%USERPROFILE%\Documents\ChocolateyBackups\</code> if it does not exist.</li>
+            <li><strong>Log file</strong> &mdash; Creates or appends to <code>%USERPROFILE%\Logs\ChocolateyBackup.log</code>.</li>
+          </ul>
+
+          <h2>Related Scripts</h2>
+
+          <div class="hub-grid">
+            <a href="install-essential-apps.html" class="hub-card">
+              <h3>Essential Apps Installer</h3>
+              <p>Install a curated default set of apps, or use backup-restore for your custom package list.</p>
+            </a>
+            <a href="health-check.html" class="hub-card">
+              <h3>Health Diagnostics</h3>
+              <p>Run a health check after restoring packages to verify everything is working correctly.</p>
+            </a>
+            <a href="install-chocolatey.html" class="hub-card">
+              <h3>Chocolatey Installation</h3>
+              <p>Install Chocolatey on a new machine before running a package restore.</p>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>

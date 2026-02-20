@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheduled Tasks Setup - Chocolatey Scripts</title>
+  <meta name="description" content="Set up Windows scheduled tasks for automated Chocolatey maintenance including auto-updates and cleanup with an interactive wizard.">
+  <meta name="keywords" content="chocolatey, scheduled tasks, task scheduler, automation, windows maintenance, auto-update, cleanup, powershell">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/scripts/setup-scheduled-tasks.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Scheduled Tasks Setup - Chocolatey Scripts">
+  <meta property="og:description" content="Set up Windows scheduled tasks for automated Chocolatey maintenance including auto-updates and cleanup with an interactive wizard.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/scripts/setup-scheduled-tasks.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Scheduled Tasks Setup - Chocolatey Scripts">
+  <meta name="twitter:description" content="Set up Windows scheduled tasks for automated Chocolatey maintenance including auto-updates and cleanup.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Scheduled Tasks Setup
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Scheduled Tasks Setup</h1>
+        <p>Set up Windows scheduled tasks for automated Chocolatey maintenance.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">setup-scheduled-tasks.ps1</span>
+          <span class="script-meta-item">Automation</span>
+          <span class="script-meta-item">Windows 10/11</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/setup-scheduled-tasks.ps1" class="btn-primary" target="_blank" rel="noopener noreferrer">Download Script</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/setup-scheduled-tasks.ps1" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="content-body">
+
+          <h2>What This Script Does</h2>
+
+          <p>The <code>setup-scheduled-tasks.ps1</code> script provides an interactive wizard for creating and managing Windows Scheduled Tasks that automate your Chocolatey maintenance routines. Instead of requiring you to manually open Task Scheduler, navigate its complex interface, and configure task settings by hand, this script walks you through the process with a series of clear prompts and sensible defaults. The result is a fully configured set of scheduled tasks that run your Chocolatey maintenance scripts automatically on the days and times you choose, without requiring any manual intervention.</p>
+
+          <p>When you launch the script, it presents you with a main menu offering several options: create new scheduled tasks, view existing Chocolatey-related tasks, modify existing tasks, remove tasks, or exit. This menu-driven approach makes the script accessible to users who are not familiar with the Windows Task Scheduler cmdlets or the Task Scheduler GUI. Each option leads to a focused sub-workflow that guides you through the specific operation with clear instructions and validation at every step.</p>
+
+          <p>The task creation workflow is the primary feature of the script. When you choose to create new tasks, the wizard first asks which maintenance scripts you want to schedule. The two most common choices are the auto-update script (<code>auto-update-chocolatey.ps1</code>) for keeping packages current, and the cleanup script (<code>cleanup-chocolatey.ps1</code>) for managing disk space. You can choose to schedule one or both of these scripts, and each one gets its own independently configured scheduled task with its own schedule settings.</p>
+
+          <p>For each task you create, the wizard walks you through selecting the schedule frequency and timing. You can choose from daily, weekly, or monthly schedules depending on how frequently you want the maintenance to run. For weekly schedules, you select which days of the week the task should run, with the ability to choose multiple days. For example, you might configure auto-updates to run on Sundays and Wednesdays, providing two update windows per week. For each selected schedule, you specify the time of day the task should execute. The wizard defaults to 3:00 AM, which is a common choice because most users are not actively using their computer at that hour, but you can select any time that works for your routine.</p>
+
+          <p>The recommended configuration for most users is to schedule auto-updates twice per week, on Sundays and Wednesdays at 3:00 AM, and to schedule cleanup monthly, on the first Sunday of each month at 4:00 AM. This configuration ensures that your packages are never more than a few days out of date while keeping cleanup operations infrequent enough to not impact system performance unnecessarily. The wizard presents these recommendations as defaults, so you can simply press Enter to accept them or type different values to customize the schedule to your preferences.</p>
+
+          <p>Behind the scenes, the script uses the Windows Task Scheduler PowerShell cmdlets to create the tasks with the correct configuration. Each task is configured to run with highest privileges (Administrator), which is required for Chocolatey operations. The tasks are set to run whether or not a user is logged in, ensuring that maintenance happens even if the machine is unattended. The script configures the tasks with the <code>-ExecutionPolicy Bypass</code> flag so that the PowerShell execution policy does not prevent the scheduled scripts from running. The task definitions point to the full absolute paths of the maintenance scripts, so they work correctly regardless of the working directory.</p>
+
+          <p>The view existing tasks feature provides a formatted display of all Chocolatey-related scheduled tasks currently configured on the system. For each task, it shows the task name, the current status (enabled or disabled), the next scheduled run time, the last run time and result, and the script that the task executes. This overview makes it easy to verify that your scheduled tasks are configured correctly and running as expected. If a task has failed on its last run, the display includes the error code and a brief description of what might have gone wrong.</p>
+
+          <p>The modify tasks option allows you to change the schedule of existing tasks without deleting and recreating them. You can adjust the days of the week, the time of day, or the frequency of execution. The modification workflow presents the current settings for the selected task and then walks you through changing whichever aspects you want to update. Settings you do not change retain their current values, so you can make a quick adjustment to the run time without having to re-enter the day and frequency settings.</p>
+
+          <p>The remove tasks option provides a safe way to delete scheduled tasks that are no longer needed. The script lists all Chocolatey-related tasks and lets you select which ones to remove. Before any task is deleted, the script asks for confirmation, displaying the full details of the task that will be removed. This confirmation step prevents accidental deletion of tasks that are still wanted, which could lead to packages going without updates or cleanup until the oversight is noticed.</p>
+
+          <p>The script includes validation logic throughout the wizard to prevent common configuration mistakes. If you enter an invalid time format, the wizard will prompt you again with guidance on the expected format. If you try to create a task that already exists, the script will warn you and offer to update the existing task instead. If the script directory path has changed since the tasks were originally created, the script detects this and offers to update the task definitions with the correct paths. These validations make the wizard robust against user error and environmental changes.</p>
+
+          <p>Creating scheduled tasks requires Administrator privileges because the tasks are configured to run at the system level with highest privileges. If the script detects that it is not running elevated, it displays a clear message explaining that Administrator privileges are required and provides instructions for running PowerShell as Administrator. This check happens before the main menu is displayed, so you know immediately if you need to restart with elevated privileges.</p>
+
+          <p>All task creation, modification, and removal operations are logged to <code>%USERPROFILE%\Logs\ScheduledTaskSetup.log</code>. The log records the full configuration of every task created or modified, including the script path, schedule settings, and run-as configuration. This log serves as a reference for the current state of your scheduled tasks and as an audit trail of changes made over time. If something goes wrong with a scheduled task, the setup log combined with the individual script logs provides a complete picture for troubleshooting.</p>
+
+          <h2>Usage</h2>
+
+          <p>Run the script from an elevated PowerShell window to launch the interactive wizard.</p>
+
+          <pre><code># Launch the scheduled tasks wizard (requires Administrator)
+.\setup-scheduled-tasks.ps1</code></pre>
+
+          <p>The wizard presents an interactive menu:</p>
+
+          <pre><code>========================================
+  Chocolatey Scheduled Tasks Setup
+========================================
+
+  1. Create new scheduled tasks
+  2. View existing tasks
+  3. Modify existing tasks
+  4. Remove tasks
+  5. Exit
+
+Select an option (1-5):</code></pre>
+
+          <h2>Recommended Schedule</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Script</th>
+                <th>Frequency</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Auto-Update</td><td>auto-update-chocolatey.ps1</td><td>Sunday &amp; Wednesday</td><td>3:00 AM</td></tr>
+              <tr><td>Cleanup</td><td>cleanup-chocolatey.ps1</td><td>Monthly (1st Sunday)</td><td>4:00 AM</td></tr>
+            </tbody>
+          </table>
+
+          <h2>What Gets Changed</h2>
+
+          <ul>
+            <li><strong>Windows Scheduled Tasks</strong> &mdash; Creates, modifies, or removes entries in the Windows Task Scheduler for Chocolatey maintenance scripts.</li>
+            <li><strong>Task permissions</strong> &mdash; Tasks are configured to run with highest privileges (Administrator) whether or not a user is logged in.</li>
+            <li><strong>Task triggers</strong> &mdash; Schedule triggers are set based on your chosen frequency, days, and times.</li>
+            <li><strong>Log file</strong> &mdash; Creates or appends to <code>%USERPROFILE%\Logs\ScheduledTaskSetup.log</code>.</li>
+          </ul>
+
+          <h2>Related Scripts</h2>
+
+          <div class="hub-grid">
+            <a href="auto-update-chocolatey.html" class="hub-card">
+              <h3>Auto-Update Chocolatey</h3>
+              <p>The primary script scheduled for automated package updates.</p>
+            </a>
+            <a href="cleanup-chocolatey.html" class="hub-card">
+              <h3>Chocolatey Cleanup</h3>
+              <p>The cleanup script commonly scheduled for monthly disk space maintenance.</p>
+            </a>
+            <a href="send-toast-notification.html" class="hub-card">
+              <h3>Toast Notifications</h3>
+              <p>Scheduled scripts use toast notifications to report results when running in the background.</p>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>

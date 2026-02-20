@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started &mdash; Chocolatey Scripts</title>
+  <meta name="description" content="Step-by-step guide to setting up and using Chocolatey Scripts on Windows. Download, configure, and run your first PowerShell automation script in minutes.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/getting-started.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Getting Started &mdash; Chocolatey Scripts">
+  <meta property="og:description" content="Step-by-step guide to setting up and using Chocolatey Scripts on Windows. Download, configure, and run your first PowerShell automation script in minutes.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/getting-started.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Getting Started &mdash; Chocolatey Scripts">
+  <meta name="twitter:description" content="Step-by-step guide to setting up and using Chocolatey Scripts on Windows. Download, configure, and run your first PowerShell automation script in minutes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="getting-started.html" class="active">Getting Started</a>
+        <a href="guides.html">Guides</a>
+        <a href="scripts.html">Scripts</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span class="separator">/</span>Getting Started
+    </nav>
+    <div class="page-header">
+      <div class="container">
+        <h1>Getting Started</h1>
+        <p>A step-by-step guide to setting up and using Chocolatey Scripts on your Windows machine. You will be up and running in just a few minutes.</p>
+      </div>
+    </div>
+
+    <!-- Requirements -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Requirements</h2>
+          <p>Before you begin, make sure your system meets the following requirements. These PowerShell scripts are designed to work on modern Windows systems and require a few basic prerequisites to function properly. If you are unsure about any of these, read through the notes below each item for guidance.</p>
+          <ul>
+            <li><strong>Windows 10 (version 1809 or later) or Windows 11</strong> &mdash; These scripts are designed and tested on modern Windows releases. Earlier versions of Windows may lack the PowerShell features and system APIs that the scripts depend on. You can check your Windows version by pressing <code>Win + R</code>, typing <code>winver</code>, and pressing Enter.</li>
+            <li><strong>PowerShell 5.1 or later (PowerShell 7+ recommended)</strong> &mdash; PowerShell 5.1 ships with Windows 10 and 11, so you likely already have it. However, PowerShell 7+ offers significantly faster execution, improved error handling, and modern language features that make the scripts more reliable. You can check your current version by opening PowerShell and running <code>$PSVersionTable.PSVersion</code>.</li>
+            <li><strong>Administrator privileges</strong> &mdash; Chocolatey installs software system-wide, which requires elevated permissions. You will need to run PowerShell as Administrator for most operations. If you are not an administrator on your machine, you will need someone with those rights to assist during setup.</li>
+            <li><strong>Active internet connection</strong> &mdash; A stable connection is required to download Chocolatey itself and all packages you choose to install. Wired or strong Wi-Fi connections are recommended, especially during the initial setup which may download several hundred megabytes of data.</li>
+            <li><strong>At least 10 GB free disk space</strong> &mdash; Chocolatey, its package cache, and the applications you install will need room on your drive. The actual space required depends on how many applications you choose to install. You can check your available storage by opening File Explorer, right-clicking your C: drive, and selecting Properties.</li>
+          </ul>
+          <p>If your system does not meet one or more of these requirements, the scripts include pre-flight checks that will detect the issue and let you know what needs to be resolved before continuing.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 1 — Download -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 1 &mdash; Download the Scripts</h2>
+          <p>There are two ways to get the scripts onto your Windows machine. Choose the option that best fits your workflow. If you are comfortable with Git and want to receive updates easily, cloning is the way to go. If you just want to grab the files quickly and do not plan to track upstream changes, downloading the ZIP is perfectly fine.</p>
+
+          <h3>Option A: Clone with Git</h3>
+          <p>Cloning creates a local copy of the repository that is linked to the original on GitHub. This makes it easy to pull down updates later with a single <code>git pull</code> command, and also lets you contribute back if you find improvements to share.</p>
+          <pre><code># Open PowerShell and clone the repository
+git clone https://github.com/DJCastle/chocolateyScripts.git
+
+# Move into the project folder
+cd chocolateyScripts</code></pre>
+          <p>If you do not have Git installed yet, you can install it later using Chocolatey itself (<code>choco install git -y</code>), or download it manually from <a href="https://git-scm.com" target="_blank" rel="noopener noreferrer">git-scm.com</a>. For now, Option B below does not require Git.</p>
+
+          <h3>Option B: Download ZIP</h3>
+          <p>If you prefer not to use Git, you can download the entire project as a ZIP file directly from GitHub. This is a quick option if you want to get started right away without setting up Git first.</p>
+          <ol>
+            <li>Visit the <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub repository</a> in your browser.</li>
+            <li>Click the green <strong>Code</strong> button and select <strong>Download ZIP</strong>.</li>
+            <li>Extract the ZIP file to a convenient location (such as <code>C:\Users\YourName\chocolateyScripts</code>).</li>
+            <li>Open PowerShell and navigate to the extracted folder.</li>
+          </ol>
+          <p>Alternatively, you can download and extract using PowerShell directly:</p>
+          <pre><code># Download the latest version as a ZIP file
+Invoke-WebRequest -Uri "https://github.com/DJCastle/chocolateyScripts/archive/refs/heads/main.zip" -OutFile "$env:TEMP\chocolateyScripts.zip"
+
+# Extract to your home directory
+Expand-Archive -Path "$env:TEMP\chocolateyScripts.zip" -DestinationPath "$env:USERPROFILE"
+
+# Move into the project folder
+cd "$env:USERPROFILE\chocolateyScripts-main"</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2 — Set Execution Policy -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 2 &mdash; Set Execution Policy</h2>
+          <p>By default, Windows does not allow PowerShell scripts to run. This is a security measure that prevents scripts from running unintentionally. Before you can execute any of the Chocolatey Scripts, you need to adjust the execution policy to allow locally-created scripts to run while still requiring downloaded scripts to be signed.</p>
+          <p>Open PowerShell <strong>as Administrator</strong> (right-click the PowerShell icon and select "Run as Administrator") and run the following command:</p>
+          <pre><code># Allow local scripts to run (one-time setup)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+          <p>The <code>RemoteSigned</code> policy is a balanced security setting. It allows scripts created on your local machine to run freely, while scripts downloaded from the internet must have a valid digital signature. This is the recommended setting for most users and is the same policy that Microsoft suggests for development environments.</p>
+          <p>You can verify the current execution policy at any time by running:</p>
+          <pre><code># Check the current execution policy
+Get-ExecutionPolicy</code></pre>
+          <p>If you see <code>RemoteSigned</code> in the output, you are ready to proceed. If you see <code>Restricted</code>, the command above did not take effect and you may need to run PowerShell as Administrator again. Some organizations enforce execution policies through Group Policy, in which case you may need to contact your IT department.</p>
+
+          <div class="callout callout-tip">
+            <div class="callout-icon">&#9733;</div>
+            <div class="callout-content">
+              <p><strong>Pro tip:</strong> If you are on a managed corporate machine where the execution policy is locked down by Group Policy, you can use the <code>-Scope Process</code> parameter instead. This changes the policy only for the current PowerShell session and does not persist after you close the window: <code>Set-ExecutionPolicy RemoteSigned -Scope Process</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3 — Install Chocolatey -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 3 &mdash; Install Chocolatey</h2>
+          <p>With the execution policy configured, you are ready to install Chocolatey itself. The installation script handles everything automatically, including downloading Chocolatey, configuring environment variables, and running initial health checks to verify the installation succeeded.</p>
+          <p>Make sure you are in the project directory and running PowerShell as Administrator, then execute:</p>
+          <pre><code># Install the Chocolatey package manager
+.\install-chocolatey.ps1</code></pre>
+
+          <h3>What This Script Does</h3>
+          <p>The installation script performs the following operations in order:</p>
+          <ul>
+            <li><strong>Downloads and installs Chocolatey</strong> from the official source at <a href="https://chocolatey.org" target="_blank" rel="noopener noreferrer">chocolatey.org</a>. If Chocolatey is already installed, the script detects this and skips the installation step entirely, making it safe to run multiple times.</li>
+            <li><strong>Configures environment variables</strong> so that the <code>choco</code> command is available in all future PowerShell and Command Prompt sessions without needing to restart your computer.</li>
+            <li><strong>Enables global confirmation</strong> by running <code>choco feature enable -n allowGlobalConfirmation</code>. This reduces interactive prompts during package installations, which is essential for automated scripts.</li>
+            <li><strong>Runs health checks</strong> using <code>choco doctor</code> to verify that the installation is healthy and all components are functioning correctly.</li>
+            <li><strong>Creates installation logs</strong> in <code>%USERPROFILE%\Logs\</code> with a timestamped record of every operation performed.</li>
+          </ul>
+
+          <h3>Expected Output</h3>
+          <p>During a successful installation, you will see green success messages showing the installation progress, the Chocolatey version number, and the configuration status. If anything goes wrong, error messages will appear in red with clear descriptions of what failed and how to fix it.</p>
+          <p>After the script completes, you can verify the installation by running:</p>
+          <pre><code># Verify Chocolatey is installed and check its version
+choco --version</code></pre>
+          <p>If you see a version number (for example, <code>2.4.1</code>), Chocolatey is installed and working correctly. If you get a "command not found" error, try closing and reopening PowerShell, or run <code>refreshenv</code> to reload environment variables in the current session.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4 — Install Essential Apps -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 4 &mdash; Install Essential Applications</h2>
+          <p>With Chocolatey installed, you can now use the essential apps script to install a curated set of applications that most Windows users need. This script batch-installs everything in one pass, saving you the time and effort of visiting multiple websites, downloading individual installers, and clicking through setup wizards for each application.</p>
+          <pre><code># Install the curated set of essential Windows applications
+.\install-essential-apps.ps1</code></pre>
+
+          <h3>Applications Installed</h3>
+          <p>The script installs the following categories of applications by default:</p>
+          <ul>
+            <li><strong>Browsers</strong> &mdash; Google Chrome, Mozilla Firefox, Microsoft Edge (if not already present)</li>
+            <li><strong>Development Tools</strong> &mdash; Visual Studio Code, Notepad++, Git, PowerShell 7+</li>
+            <li><strong>Utilities</strong> &mdash; 7-Zip, VLC Media Player, Windows Terminal</li>
+            <li><strong>Communication</strong> &mdash; Discord</li>
+            <li><strong>Gaming</strong> &mdash; Steam</li>
+          </ul>
+          <p>Each application is installed using Chocolatey's verified community packages, which means you get the official versions from trusted sources with automatic checksum verification.</p>
+
+          <h3>Customizing the Application List</h3>
+          <p>You do not have to install every application in the default list. The script uses a <code>$apps</code> array that you can edit to add or remove applications before running it. Open the script in any text editor to customize:</p>
+          <pre><code># View or edit the application list
+notepad .\install-essential-apps.ps1
+
+# Or use PowerShell to view the current list
+Get-Content .\install-essential-apps.ps1 | Select-String "\$apps"</code></pre>
+          <p>To find the correct package name for an application you want to add, search the <a href="https://community.chocolatey.org/packages" target="_blank" rel="noopener noreferrer">Chocolatey package repository</a> or use the command line:</p>
+          <pre><code># Search for a package by name
+choco search firefox
+
+# Get detailed information about a specific package
+choco info googlechrome</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 5 — Run Health Check -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 5 &mdash; Run Health Check</h2>
+          <p>After installing Chocolatey and your applications, it is important to run a comprehensive health check to verify that everything is working correctly. The health check script examines your entire Chocolatey installation and reports any issues that need attention.</p>
+          <pre><code># Run the comprehensive health check
+.\health-check.ps1</code></pre>
+
+          <h3>What It Checks</h3>
+          <p>The health check script performs a thorough examination of your system:</p>
+          <ul>
+            <li><strong>Chocolatey installation status</strong> &mdash; Verifies that Chocolatey is installed, accessible from the command line, and running the latest version.</li>
+            <li><strong>System requirements</strong> &mdash; Confirms that your Windows version, PowerShell version, and available disk space all meet the minimum requirements.</li>
+            <li><strong>Outdated packages</strong> &mdash; Lists all installed packages that have newer versions available, along with the current and latest version numbers.</li>
+            <li><strong>Disk usage</strong> &mdash; Reports how much disk space is being used by Chocolatey's package cache and installed applications, and warns if free space is running low.</li>
+            <li><strong>Configuration issues</strong> &mdash; Checks for common configuration problems such as missing config files, invalid settings, or conflicting options.</li>
+            <li><strong>Scheduled tasks</strong> &mdash; Reports on any Chocolatey-related scheduled tasks, their status, and when they last ran.</li>
+          </ul>
+          <p>The health check uses color-coded output to make results easy to scan: green for items that pass, yellow for warnings that deserve attention, and red for errors that need to be fixed. A summary at the end gives you a quick overview of your system's overall health.</p>
+
+          <div class="callout callout-tip">
+            <div class="callout-icon">&#9733;</div>
+            <div class="callout-content">
+              <p><strong>Pro tip:</strong> Make it a habit to run the health check after installing new packages, when experiencing issues, during monthly maintenance, and before major updates. Regular health checks catch small problems before they become big ones.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Configuration -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Configuration</h2>
+          <p>The <code>config.json</code> file centralizes all script settings in one place. Rather than editing individual scripts to change behavior, you modify this single configuration file. An example configuration ships with the project so you can see all available options and their default values.</p>
+          <p>Start by copying the example configuration to create your own personal config file:</p>
+          <pre><code># Create your config from the example template
+Copy-Item config.example.json config.json
+
+# Open the config file in Notepad for editing
+notepad config.json</code></pre>
+          <p>Here are the key settings you will want to review and customize:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>What It Does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>wifiNetwork</code></td>
+                <td>Only run auto-updates when connected to this specific Wi-Fi network. Set this to your home or office network name to prevent large downloads on metered or slow connections. The name must match your SSID exactly, including capitalization.</td>
+              </tr>
+              <tr>
+                <td><code>emailAddress</code></td>
+                <td>Where to send update reports. After each automatic update, you will receive a summary of what was updated, what failed, and any action items. Requires SMTP configuration (see below).</td>
+              </tr>
+              <tr>
+                <td><code>smtpServer</code> / <code>smtpPort</code></td>
+                <td>SMTP server settings for email notifications. For Gmail, use <code>smtp.gmail.com</code> on port <code>587</code>. You will need to create an <a href="https://support.google.com/accounts/answer/185833" target="_blank" rel="noopener noreferrer">App Password</a> for authentication.</td>
+              </tr>
+              <tr>
+                <td><code>notifications</code></td>
+                <td>Controls which types of notifications are sent. You can independently enable or disable email notifications, toast notifications, and filter by event type (success, error, warning).</td>
+              </tr>
+              <tr>
+                <td><code>backupSettings</code></td>
+                <td>Configure automatic backups before updates. Set the backup directory path, enable or disable auto-backup, and control how many backup files to keep before old ones are rotated out.</td>
+              </tr>
+              <tr>
+                <td><code>maxRetries</code></td>
+                <td>Number of times to retry a failed operation (such as a network download) before giving up. The default of 3 works well for most connections.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>The example config file includes sensible defaults, so you do not need to configure everything right away. The most important setting to customize is <code>wifiNetwork</code> if you plan to use automatic updates.</p>
+
+          <h3>Creating an Initial Backup</h3>
+          <p>Before making any further changes, it is a good idea to create a backup of your current package configuration. This gives you a restore point if you ever need to set up a new machine or recover from a problem.</p>
+          <pre><code># Create a backup of all installed packages
+.\backup-packages.ps1 -Action Backup</code></pre>
+          <p>Your backup will be saved as a JSON file at:<br>
+          <code>%USERPROFILE%\Documents\ChocolateyBackups\chocolatey-backup-YYYY-MM-DD_HHMMSS.json</code></p>
+          <p>This file contains a complete list of every Chocolatey package installed on your system along with version numbers. You can use it later to restore your exact package configuration on a fresh Windows installation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Running Scripts -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Running Scripts</h2>
+          <p>With everything installed and configured, here is how to use the scripts for ongoing maintenance of your Windows system. Each script is designed to be run independently, so you can use whichever ones fit your workflow.</p>
+
+          <h3>Manual Updates</h3>
+          <p>Keep all your installed packages up to date with the latest versions:</p>
+          <pre><code># Update all Chocolatey packages
+.\auto-update-chocolatey.ps1</code></pre>
+          <p>The update script is smart about when and how it runs. Before starting any downloads, it checks three conditions:</p>
+          <ul>
+            <li><strong>WiFi network</strong> &mdash; Connected to the network specified in <code>config.json</code> (configurable, can be disabled)</li>
+            <li><strong>Power status</strong> &mdash; Plugged into AC power, not running on battery (important for laptops)</li>
+            <li><strong>Administrator privileges</strong> &mdash; Running with the elevated permissions Chocolatey needs</li>
+          </ul>
+          <p>If all conditions are met, the script updates Chocolatey itself, upgrades all installed packages to their latest versions, runs cleanup to remove old package versions, sends notifications if configured, and logs all operations to the log directory.</p>
+
+          <h3>Manual Cleanup</h3>
+          <p>Over time, Chocolatey accumulates old package versions and cached files that take up disk space. The cleanup script removes these safely:</p>
+          <pre><code># Free up disk space by cleaning old packages and caches
+.\cleanup-chocolatey.ps1</code></pre>
+          <p>The cleanup script removes old package versions that are no longer needed, cached package download files, orphaned dependencies left behind by uninstalled packages, and temporary installation files. Typical disk space savings range from 500 MB to 2 GB depending on how many packages you have installed and how long it has been since your last cleanup.</p>
+
+          <h3>Health Monitoring</h3>
+          <p>Run the health check script periodically to catch issues early:</p>
+          <pre><code># Run a comprehensive system health check
+.\health-check.ps1</code></pre>
+          <p>Good times to run a health check include after installing new packages, when experiencing issues with installed applications, as part of monthly maintenance, and before running major updates.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Optional: Automation Setup -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Optional &mdash; Automation Setup</h2>
+          <p>Once you have Chocolatey and your applications installed, you can set up automatic maintenance to keep everything current without manual intervention. The automation system uses Windows Task Scheduler to run updates and cleanup on a schedule you define.</p>
+          <pre><code># Launch the interactive automation setup wizard
+.\setup-scheduled-tasks.ps1</code></pre>
+          <p>The setup wizard walks you through creating scheduled tasks with an interactive menu. You have three main options:</p>
+
+          <h3>1. Auto-Update Task</h3>
+          <p>Schedules automatic package updates. You choose which days of the week to run (for example, Sunday and Wednesday) and the time of day (for example, 3:00 AM). The task only runs when conditions are met: connected to your specified WiFi network and plugged into power.</p>
+
+          <h3>2. Cleanup Task</h3>
+          <p>Schedules automatic disk space reclamation. Choose from daily, weekly, or monthly frequencies. Runs during off-peak hours to minimize any impact on system performance while keeping your disk tidy.</p>
+
+          <h3>3. View and Manage Tasks</h3>
+          <p>Review existing Chocolatey scheduled tasks, check when they last ran, see their next scheduled run time, and remove any tasks you no longer want.</p>
+
+          <h3>Recommended Schedule</h3>
+          <p>For most users, we recommend the following schedule:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Schedule</th>
+                <th>Rationale</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Auto-Update</strong></td>
+                <td>Sunday and Wednesday at 3:00 AM</td>
+                <td>Twice-weekly updates ensure timely security patches without excessive network usage. Running at 3:00 AM avoids interference with work hours.</td>
+              </tr>
+              <tr>
+                <td><strong>Cleanup</strong></td>
+                <td>Monthly (first Sunday of the month)</td>
+                <td>Monthly cleanup prevents cache bloat without running so frequently that it wastes CPU cycles. Once a month is sufficient for most users.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>You can verify that your scheduled tasks were created successfully using PowerShell:</p>
+          <pre><code># List all Chocolatey scheduled tasks
+Get-ScheduledTask | Where-Object { $_.TaskName -like "*Chocolatey*" }</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Logs -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Logs</h2>
+          <p>All scripts produce detailed logs that record every action taken, along with timestamps and status indicators. Logs are your best friend when troubleshooting &mdash; they contain a complete record of what happened, what succeeded, and what failed. Every log entry includes a severity level (INFO, WARNING, ERROR, SUCCESS) so you can quickly scan for issues.</p>
+          <p>Log files are stored in your user profile's Logs directory:</p>
+          <pre><code># List all Chocolatey Scripts log files
+Get-ChildItem "$env:USERPROFILE\Logs\Chocolatey*.log"
+
+# View the most recent log entries (last 50 lines)
+Get-Content "$env:USERPROFILE\Logs\ChocolateyInstall.log" -Tail 50
+
+# Search logs for errors across all log files
+Get-ChildItem "$env:USERPROFILE\Logs\Chocolatey*.log" |
+    ForEach-Object { Select-String "ERROR" $_ }
+
+# View recent errors with context
+Get-Content "$env:USERPROFILE\Logs\*.log" |
+    Select-String "ERROR" |
+    Select-Object -Last 20</code></pre>
+          <p>If something goes wrong during a script run, the log file should be the first place you check. It will show you exactly which step failed and usually includes an error message from the underlying tool that explains why. Log entries include timestamps in the format <code>[2026-02-06 14:30:15]</code>, making it easy to correlate events and understand the sequence of operations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tips for Success -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Tips for Success</h2>
+          <div class="callout callout-tip">
+            <div class="callout-icon">&#9733;</div>
+            <div class="callout-content">
+              <p><strong>Always run PowerShell as Administrator</strong> when executing these scripts. Right-click the PowerShell icon and select "Run as Administrator." Without elevated privileges, Chocolatey cannot install or update system-wide packages and you will see access denied errors.</p>
+              <p><strong>Review scripts before running them.</strong> You can read any script's contents with <code>Get-Content .\script-name.ps1 | more</code>. This is an educational project, and understanding what each script does will help you troubleshoot issues and customize the scripts for your needs.</p>
+              <p><strong>Back up your system regularly.</strong> Run <code>.\backup-packages.ps1 -Action Backup</code> monthly to maintain a current snapshot of your installed packages. This makes it trivial to restore your exact setup on a new machine or after a Windows reinstallation.</p>
+              <p><strong>Keep your config.json private.</strong> The configuration file contains personal settings like your WiFi network name and email address. It is listed in <code>.gitignore</code> so it will not be accidentally committed to version control. If you fork the repository, double-check that your config file is not being tracked.</p>
+              <p><strong>Start with one script at a time</strong> rather than running everything at once. This gives you a clear understanding of what each script does and makes troubleshooting simpler if anything does not work as expected.</p>
+              <p><strong>Consider upgrading to PowerShell 7+</strong> for better performance, improved error handling, and modern language features. After installing Chocolatey, you can install it with: <code>choco install powershell-core -y</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next Steps -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Next Steps</h2>
+          <p>Now that you are set up, here are some resources to help you go further:</p>
+          <ul>
+            <li><a href="safety-best-practices.html">Safety &amp; Best Practices</a> &mdash; Understand the safety features built into these scripts and learn best practices for working with system automation on Windows.</li>
+            <li><a href="powershell-scripting-guide.html">PowerShell Scripting Guide</a> &mdash; Learn PowerShell scripting concepts by studying the real-world patterns used in these automation scripts.</li>
+            <li><a href="faq.html">FAQ</a> &mdash; Answers to common questions about installation, configuration, and troubleshooting.</li>
+            <li><a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub Repository</a> &mdash; Browse the source code, report issues, and contribute improvements.</li>
+            <li><a href="https://docs.chocolatey.org/" target="_blank" rel="noopener noreferrer">Chocolatey Documentation</a> &mdash; The official Chocolatey docs for in-depth reference on package management.</li>
+            <li><a href="https://community.chocolatey.org/packages" target="_blank" rel="noopener noreferrer">Package Search</a> &mdash; Browse thousands of available Chocolatey packages to expand your setup.</li>
+          </ul>
+
+          <h3>Recommended Workflow</h3>
+          <p>Once everything is configured, here is the workflow that works best for most users:</p>
+          <pre><code># Weekly: Check for updates (or let the scheduled task handle it)
+.\auto-update-chocolatey.ps1
+
+# Monthly: Run health check and cleanup
+.\health-check.ps1
+.\cleanup-chocolatey.ps1
+
+# Monthly: Create a backup of your package list
+.\backup-packages.ps1 -Action Backup
+
+# As needed: Install new packages
+choco install package-name -y</code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="guides.html">Guides</a>
+          <a href="scripts.html">Scripts</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>

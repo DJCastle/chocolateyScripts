@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Essential Apps Installer - Chocolatey Scripts</title>
+  <meta name="description" content="Install a curated set of essential Windows applications using Chocolatey with a single PowerShell script.">
+  <meta name="keywords" content="chocolatey, install apps, windows applications, powershell, chrome, vscode, git, automation, essential software">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/scripts/install-essential-apps.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Essential Apps Installer - Chocolatey Scripts">
+  <meta property="og:description" content="Install a curated set of essential Windows applications using Chocolatey with a single PowerShell script.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/scripts/install-essential-apps.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Essential Apps Installer - Chocolatey Scripts">
+  <meta name="twitter:description" content="Install a curated set of essential Windows applications using Chocolatey with a single PowerShell script.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Essential Apps Installer
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Essential Apps Installer</h1>
+        <p>Install a curated set of essential Windows applications using Chocolatey.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">install-essential-apps.ps1</span>
+          <span class="script-meta-item">Installation</span>
+          <span class="script-meta-item">Windows 10/11</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/install-essential-apps.ps1" class="btn-primary" target="_blank" rel="noopener noreferrer">Download Script</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/install-essential-apps.ps1" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="content-body">
+
+          <h2>What This Script Does</h2>
+
+          <p>The <code>install-essential-apps.ps1</code> script automates the process of installing a carefully curated collection of essential Windows applications through the Chocolatey package manager. Instead of spending an hour or more downloading installers from individual websites, navigating through setup wizards, and clicking through license agreements, this script installs all of your core applications in a single automated run. It is designed to be the second script you run after <code>install-chocolatey.ps1</code>, transforming a bare Windows installation into a fully equipped workstation.</p>
+
+          <p>At its core, the script defines a customizable array called <code>$apps</code> that contains the Chocolatey package identifiers for each application to be installed. The default list has been carefully selected to cover the most common needs of developers, IT professionals, and power users. The included applications represent browsers for web access and testing, development tools for coding and version control, utilities for file management and media playback, and communication and entertainment platforms. Each package identifier in the array corresponds to a verified package in the Chocolatey Community Repository, ensuring that you receive the official, unmodified version of each application.</p>
+
+          <p>The default application list includes Google Chrome and Mozilla Firefox as primary and secondary web browsers, providing both Chromium-based and Gecko-based options for web browsing and development testing. Microsoft Edge is also included, though it comes pre-installed on modern Windows systems, having it managed by Chocolatey ensures it stays up to date through the same automated update pipeline as your other applications. Visual Studio Code is included as the primary code editor, offering a lightweight yet powerful development environment with an extensive extension marketplace. Notepad++ provides a fast, lightweight alternative for quick text editing and log file viewing.</p>
+
+          <p>For development infrastructure, the script installs Git, which is essential for version control and is a prerequisite for countless development workflows. PowerShell 7 or later is included to provide the modern, cross-platform version of PowerShell alongside the built-in Windows PowerShell 5.1. Having both versions available ensures compatibility with older scripts while giving you access to the latest PowerShell features and improvements. The 7-Zip file archiver handles compressed file formats far more efficiently than the built-in Windows extraction tool, supporting formats like 7z, RAR, TAR, and many others.</p>
+
+          <p>VLC media player is included as a universal media player that handles virtually every audio and video format without requiring additional codec installations. Windows Terminal provides a modern, tabbed terminal experience that unifies PowerShell, Command Prompt, and WSL terminals in a single application with GPU-accelerated text rendering and extensive customization options. Discord serves communication needs for development communities and team coordination, while Steam provides access to the gaming platform for leisure time.</p>
+
+          <p>One of the most valuable aspects of this script is its customizability. The <code>$apps</code> array is designed to be easily modified before running the script. You can add packages by looking up their identifiers on the Chocolatey Community Repository website, remove packages you do not need, or rearrange the order of installation. For enterprise environments, system administrators often create a customized version of this array that includes organization-specific tools such as Slack, Microsoft Teams, specific VPN clients, or proprietary software that has been packaged for Chocolatey.</p>
+
+          <p>The script processes each application in the array sequentially, running the <code>choco install</code> command for each one. This sequential approach is intentional rather than parallel because some applications have shared dependencies or may conflict during simultaneous installation. For each application, the script logs whether the installation succeeded, whether the package was already installed, or whether any errors occurred. This per-package tracking makes it easy to identify which specific application caused a problem if something goes wrong during a batch installation.</p>
+
+          <p>Error handling in this script is designed to be resilient. If one application fails to install, the script does not abort the entire process. Instead, it logs the failure and continues with the next application in the list. At the end of the run, a summary report shows which applications were successfully installed, which were already present, and which failed. This approach ensures that a single problematic package does not prevent the rest of your essential applications from being installed.</p>
+
+          <p>The script requires that Chocolatey is already installed on the system, which is why <code>install-chocolatey.ps1</code> should be run first. If Chocolatey is not detected, the script will exit with a clear error message directing you to run the installation script. Administrator privileges are required because Chocolatey package installations typically modify the Program Files directory and system PATH, both of which require elevated permissions.</p>
+
+          <p>All output from the installation process is logged to <code>%USERPROFILE%\Logs\EssentialAppsInstall.log</code>, providing a detailed record of every package operation. This log file is invaluable for troubleshooting failed installations, verifying which versions were installed, and maintaining an audit trail of changes made to the system. The log includes timestamps, package names, version numbers, and the full output from each Chocolatey installation command.</p>
+
+          <p>This script is particularly useful when setting up new machines, whether it is a fresh Windows installation, a new laptop for a team member, or a virtual machine for testing. By maintaining a customized version of this script with your preferred application list, you can reproduce your exact software environment on any Windows machine in minutes rather than hours. Combined with the backup and restore functionality provided by <code>backup-packages.ps1</code>, you have a complete solution for software environment management.</p>
+
+          <h2>Usage</h2>
+
+          <p>Open an elevated PowerShell window and navigate to the script directory.</p>
+
+          <pre><code># Run with the default app list
+.\install-essential-apps.ps1</code></pre>
+
+          <p>To customize the application list, open the script in a text editor before running it and modify the <code>$apps</code> array:</p>
+
+          <pre><code># Default apps array inside the script
+$apps = @(
+    "googlechrome"
+    "firefox"
+    "microsoft-edge"
+    "vscode"
+    "notepadplusplus"
+    "git"
+    "powershell-core"
+    "7zip"
+    "vlc"
+    "microsoft-windows-terminal"
+    "discord"
+    "steam"
+)</code></pre>
+
+          <p>You can add or remove entries as needed. To find Chocolatey package names, search the <a href="https://community.chocolatey.org/packages" target="_blank" rel="noopener noreferrer">Chocolatey Community Repository</a>.</p>
+
+          <h2>Default Applications</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Application</th>
+                <th>Chocolatey Package</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Google Chrome</td><td><code>googlechrome</code></td><td>Browser</td></tr>
+              <tr><td>Mozilla Firefox</td><td><code>firefox</code></td><td>Browser</td></tr>
+              <tr><td>Microsoft Edge</td><td><code>microsoft-edge</code></td><td>Browser</td></tr>
+              <tr><td>Visual Studio Code</td><td><code>vscode</code></td><td>Development</td></tr>
+              <tr><td>Notepad++</td><td><code>notepadplusplus</code></td><td>Development</td></tr>
+              <tr><td>Git</td><td><code>git</code></td><td>Development</td></tr>
+              <tr><td>PowerShell 7+</td><td><code>powershell-core</code></td><td>Development</td></tr>
+              <tr><td>7-Zip</td><td><code>7zip</code></td><td>Utility</td></tr>
+              <tr><td>VLC</td><td><code>vlc</code></td><td>Media</td></tr>
+              <tr><td>Windows Terminal</td><td><code>microsoft-windows-terminal</code></td><td>Utility</td></tr>
+              <tr><td>Discord</td><td><code>discord</code></td><td>Communication</td></tr>
+              <tr><td>Steam</td><td><code>steam</code></td><td>Entertainment</td></tr>
+            </tbody>
+          </table>
+
+          <h2>What Gets Changed</h2>
+
+          <ul>
+            <li><strong>Application installations</strong> &mdash; Each application in the <code>$apps</code> array is installed to its default location via Chocolatey.</li>
+            <li><strong>PATH entries</strong> &mdash; Applications that include command-line tools (Git, PowerShell 7, VS Code) add entries to the system PATH.</li>
+            <li><strong>Desktop shortcuts</strong> &mdash; Some packages create desktop shortcuts as part of their installation process.</li>
+            <li><strong>Start menu entries</strong> &mdash; All installed applications create entries in the Start menu.</li>
+            <li><strong>Log file</strong> &mdash; Creates or appends to <code>%USERPROFILE%\Logs\EssentialAppsInstall.log</code>.</li>
+          </ul>
+
+          <h2>Related Scripts</h2>
+
+          <div class="hub-grid">
+            <a href="install-chocolatey.html" class="hub-card">
+              <h3>Chocolatey Installation</h3>
+              <p>Install and configure Chocolatey before running the essential apps installer.</p>
+            </a>
+            <a href="backup-packages.html" class="hub-card">
+              <h3>Backup &amp; Restore</h3>
+              <p>Export your installed package list for backup or migration after installing apps.</p>
+            </a>
+            <a href="auto-update-chocolatey.html" class="hub-card">
+              <h3>Auto-Update Chocolatey</h3>
+              <p>Keep your installed applications up to date automatically.</p>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>

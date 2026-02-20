@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Validation - Chocolatey Scripts</title>
+  <meta name="description" content="Validate your Chocolatey Scripts installation and configuration. Checks all scripts are present, config.json is valid, and system requirements are met.">
+  <meta name="keywords" content="chocolatey, validate, setup, configuration, config.json, powershell, windows, system check, installation verify">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/scripts/validate-setup.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Setup Validation - Chocolatey Scripts">
+  <meta property="og:description" content="Validate your Chocolatey Scripts installation and configuration. Checks all scripts are present, config.json is valid, and system requirements are met.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/scripts/validate-setup.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Setup Validation - Chocolatey Scripts">
+  <meta name="twitter:description" content="Validate your Chocolatey Scripts installation and configuration.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Setup Validation
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Setup Validation</h1>
+        <p>Validate your Chocolatey Scripts installation and configuration.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">validate-setup.ps1</span>
+          <span class="script-meta-item">Diagnostics</span>
+          <span class="script-meta-item">Windows 10/11</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/validate-setup.ps1" class="btn-primary" target="_blank" rel="noopener noreferrer">Download Script</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/validate-setup.ps1" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="content-body">
+
+          <h2>What This Script Does</h2>
+
+          <p>The <code>validate-setup.ps1</code> script is a pre-flight and post-flight validation tool for the Chocolatey Scripts toolkit. Its primary purpose is to verify that all the components of the toolkit are correctly installed, that the configuration file is properly formatted with valid values, and that the underlying system meets all the requirements for the scripts to function correctly. Think of it as a checklist inspector that goes through every requirement and dependency, reporting what is in order and what needs attention before you start using the toolkit.</p>
+
+          <p>The first major validation phase checks for the presence of all expected script files in the toolkit directory. The script maintains an internal manifest of all the files that should be present in a complete installation, including the main PowerShell scripts, the configuration file, the helper functions, and any supporting files. For each expected file, it verifies that the file exists at the expected path and that it is not empty (a zero-byte file would indicate a corrupted download or incomplete extraction). If any files are missing, the script reports exactly which ones are absent and suggests re-downloading the toolkit from the GitHub repository to obtain the missing files.</p>
+
+          <p>The file presence check is particularly valuable after downloading and extracting the toolkit from a ZIP file, which is one of the recommended installation methods. ZIP extraction can sometimes fail silently, producing an incomplete set of files without any error message. Similarly, if you cloned the repository with Git and the clone was interrupted by a network issue, some files might be missing. Running the validation script immediately after downloading the toolkit catches these issues before you discover them the hard way by trying to run a script that depends on a missing file.</p>
+
+          <p>The second validation phase performs a thorough examination of the <code>config.json</code> configuration file. This is one of the most important checks because configuration problems are one of the most common sources of issues when running the toolkit scripts, particularly the auto-update script which depends heavily on configuration values. The validation starts by checking that the file exists and that it contains valid JSON syntax. A misplaced comma, missing bracket, or stray character in the JSON file would prevent any script that reads the configuration from functioning, so catching syntax errors early is critical.</p>
+
+          <p>Beyond basic JSON syntax validation, the script examines each configuration value for correctness and completeness. It checks that all required keys are present (such as <code>wifiNetwork</code>, <code>emailAddress</code>, <code>smtpServer</code>, and <code>smtpPort</code>) and that their values are of the expected type (strings for text values, integers for port numbers, booleans for notification toggles). The script also performs semantic validation on values where possible. For example, it verifies that the SMTP port number falls within the valid range (1-65535), that the email address contains an @ symbol and a domain, and that the SMTP server name is not empty when email notifications are enabled.</p>
+
+          <p>One of the most helpful checks in the configuration validation is the detection of placeholder values. When the toolkit is first downloaded, the <code>config.json</code> file contains placeholder values like <code>"your-wifi-network-name"</code> and <code>"your-email@example.com"</code> that are meant to be replaced with your actual values. Many users forget to update one or more of these placeholders before running the scripts, which leads to confusing failures. The validation script specifically checks for these known placeholder patterns and flags them with a clear message explaining that the value needs to be replaced with a real value. This check alone prevents one of the most common setup mistakes.</p>
+
+          <p>The third validation phase verifies that the system meets all requirements for running the toolkit. This includes checking the Windows version (Windows 10 or 11 required), the PowerShell version (5.1 or later required, 7 or later recommended), the availability of the .NET Framework (required by Chocolatey), and the presence of an internet connection (required for downloading and updating packages). Each requirement is checked independently, and the results are presented in a clear pass/fail format with explanations for any failures.</p>
+
+          <p>The system requirements check also looks for optional but recommended components. For example, it checks whether Git is installed (useful for keeping the toolkit updated via repository pulls), whether the Windows Task Scheduler service is running (required for scheduled maintenance tasks), and whether the Chocolatey package manager itself is installed. If Chocolatey is not yet installed, the validation script notes this and recommends running <code>install-chocolatey.ps1</code> as the first step. If Chocolatey is installed, it additionally checks the version and reports whether an update is available.</p>
+
+          <p>An important design characteristic of this script is that it does not require Administrator privileges to run. While many other scripts in the toolkit need elevated permissions for installing packages or modifying system settings, the validation script is purely diagnostic and only reads information. This means you can run it at any time from a regular (non-elevated) PowerShell window to check the state of your installation. The script does note in its output that some toolkit scripts will require Administrator privileges when you actually run them, but the validation itself operates entirely in read-only mode.</p>
+
+          <p>The script provides clear, structured output organized into sections for each validation phase. Each check is presented with a status indicator (PASS, WARN, or FAIL), the name of the check, and a description of the result. Warning status is used for issues that will not prevent the toolkit from functioning but should be addressed for optimal operation, such as having an older version of PowerShell or missing optional components. Failed status is used for issues that will prevent one or more scripts from functioning correctly and must be resolved before proceeding.</p>
+
+          <p>At the end of the validation, the script provides a summary with an overall assessment and prioritized setup recommendations. If everything passes, the summary confirms that the toolkit is ready to use and suggests starting with <code>install-chocolatey.ps1</code> if Chocolatey is not yet installed, or <code>health-check.ps1</code> if it is. If there are failures, the summary lists the issues in priority order with specific remediation steps for each one. This prioritized approach ensures that users address the most critical issues first rather than getting stuck on optional improvements while critical prerequisites remain unmet.</p>
+
+          <p>The validation script is recommended to be run in two scenarios. First, run it immediately after downloading or cloning the toolkit to verify that all files are present and the configuration is ready. Second, run it any time you experience unexpected behavior from any of the toolkit scripts, as the validation may reveal a configuration or environmental issue that explains the problem. Some users also include the validation script in their periodic maintenance routine alongside the health check, running both monthly to ensure everything remains in good order.</p>
+
+          <h2>Usage</h2>
+
+          <p>The validation script does not require Administrator privileges and can be run from any PowerShell window.</p>
+
+          <pre><code># Run setup validation
+.\validate-setup.ps1</code></pre>
+
+          <p>Example output from the validation script:</p>
+
+          <pre><code>========================================
+  Chocolatey Scripts Setup Validation
+========================================
+
+--- File Checks ---
+[PASS] install-chocolatey.ps1
+[PASS] install-essential-apps.ps1
+[PASS] auto-update-chocolatey.ps1
+[PASS] cleanup-chocolatey.ps1
+[PASS] health-check.ps1
+[PASS] backup-packages.ps1
+[PASS] setup-scheduled-tasks.ps1
+[PASS] Send-ToastNotification.ps1
+[PASS] validate-setup.ps1
+[PASS] config.json
+
+--- Configuration Checks ---
+[PASS] config.json syntax valid
+[PASS] wifiNetwork configured
+[WARN] emailAddress contains placeholder value
+[PASS] smtpPort valid (587)
+[PASS] notifications.toast enabled
+[WARN] notifications.email enabled but email not configured
+
+--- System Requirements ---
+[PASS] Windows 11 23H2
+[PASS] PowerShell 7.4.1
+[PASS] .NET Framework 4.8.1
+[PASS] Internet connection available
+[PASS] Chocolatey installed (v2.4.1)
+[PASS] Git installed (v2.43.0)
+[PASS] Task Scheduler service running
+
+--- Summary ---
+Status: READY (2 warnings)
+Recommendations:
+  1. Update emailAddress in config.json with your email
+  2. Update smtpServer in config.json if you want email reports</code></pre>
+
+          <h2>What Gets Changed</h2>
+
+          <ul>
+            <li><strong>No system modifications</strong> &mdash; This script is completely read-only and does not modify any files, settings, or configurations on your system.</li>
+            <li><strong>No Administrator required</strong> &mdash; The script runs entirely in user-level mode and does not need elevated privileges.</li>
+            <li><strong>Console output</strong> &mdash; Displays a formatted validation report in the PowerShell window.</li>
+          </ul>
+
+          <h2>Related Scripts</h2>
+
+          <div class="hub-grid">
+            <a href="health-check.html" class="hub-card">
+              <h3>Health Diagnostics</h3>
+              <p>While validate-setup checks the toolkit, health-check examines the Chocolatey installation itself.</p>
+            </a>
+            <a href="install-chocolatey.html" class="hub-card">
+              <h3>Chocolatey Installation</h3>
+              <p>If validation detects Chocolatey is not installed, this is the recommended next step.</p>
+            </a>
+            <a href="auto-update-chocolatey.html" class="hub-card">
+              <h3>Auto-Update Chocolatey</h3>
+              <p>The auto-update script depends most heavily on config.json, which validate-setup checks thoroughly.</p>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>

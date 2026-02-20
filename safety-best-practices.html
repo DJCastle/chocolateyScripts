@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety &amp; Best Practices &mdash; Chocolatey Scripts</title>
+  <meta name="description" content="Comprehensive safety guide for using Chocolatey Scripts on Windows. Learn about built-in safety measures, pre-installation checklists, emergency procedures, security considerations, and best practices for PowerShell automation.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/safety-best-practices.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Safety &amp; Best Practices &mdash; Chocolatey Scripts">
+  <meta property="og:description" content="Comprehensive safety guide for using Chocolatey Scripts on Windows. Learn about built-in safety measures, pre-installation checklists, emergency procedures, and best practices for PowerShell automation.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/safety-best-practices.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Safety &amp; Best Practices &mdash; Chocolatey Scripts">
+  <meta name="twitter:description" content="Comprehensive safety guide for using Chocolatey Scripts on Windows. Learn about built-in safety measures, pre-installation checklists, emergency procedures, and best practices for PowerShell automation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="guides.html" class="active">Guides</a>
+        <a href="scripts.html">Scripts</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span class="separator">/</span><a href="guides.html">Guides</a><span class="separator">/</span>Safety &amp; Best Practices
+    </nav>
+    <div class="page-header">
+      <div class="container">
+        <h1>Safety &amp; Best Practices</h1>
+        <p>Everything you need to know about staying safe while using PowerShell automation scripts on Windows. Read this guide before running any script for the first time.</p>
+      </div>
+    </div>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-with-toc">
+          <div class="content-body">
+
+            <!-- Critical Safety Information -->
+            <h2 id="critical-safety">Critical Safety Information</h2>
+            <div class="callout callout-warning">
+              <div class="callout-icon">&#9888;</div>
+              <div class="callout-content">
+                <p><strong>Stop and read this section completely before running any script.</strong> These scripts modify your Windows system. While they include extensive safety measures, you must understand the risks and take appropriate precautions before proceeding. Running PowerShell scripts with administrator privileges gives them full access to your system, and understanding what they do is essential for safe operation.</p>
+              </div>
+            </div>
+
+            <h3>What These Scripts Do</h3>
+            <p>Understanding what automation scripts do to your system is the first and most important step toward using them safely. The Chocolatey Scripts project performs the following types of operations on your Windows machine:</p>
+            <ol>
+              <li><strong>Install Software</strong> &mdash; The scripts download and install the Chocolatey package manager along with any Windows applications you specify. This means new software is being added to your system that was not there before, including executables, libraries, and registry entries.</li>
+              <li><strong>Modify System Settings</strong> &mdash; The PowerShell execution policy may be changed to allow script execution. Environment variables are configured so that Chocolatey is accessible from any command prompt. Chocolatey's own configuration is adjusted to enable features like global confirmation.</li>
+              <li><strong>Create Scheduled Tasks</strong> &mdash; If you set up automatic updates, the scripts create Windows Task Scheduler jobs that run in the background on a schedule. These jobs persist across restarts and will continue running until you remove them.</li>
+              <li><strong>Network Operations</strong> &mdash; Packages and applications are downloaded from the internet via Chocolatey's community repository and official package sources. This generates network traffic and consumes bandwidth during installation and updates.</li>
+              <li><strong>File System Changes</strong> &mdash; The scripts create directories for logs, configuration files, and package backups. Log files are written to <code>%USERPROFILE%\Logs\</code>. Backup files are stored in <code>%USERPROFILE%\Documents\ChocolateyBackups\</code>.</li>
+            </ol>
+
+            <h3>Potential Risks</h3>
+            <p>Every system automation tool carries inherent risks. Being aware of these risks allows you to make informed decisions and take appropriate precautions:</p>
+            <ul>
+              <li><strong>System Changes</strong> &mdash; Modifications to execution policies, environment variables, and installed software may affect how applications and services behave. If you have custom PowerShell profiles or environment configurations, the scripts could potentially interact with them in unexpected ways.</li>
+              <li><strong>Network Usage</strong> &mdash; Downloads can consume significant bandwidth, especially during initial setup when many packages are being installed simultaneously. The essential apps script alone may download several gigabytes of software. Be mindful if you are on a metered connection or have data caps.</li>
+              <li><strong>Disk Space</strong> &mdash; Applications, their dependencies, and Chocolatey's download cache require storage space. A full installation with all the default applications can use 5-10 GB or more of disk space. Running the cleanup script periodically helps manage this.</li>
+              <li><strong>Security</strong> &mdash; Installing any software carries some security risk. While Chocolatey verifies package checksums and uses HTTPS for all downloads, you should always be aware of what you are installing and verify that packages come from trusted sources.</li>
+              <li><strong>Administrator Privileges</strong> &mdash; Most operations require running PowerShell as Administrator. Elevated scripts have full access to your system, including the ability to modify any file, change any setting, and install any software. This power is necessary for package management but should be respected.</li>
+            </ul>
+
+            <!-- Built-in Safety Measures -->
+            <h2 id="safety-measures">Built-in Safety Measures</h2>
+            <p>Chocolatey Scripts includes multiple layers of safety features designed to protect your system and give you full control over every operation. These measures are built into the core of every script, not bolted on as an afterthought.</p>
+
+            <h3>1. Idempotent Operations</h3>
+            <p>All operations in Chocolatey Scripts are designed to be idempotent, meaning you can run them multiple times without causing problems. Before performing any action, the script checks whether the desired state already exists and skips the operation if it does.</p>
+            <pre><code># Safe to run multiple times — checks before acting
+if (Get-Command choco -ErrorAction SilentlyContinue) {
+    Write-Success "Chocolatey is already installed"
+    return
+}
+# Only reaches here if Chocolatey is NOT installed
+Write-Status "Installing Chocolatey..."</code></pre>
+            <p>This design has several practical benefits. You can safely resume a script after an interruption &mdash; it will pick up where it left off without duplicating work. If you run the essential apps script again after adding new apps to the list, it will only install the new ones and skip everything that is already in place. Running a script multiple times will never create duplicate installations, conflicting configurations, or wasted downloads. This idempotent design is a professional software engineering pattern that makes the scripts robust and forgiving.</p>
+
+            <h3>2. Prerequisite Checks</h3>
+            <p>Before making any changes to your system, the scripts validate that all prerequisites are met. The validation script performs a comprehensive check of your environment and reports all issues at once, rather than failing on the first problem.</p>
+            <pre><code># Validates your system before making any changes
+.\validate-setup.ps1</code></pre>
+            <p>The prerequisite checks verify the following:</p>
+            <ul>
+              <li><strong>PowerShell version</strong> meets the minimum requirement (5.1 or later)</li>
+              <li><strong>Administrator privileges</strong> are available for the current session</li>
+              <li><strong>Chocolatey</strong> is installed and working (for scripts that depend on it)</li>
+              <li><strong>Config file</strong> exists and contains valid JSON syntax</li>
+              <li><strong>Disk space</strong> is sufficient for the planned operations</li>
+              <li><strong>Network connectivity</strong> is available for downloading packages</li>
+            </ul>
+            <p>If any check fails, the script reports the issue with a clear description and a suggestion for how to fix it. This prevents the frustrating experience of running through half an installation only to have it fail because of a missing prerequisite.</p>
+
+            <h3>3. Comprehensive Logging</h3>
+            <p>Every operation performed by the scripts is recorded in a detailed log file with timestamps, severity levels, and descriptive messages. This creates a complete audit trail that you can review at any time to understand exactly what happened on your system.</p>
+            <pre><code># All operations are logged with timestamps
+$LogFile = "$env:USERPROFILE\Logs\ChocolateyInstall.log"
+
+# Example log entries
+[2026-02-06 14:30:15] [INFO] Starting Chocolatey installation...
+[2026-02-06 14:30:18] [INFO] Downloading Chocolatey from official source
+[2026-02-06 14:30:45] [SUCCESS] Chocolatey 2.4.1 installed successfully
+[2026-02-06 14:31:02] [INFO] Installing Visual Studio Code...
+[2026-02-06 14:31:30] [SUCCESS] Visual Studio Code installed successfully
+[2026-02-06 14:31:45] [WARNING] Package 'unknown-app' not found, skipping
+[2026-02-06 14:32:00] [ERROR] Failed to install broken-package: checksum mismatch</code></pre>
+            <p>The log captures every command executed, all configuration changes made, every error and warning encountered, system state information, and timestamps for all operations. If something goes wrong, the log is the single best resource for understanding what happened and why. You can review logs at any time:</p>
+            <pre><code># View the most recent log entries
+Get-Content "$env:USERPROFILE\Logs\ChocolateyInstall.log" -Tail 30
+
+# Search for errors across all log files
+Get-ChildItem "$env:USERPROFILE\Logs\Chocolatey*.log" |
+    ForEach-Object { Select-String "ERROR" $_ }</code></pre>
+
+            <h3>4. Input Validation</h3>
+            <p>Every piece of user input and configuration is validated before it is used. This prevents common mistakes from causing problems downstream, such as invalid file paths, malformed JSON, or placeholder values that were never customized.</p>
+            <pre><code># Configuration files are validated before use
+try {
+    $config = Get-Content $configPath -Raw | ConvertFrom-Json
+    Write-Pass "config.json has valid JSON syntax"
+}
+catch {
+    Write-Fail "config.json has invalid JSON: $($_.Exception.Message)"
+    return $false
+}
+
+# Placeholder values are detected and flagged
+if ($config.wifiNetwork -eq "YOUR_WIFI_NAME") {
+    Write-Warn "WiFi network is still set to the placeholder value"
+}</code></pre>
+            <p>Validation is performed early in the script's execution, during the pre-flight check phase. This means that if there is a problem with your configuration, you will find out immediately rather than discovering it halfway through a long installation process. The validation covers config file syntax and structure, system requirements and compatibility, network and power conditions, and placeholder values that need to be customized.</p>
+
+            <h3>5. Error Recovery</h3>
+            <p>When things go wrong &mdash; and with network operations, they sometimes do &mdash; the scripts handle failures gracefully. Transient errors such as network timeouts are automatically retried with delays between attempts, giving temporary issues time to resolve themselves.</p>
+            <pre><code># Automatic retry for transient failures
+$retryCount = 0
+while ($retryCount -lt $MaxRetries) {
+    try {
+        # Attempt the operation
+        choco install $PackageName -y --no-progress
+        if ($LASTEXITCODE -eq 0) {
+            Write-Success "$PackageName installed successfully"
+            break
+        }
+    }
+    catch {
+        Write-Warning "Attempt $($retryCount + 1) failed: $($_.Exception.Message)"
+    }
+
+    $retryCount++
+    if ($retryCount -lt $MaxRetries) {
+        Write-Status "Retrying in $RetryDelay seconds..."
+        Start-Sleep -Seconds $RetryDelay
+    }
+}</code></pre>
+            <p>When retries are exhausted and an operation truly fails, the script logs a detailed error message and continues with the remaining operations rather than crashing entirely. This graceful degradation means that a single failed app installation does not prevent all the other apps from being installed. At the end of the run, you get a clear summary of what succeeded and what needs attention.</p>
+
+            <!-- Pre-Installation Checklist -->
+            <h2 id="pre-installation">Pre-Installation Checklist</h2>
+            <p>Before running any script for the first time, work through this checklist to make sure your system is prepared. Taking a few minutes to prepare will save you time and potential headaches later.</p>
+
+            <h3>System Requirements</h3>
+            <ul>
+              <li>Windows 10 (version 1809 or later) or Windows 11 installed</li>
+              <li>PowerShell 5.1 or later available (PowerShell 7+ recommended)</li>
+              <li>Administrator privileges (you know your password or have access to an admin account)</li>
+              <li>At least 10 GB free disk space available on your system drive</li>
+              <li>Stable internet connection active and working</li>
+              <li>No critical work in progress (in case a restart is needed after installing certain packages)</li>
+            </ul>
+
+            <h3>Preparation Steps</h3>
+            <ul>
+              <li><strong>Create a system restore point</strong> before running scripts for the first time. Open System Properties (type "restore point" in the Start menu), click "Create," and give it a descriptive name like "Before Chocolatey Scripts." This gives you a way to roll back if anything goes wrong.</li>
+              <li><strong>Close important applications</strong> to avoid conflicts during installation. Some apps may need to be restarted if they are updated, and having open files could prevent updates from completing.</li>
+              <li><strong>Review <code>config.example.json</code></strong> to understand what will be configured. Check each setting and make sure you understand what it controls before copying it to <code>config.json</code>.</li>
+              <li><strong>Copy <code>config.example.json</code> to <code>config.json</code></strong> and customize the settings for your environment. At minimum, update the <code>wifiNetwork</code> setting if you plan to use automatic updates.</li>
+              <li><strong>Run <code>validate-setup.ps1</code></strong> to check your environment. This script verifies all prerequisites without making any changes and tells you if anything needs to be fixed first.</li>
+              <li><strong>Have your password ready</strong> for the User Account Control (UAC) prompt that appears when you run PowerShell as Administrator.</li>
+            </ul>
+
+            <h3>Network Considerations</h3>
+            <ul>
+              <li>Connected to a reliable network with good throughput (wired is ideal for initial setup)</li>
+              <li>Sufficient bandwidth for potentially large downloads (the full app suite can exceed 2 GB)</li>
+              <li>Not on a metered connection if data usage is a concern</li>
+              <li>Firewall allows connections to <code>chocolatey.org</code> and <code>community.chocolatey.org</code></li>
+              <li>If behind a corporate proxy, Chocolatey may need proxy configuration (see <a href="https://docs.chocolatey.org/en-us/guides/usage/proxy-settings-for-chocolatey" target="_blank" rel="noopener noreferrer">Chocolatey proxy documentation</a>)</li>
+            </ul>
+
+            <div class="callout callout-info">
+              <div class="callout-icon">&#8505;</div>
+              <div class="callout-content">
+                <p><strong>Network tip:</strong> If you are on a corporate network with a proxy or firewall, you may need to configure Chocolatey to use your proxy settings. Run <code>choco config set proxy &lt;proxy-url&gt;</code> after installation, or check with your IT department if downloads fail with network or timeout errors.</p>
+              </div>
+            </div>
+
+            <!-- Best Practices -->
+            <h2 id="best-practices">Best Practices for Usage</h2>
+            <p>Following these best practices will help you get the most out of Chocolatey Scripts while minimizing the chance of running into issues. These recommendations come from real-world experience and represent the safest, most effective way to use system automation tools on Windows.</p>
+
+            <h3>1. Start with Validation</h3>
+            <p>Before running any installation or update script, always run the validation and health check scripts first. They verify that your environment is properly configured and identify any issues that should be resolved before proceeding.</p>
+            <pre><code># Always run these first
+.\validate-setup.ps1
+.\health-check.ps1</code></pre>
+            <p>The validation script checks your configuration file, environment, and prerequisites. The health check examines the state of your Chocolatey installation and reports on outdated packages, disk usage, and scheduled tasks. Together, they give you a complete picture of your system's readiness.</p>
+
+            <h3>2. Install in the Right Order</h3>
+            <p>The scripts are designed to be run in a specific order. Following this order ensures that each script's prerequisites are met by the scripts that came before it.</p>
+            <pre><code># Step 1: Install the package manager first
+.\install-chocolatey.ps1
+
+# Step 2: Then install applications
+.\install-essential-apps.ps1
+
+# Step 3: Verify everything is working
+.\health-check.ps1
+
+# Step 4 (optional): Set up automation
+.\setup-scheduled-tasks.ps1</code></pre>
+            <p>Trying to run the essential apps script before installing Chocolatey will fail, because the <code>choco</code> command does not exist yet. The scripts include checks for this, but following the intended order avoids unnecessary error messages and retries.</p>
+
+            <h3>3. Review Logs Regularly</h3>
+            <p>After each script run, take a moment to review the log file. Look for warnings and errors that might indicate issues requiring your attention. This is especially important for automated update runs where you do not see the console output directly.</p>
+            <pre><code># Check what happened during the last run
+Get-Content "$env:USERPROFILE\Logs\ChocolateyInstall.log" -Tail 30
+
+# Search for errors specifically
+Get-ChildItem "$env:USERPROFILE\Logs\Chocolatey*.log" |
+    ForEach-Object { Select-String "ERROR" $_ }
+
+# View recent errors with their timestamps
+Get-Content "$env:USERPROFILE\Logs\*.log" |
+    Select-String "ERROR" |
+    Select-Object -Last 20</code></pre>
+
+            <h3>4. Back Up Before Major Changes</h3>
+            <p>Before running updates or making significant changes to your installed packages, create a backup of your current package configuration. This gives you a restore point that can be used to recreate your exact setup on a new machine or recover from a problem.</p>
+            <pre><code># Export your current package list before changes
+.\backup-packages.ps1 -Action Backup
+
+# Restore on a new machine or after a problem
+.\backup-packages.ps1 -Action Restore -BackupFile "path\to\backup.json"</code></pre>
+
+            <h3>5. Keep Configuration Under Control</h3>
+            <p>Your <code>config.json</code> file is git-ignored because it contains personal settings like your WiFi network name and email address. However, you should still keep a backup somewhere safe in case you need to set up again on a new machine. Consider storing it in a secure cloud location or an encrypted backup.</p>
+
+            <h3>6. Review Scripts Before Running</h3>
+            <p>Every script in this project is open source and extensively commented. You are encouraged to read and understand the code before running it. This is an educational project, and understanding what each script does is part of the learning experience.</p>
+            <pre><code># Read any script before executing it
+Get-Content .\script-name.ps1 | more
+
+# Or open it in your preferred editor
+notepad .\script-name.ps1
+code .\script-name.ps1</code></pre>
+
+            <!-- Emergency Procedures -->
+            <h2 id="emergency-procedures">Emergency Procedures</h2>
+            <p>Even with all the safety measures in place, things can occasionally go wrong. This section describes what to do if you encounter problems during or after running the scripts. The most important thing is to stay calm &mdash; nearly every issue is recoverable.</p>
+
+            <h3>If Something Goes Wrong</h3>
+            <ol>
+              <li><strong>Do not panic.</strong> Most issues are recoverable, and the scripts are designed to fail safely without leaving your system in a broken state.</li>
+              <li><strong>Check the logs.</strong> Open the log files at <code>$env:USERPROFILE\Logs\</code> and look for ERROR entries near the bottom. The log will usually tell you exactly what went wrong and may suggest a fix.</li>
+              <li><strong>Stop the script</strong> if it is still running by pressing <code>Ctrl+C</code>. PowerShell will terminate the script and return you to the command prompt.</li>
+              <li><strong>Note what happened.</strong> Document which script you were running, what step it was on, and what error messages appeared. This information is invaluable for troubleshooting.</li>
+            </ol>
+
+            <h3>Recovery: Chocolatey Installation Issues</h3>
+            <p>If Chocolatey itself is not working correctly or the installation was interrupted, you can check its status and attempt repairs.</p>
+            <pre><code># Check if Chocolatey is accessible
+choco --version
+
+# If not found, refresh environment variables
+refreshenv
+
+# If still not found, the installation may be incomplete
+# Check the execution policy first
+Get-ExecutionPolicy
+# If "Restricted", fix it:
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Try running the installation script again (it's idempotent)
+.\install-chocolatey.ps1</code></pre>
+            <p>Since the installation script is idempotent, running it again will detect whatever state Chocolatey is in and take the appropriate action &mdash; whether that means completing a partial installation, reconfiguring an existing one, or simply confirming that everything is already working.</p>
+
+            <h3>Recovery: Package Installation Failures</h3>
+            <p>If a specific application fails to install or is not working correctly after installation, you can remove it through Chocolatey and try again, or clear the download cache to force a fresh download.</p>
+            <pre><code># Remove a problem package
+choco uninstall problematic-package -y
+
+# Clear Chocolatey's download cache
+Remove-Item "$env:TEMP\chocolatey" -Recurse -Force -ErrorAction SilentlyContinue
+
+# Try installing again with verbose output for debugging
+choco install problematic-package -y -v
+
+# If the package doesn't exist, search for the correct name
+choco search package-name</code></pre>
+
+            <h3>Recovery: Scheduled Task Not Running</h3>
+            <p>If automated updates are not running as expected, check the scheduled task status and recreate it if necessary.</p>
+            <pre><code># Check if the task exists and its current status
+Get-ScheduledTask | Where-Object { $_.TaskName -like "*Chocolatey*" }
+
+# View the last run time and result
+Get-ScheduledTask -TaskName "Chocolatey*" |
+    Get-ScheduledTaskInfo
+
+# Re-create the scheduled tasks
+.\setup-scheduled-tasks.ps1</code></pre>
+
+            <h3>Recovery: System Restore</h3>
+            <p>If you created a system restore point before running the scripts (as recommended in the Pre-Installation Checklist), you can use it to roll back your entire system to its previous state.</p>
+            <pre><code># Open System Restore from PowerShell
+rstrui.exe</code></pre>
+            <p>System Restore will undo all software installations, configuration changes, and registry modifications made since the restore point was created. It does not affect your personal files, but it will remove any applications that were installed after the restore point.</p>
+
+            <div class="callout callout-warning">
+              <div class="callout-icon">&#9888;</div>
+              <div class="callout-content">
+                <p><strong>When to seek professional help:</strong> If your computer will not boot normally, use Windows Recovery (hold Shift while clicking Restart) to access System Restore and Startup Repair. If applications from outside Chocolatey are affected, check the application's own support resources. If you see persistent permission errors even when running as Administrator, your system's security policies may need attention from an IT professional.</p>
+              </div>
+            </div>
+
+            <!-- Security Considerations -->
+            <h2 id="security">Security Considerations</h2>
+            <p>Security is a fundamental concern when running any automation script with administrator privileges. Chocolatey Scripts is designed with security in mind, but understanding the security model helps you make informed decisions about how and when to use the scripts.</p>
+
+            <h3>Script Security</h3>
+            <ul>
+              <li><strong>Read before running</strong> &mdash; Understand what a script does before executing it. Every script in this project is fully open source and extensively commented. Use <code>Get-Content .\script.ps1 | more</code> to review any script before running it.</li>
+              <li><strong>Trusted sources only</strong> &mdash; Only run scripts from sources you trust. The official Chocolatey Scripts repository is hosted on GitHub at <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">github.com/DJCastle/chocolateyScripts</a>, and you should always download from this URL.</li>
+              <li><strong>Admin awareness</strong> &mdash; Know that elevated scripts can change anything on your system. Only run PowerShell as Administrator when a script requires it, and close the elevated session when you are done.</li>
+              <li><strong>Keep scripts updated</strong> &mdash; Pull the latest version from the repository periodically to get security fixes and improvements. If you cloned with Git, run <code>git pull</code> to update.</li>
+            </ul>
+
+            <h3>Application Security</h3>
+            <ul>
+              <li><strong>Official sources</strong> &mdash; Chocolatey packages come from the <a href="https://community.chocolatey.org/packages" target="_blank" rel="noopener noreferrer">community repository</a>, which is maintained by the Chocolatey community. Packages are reviewed by moderators before being published.</li>
+              <li><strong>Checksum verification</strong> &mdash; Chocolatey automatically verifies package checksums before installation. If a package's checksum does not match the expected value, the installation is refused. This protects against tampered or corrupted downloads.</li>
+              <li><strong>Keep apps updated</strong> &mdash; Running <code>choco upgrade all</code> regularly (or using the auto-update script) ensures your installed software receives security patches promptly. Outdated software is one of the most common attack vectors.</li>
+              <li><strong>Verify before installing</strong> &mdash; Use <code>choco info package-name</code> to review package details, including the maintainer, download count, and last update date, before installing unfamiliar packages.</li>
+            </ul>
+
+            <h3>Network Security</h3>
+            <ul>
+              <li><strong>HTTPS connections</strong> &mdash; All downloads use encrypted HTTPS connections. No package data is transmitted in plain text, protecting against eavesdropping and tampering during transit.</li>
+              <li><strong>No credential storage</strong> &mdash; These scripts do not store your Windows password, tokens, or other credentials. The SMTP password for email notifications is the only credential-like value, and it is stored in a separate, git-ignored file that you control.</li>
+              <li><strong>Logged activity</strong> &mdash; All network operations are recorded in log files, creating an audit trail that you can review to understand exactly what was downloaded and from where.</li>
+              <li><strong>WiFi-aware updates</strong> &mdash; The auto-update script can be configured to only run when connected to a specific WiFi network, preventing large downloads on untrusted or metered networks.</li>
+            </ul>
+
+            <!-- Customization Guidelines -->
+            <h2 id="customization">Customization Guidelines</h2>
+            <p>One of the strengths of Chocolatey Scripts is that it is designed to be customized. Whether you are adjusting the configuration to match your preferences or modifying the scripts themselves to add new functionality, these guidelines will help you do so safely and effectively.</p>
+
+            <h3>Safe Modifications</h3>
+            <p>These are changes that carry minimal risk and are fully supported by the scripts' design:</p>
+            <ul>
+              <li><strong>Configuration changes</strong> &mdash; Modify <code>config.json</code> to change your WiFi network, notification preferences, backup paths, and scheduling options. The configuration file is designed to be the primary customization point.</li>
+              <li><strong>Application lists</strong> &mdash; Edit the <code>$apps</code> array in <code>install-essential-apps.ps1</code> to add or remove applications. Use <code>choco search</code> to find the correct package names for applications you want to add.</li>
+              <li><strong>Scheduled task timing</strong> &mdash; Adjust when automatic updates and cleanup run to fit your schedule. The setup wizard makes this easy, or you can modify the task directly through Windows Task Scheduler.</li>
+              <li><strong>Notification preferences</strong> &mdash; Enable or disable email notifications, toast notifications, or both. Configure which events trigger notifications (success, error, warning) to match your monitoring preferences.</li>
+            </ul>
+
+            <h3>Advanced Modifications</h3>
+            <p>These changes require some PowerShell knowledge and should be tested thoroughly before deploying:</p>
+            <ul>
+              <li><strong>Function additions</strong> &mdash; Add new helper functions to extend the scripts' capabilities. Follow the existing function patterns (parameter blocks, error handling, dual-output logging) for consistency.</li>
+              <li><strong>Validation rules</strong> &mdash; Enhance the <code>validate-setup.ps1</code> script to check for additional requirements specific to your environment.</li>
+              <li><strong>Error handling</strong> &mdash; Improve error recovery mechanisms for scenarios specific to your setup, such as proxy authentication or VPN connectivity.</li>
+              <li><strong>Logging enhancements</strong> &mdash; Add more detailed logging for operations you want to monitor closely, or implement log rotation to manage file sizes.</li>
+            </ul>
+
+            <h3>Testing Your Changes</h3>
+            <p>After making any modifications to the scripts, always validate your changes before running them for real. Here is a quick testing process:</p>
+            <pre><code># Step 1: Check PowerShell syntax without running the script
+powershell -Command "& { Get-Content .\your-script.ps1 | Out-Null }"
+
+# Step 2: Use PSScriptAnalyzer for deeper best practice analysis
+# (Install first if needed: Install-Module PSScriptAnalyzer)
+Invoke-ScriptAnalyzer -Path .\your-script.ps1
+
+# Step 3: Test the validation script to catch config issues
+.\validate-setup.ps1
+
+# Step 4: Test individual functions in an interactive session
+# before running the full script
+. .\your-script.ps1  # dot-source to load functions
+Test-Prerequisites     # test individual functions</code></pre>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Remember:</strong> When in doubt, do not run it. It is always better to understand what a script does before executing it on your system. Take your time, read the code, and ask questions. The <a href="powershell-scripting-guide.html">PowerShell Scripting Guide</a> can help you understand the patterns and techniques used throughout these scripts.</p>
+              </div>
+            </div>
+
+          </div>
+          <aside class="toc" aria-label="Table of Contents">
+            <h3>On This Page</h3>
+            <ul class="toc-list">
+              <li><a href="#critical-safety">Critical Safety Information</a></li>
+              <li><a href="#safety-measures">Built-in Safety Measures</a></li>
+              <li><a href="#pre-installation">Pre-Installation Checklist</a></li>
+              <li><a href="#best-practices">Best Practices for Usage</a></li>
+              <li><a href="#emergency-procedures">Emergency Procedures</a></li>
+              <li><a href="#security">Security Considerations</a></li>
+              <li><a href="#customization">Customization Guidelines</a></li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="guides.html">Guides</a>
+          <a href="scripts.html">Scripts</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>

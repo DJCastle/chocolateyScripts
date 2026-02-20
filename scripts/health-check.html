@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Diagnostics - Chocolatey Scripts</title>
+  <meta name="description" content="Run comprehensive diagnostics on your Chocolatey installation and system to identify issues, outdated packages, and configuration problems.">
+  <meta name="keywords" content="chocolatey, health check, diagnostics, system check, outdated packages, disk usage, powershell, windows">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/scripts/health-check.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Health Diagnostics - Chocolatey Scripts">
+  <meta property="og:description" content="Run comprehensive diagnostics on your Chocolatey installation and system to identify issues, outdated packages, and configuration problems.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/scripts/health-check.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Health Diagnostics - Chocolatey Scripts">
+  <meta name="twitter:description" content="Run comprehensive diagnostics on your Chocolatey installation and system to identify issues, outdated packages, and configuration problems.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Health Diagnostics
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Health Diagnostics</h1>
+        <p>Run comprehensive diagnostics on your Chocolatey installation and system.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">health-check.ps1</span>
+          <span class="script-meta-item">Diagnostics</span>
+          <span class="script-meta-item">Windows 10/11</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/health-check.ps1" class="btn-primary" target="_blank" rel="noopener noreferrer">Download Script</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/health-check.ps1" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="content-body">
+
+          <h2>What This Script Does</h2>
+
+          <p>The <code>health-check.ps1</code> script serves as your system's diagnostic dashboard for Chocolatey, providing a thorough examination of the package manager installation, its configuration, the state of all managed packages, and the underlying system resources that Chocolatey depends on. Think of it as a comprehensive physical examination for your Windows software management infrastructure. The script gathers data from multiple sources, analyzes it against known best practices and common problem patterns, and presents a clear, structured report with actionable recommendations for anything that needs attention.</p>
+
+          <p>The diagnostic process begins with the most fundamental check: verifying that Chocolatey is actually installed and accessible. The script confirms that the <code>choco</code> command is available in the system PATH, that the Chocolatey installation directory exists at its expected location, and that the installed version of Chocolatey is reasonably current. If Chocolatey is not installed or the installation appears damaged, the script reports this immediately and directs you to the <code>install-chocolatey.ps1</code> script for a fresh installation. This initial check prevents the more detailed diagnostics from producing misleading results based on a fundamentally broken installation.</p>
+
+          <p>The configuration analysis phase examines the settings and features that control how Chocolatey operates. The script checks whether the execution policy is set appropriately for running Chocolatey scripts, whether global confirmation mode is enabled (which is required for automated scripts in this toolkit), and whether the Chocolatey source repositories are properly configured. It also verifies that the Chocolatey binary directory is correctly listed in the system PATH and that there are no duplicate or conflicting PATH entries. Configuration issues are one of the most common causes of mysterious Chocolatey failures, and this diagnostic phase catches problems that might otherwise require hours of troubleshooting to identify.</p>
+
+          <p>The outdated packages check is one of the most immediately useful diagnostics. The script runs <code>choco outdated</code> to query the Chocolatey Community Repository for newer versions of all installed packages. The results are presented in a formatted table showing the package name, the currently installed version, the latest available version, and whether the package is pinned (protected from automatic updates). This information tells you at a glance how current your software is and which packages need attention. Packages that are significantly behind their latest version are flagged with higher priority, as older versions may have known security vulnerabilities or bugs that have been fixed in newer releases.</p>
+
+          <p>Disk usage analysis provides visibility into how much storage space your Chocolatey installation is consuming. The script calculates the total size of the Chocolatey installation directory, the package cache, and the lib directory where installed packages are stored. It breaks these figures down by category so you can see where the space is being used. If the cache has grown large enough to warrant cleanup, the script recommends running <code>cleanup-chocolatey.ps1</code>. The disk usage analysis also checks the available free space on the system drive and warns if it has fallen below a recommended threshold, since low disk space can cause package installations and updates to fail.</p>
+
+          <p>System requirements verification ensures that your Windows environment meets all the prerequisites for running Chocolatey and the scripts in this toolkit. The script checks the Windows version and build number to confirm you are running Windows 10 or Windows 11, verifies that PowerShell 5.1 or later is available, and checks that the .NET Framework version meets Chocolatey's minimum requirements. It also verifies that the current user has Administrator privileges, which are required for most Chocolatey operations, and checks whether the Windows Task Scheduler service is running, which is needed for automated maintenance tasks.</p>
+
+          <p>The built-in <code>choco doctor</code> command is executed as part of the diagnostic suite, providing Chocolatey's own internal health assessment. This command checks for common installation issues, verifies that the NuGet infrastructure is functioning correctly, and validates that Chocolatey's configuration file is well-formed and contains valid settings. The doctor command can detect issues that are specific to Chocolatey's internal state and would not be caught by the other diagnostic checks, making it a valuable complement to the script's own analysis.</p>
+
+          <p>One of the most valuable aspects of this script is its recommendation engine. Rather than simply presenting raw data, the script interprets the diagnostic results and generates specific, actionable recommendations. If it finds outdated packages, it recommends running the auto-update script. If disk usage is high, it recommends running the cleanup script. If configuration issues are detected, it explains exactly what settings need to be changed and provides the commands to make those changes. These recommendations transform raw diagnostic data into a clear action plan, making it easy for users of all experience levels to maintain their Chocolatey installation.</p>
+
+          <p>The script is designed to run safely in a read-only manner. It does not modify any settings, install or remove any packages, or change any system configuration. Its sole purpose is to gather information and report findings. This makes it perfectly safe to run at any time, even on production systems or machines managed by others. The read-only nature also means that the script can be run without Administrator privileges for most checks, though some diagnostics (particularly the <code>choco doctor</code> command and certain system information queries) produce more complete results when run elevated.</p>
+
+          <p>All diagnostic results are output to the console in a formatted, color-coded display that makes it easy to distinguish between passed checks (green), warnings (yellow), and failures (red). The same information is simultaneously written to <code>%USERPROFILE%\Logs\ChocolateyHealthCheck.log</code> in a structured text format suitable for archival and comparison over time. By running the health check periodically and comparing log files, you can track the health of your Chocolatey installation over time and identify trends such as gradually increasing disk usage or a growing number of outdated packages.</p>
+
+          <p>The health check script is recommended as a regular maintenance practice. Running it weekly or monthly provides early warning of developing issues before they become problems. It is also an excellent first step when troubleshooting any Chocolatey-related issue, as the comprehensive diagnostics often reveal the root cause immediately. Many users include the health check as part of their morning routine when setting up for a development session, taking 30 seconds to verify that their tools are in good shape before beginning work.</p>
+
+          <h2>Usage</h2>
+
+          <p>The health check can be run with or without Administrator privileges. Elevated mode provides more complete results.</p>
+
+          <pre><code># Run the health check
+.\health-check.ps1
+
+# For the most complete results, run as Administrator
+# Right-click PowerShell > Run as Administrator
+.\health-check.ps1</code></pre>
+
+          <p>The output is organized into clearly labeled sections:</p>
+
+          <pre><code># Example output sections
+====================================
+  CHOCOLATEY HEALTH CHECK REPORT
+====================================
+
+[PASS] Chocolatey Installation
+  Version: 2.4.1
+  Path: C:\ProgramData\chocolatey
+
+[PASS] Configuration
+  Global Confirmation: Enabled
+  Execution Policy: RemoteSigned
+
+[WARN] Outdated Packages (5 of 24 packages)
+  googlechrome    131.0.6778  > 132.0.6834
+  firefox         133.0       > 134.0.1
+  ...
+
+[PASS] Disk Usage
+  Installation: 2.1 GB
+  Cache: 340 MB
+  Free Space: 89 GB
+
+[PASS] System Requirements
+  Windows 11 23H2
+  PowerShell 7.4.1
+  .NET Framework 4.8.1
+
+Recommendations:
+  - Run auto-update-chocolatey.ps1 to update 5 outdated packages
+  - Consider running cleanup-chocolatey.ps1 to clear 340 MB of cache</code></pre>
+
+          <h2>What Gets Changed</h2>
+
+          <ul>
+            <li><strong>No system modifications</strong> &mdash; This script is read-only and does not modify any settings, packages, or files on your system.</li>
+            <li><strong>Log file</strong> &mdash; Creates or appends to <code>%USERPROFILE%\Logs\ChocolateyHealthCheck.log</code> with diagnostic results.</li>
+            <li><strong>Console output</strong> &mdash; Displays a formatted health check report in the PowerShell window.</li>
+          </ul>
+
+          <h2>Related Scripts</h2>
+
+          <div class="hub-grid">
+            <a href="validate-setup.html" class="hub-card">
+              <h3>Setup Validation</h3>
+              <p>Validate your Chocolatey Scripts toolkit installation and configuration files.</p>
+            </a>
+            <a href="cleanup-chocolatey.html" class="hub-card">
+              <h3>Chocolatey Cleanup</h3>
+              <p>Act on health check recommendations by cleaning up old packages and caches.</p>
+            </a>
+            <a href="auto-update-chocolatey.html" class="hub-card">
+              <h3>Auto-Update Chocolatey</h3>
+              <p>Address outdated packages identified by the health check with automatic updates.</p>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>

@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PowerShell Scripting Guide &mdash; Chocolatey Scripts</title>
+  <meta name="description" content="Learn PowerShell scripting through real-world Chocolatey automation examples. Covers script structure, variables, functions, error handling, logging, system detection, configuration management, and practical exercises.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/powershell-scripting-guide.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PowerShell Scripting Guide &mdash; Chocolatey Scripts">
+  <meta property="og:description" content="Learn PowerShell scripting through real-world Chocolatey automation examples. Covers script structure, variables, functions, error handling, logging, system detection, configuration management, and practical exercises.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/powershell-scripting-guide.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PowerShell Scripting Guide &mdash; Chocolatey Scripts">
+  <meta name="twitter:description" content="Learn PowerShell scripting through real-world Chocolatey automation examples. Covers script structure, variables, functions, error handling, logging, system detection, configuration management, and practical exercises.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="guides.html" class="active">Guides</a>
+        <a href="scripts.html">Scripts</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span class="separator">/</span><a href="guides.html">Guides</a><span class="separator">/</span>PowerShell Scripting Guide
+    </nav>
+    <div class="page-header">
+      <div class="container">
+        <h1>PowerShell Scripting Guide</h1>
+        <p>Learn professional PowerShell scripting by studying the real-world patterns and techniques used in the Chocolatey Scripts automation toolkit.</p>
+      </div>
+    </div>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-with-toc">
+          <div class="content-body">
+
+            <p>This guide uses the Chocolatey automation scripts as practical, real-world examples to teach PowerShell scripting concepts. Rather than learning from contrived examples, you will study code that solves actual problems &mdash; automating package management, detecting system state, handling errors gracefully, and building interactive tools for Windows. Each section builds on the previous one, taking you from fundamental concepts through to professional-level patterns.</p>
+
+            <div class="callout callout-info">
+              <div class="callout-icon">&#8505;</div>
+              <div class="callout-content">
+                <p><strong>How to use this guide:</strong> Read each section and study the code examples carefully. The examples are taken directly from the Chocolatey Scripts source code, so you can see how these patterns work in a production context. Try the exercises at the end of each section to reinforce what you have learned.</p>
+              </div>
+            </div>
+
+            <!-- 1. Basic Script Structure -->
+            <h2 id="basic-structure">1. Basic Script Structure</h2>
+            <p>Every well-written PowerShell script begins with a consistent structure that establishes the execution environment, documents the script's purpose, and sets up the foundations for reliable operation. Getting this foundation right is essential because it determines how reliably your script behaves across different systems and under different conditions.</p>
+
+            <h3>The Requires Statement</h3>
+            <p>The very first line of a professional PowerShell script is a <code>#Requires</code> statement. This special directive tells PowerShell to check prerequisites before running any of the script's code. If the requirements are not met, the script fails immediately with a clear error message rather than crashing partway through with a confusing error.</p>
+            <pre><code>#Requires -Version 5.1</code></pre>
+            <p>This single line ensures the script only runs on PowerShell 5.1 or later. Without it, a user running an older version of PowerShell would encounter cryptic errors when the script tries to use features that do not exist in their version. The <code>#Requires</code> statement catches this problem at the very start, before any code executes, and tells the user exactly what they need to fix.</p>
+            <p>You can also require administrator privileges, specific modules, or other PowerShell features:</p>
+            <pre><code>#Requires -Version 5.1
+#Requires -RunAsAdministrator</code></pre>
+            <p>The <code>-RunAsAdministrator</code> requirement is particularly useful for Chocolatey scripts, which almost always need elevated privileges to install or update system-wide packages. Adding this requirement prevents the frustrating experience of running through half an installation only to have it fail because the script was not started with the right permissions.</p>
+
+            <h3>Script Metadata (Comment-Based Help)</h3>
+            <p>After the requires statement, professional scripts include a metadata block that describes the script's purpose, behavior, and requirements. PowerShell has a built-in system for this called Comment-Based Help, which lets users run <code>Get-Help .\your-script.ps1</code> to see documentation without opening the script file.</p>
+            <pre><code>&lt;#
+.SYNOPSIS
+    Installs Chocolatey package manager for Windows.
+
+.DESCRIPTION
+    This script installs Chocolatey with proper configuration and runs
+    health checks. Safe to run multiple times - skips installation if
+    Chocolatey is already present on the system.
+
+.NOTES
+    Requires Administrator privileges.
+    Logs to: $env:USERPROFILE\Logs\ChocolateyInstall.log
+#&gt;</code></pre>
+            <p>This metadata is not just decoration. When someone encounters your script months or years later &mdash; possibly yourself &mdash; the <code>.SYNOPSIS</code> immediately communicates what the script does, the <code>.DESCRIPTION</code> provides behavioral details and safety information, and the <code>.NOTES</code> lists prerequisites and side effects. It takes seconds to write and saves significant time when maintaining or debugging scripts. Always include at least <code>.SYNOPSIS</code>, <code>.DESCRIPTION</code>, and <code>.NOTES</code> in every script you create.</p>
+
+            <h3>Administrator Check</h3>
+            <p>One of the most important patterns in Windows automation scripts is the administrator privilege check. Chocolatey installs system-wide software, which requires elevated permissions. Running without admin rights would fail partway through, potentially leaving things in a broken state.</p>
+            <pre><code>function Test-Administrator {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+    return $principal.IsInRole(
+        [Security.Principal.WindowsBuiltInRole]::Administrator
+    )
+}
+
+if (-not (Test-Administrator)) {
+    Write-Host "This script requires Administrator privileges." -ForegroundColor Red
+    Write-Host "Right-click PowerShell and select 'Run as Administrator'." -ForegroundColor Yellow
+    exit 1
+}</code></pre>
+            <p>This pattern uses the .NET security classes built into PowerShell to check whether the current session has administrator privileges. The function creates a <code>WindowsPrincipal</code> object from the current user's identity and then checks if that principal is in the <code>Administrator</code> role. This is the most reliable way to perform this check in PowerShell. If the check fails, the script exits with a clear, helpful error message rather than failing later with a confusing access denied error.</p>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Exercise:</strong> Try running one of the Chocolatey Scripts without administrator privileges and observe the error messages. Then run it as Administrator and compare the behavior. Understanding the difference will help you debug permission-related issues in your own scripts.</p>
+              </div>
+            </div>
+
+            <!-- 2. Variables and Configuration -->
+            <h2 id="variables">2. Variables and Configuration</h2>
+            <p>Variables are the foundation of any configurable script. PowerShell provides several categories of variables, each with different scopes and purposes. Understanding these categories and using the right type for each situation makes your scripts more robust and easier to maintain.</p>
+
+            <h3>Automatic Variables</h3>
+            <p>PowerShell provides many built-in variables that give you information about the current environment. These are called automatic variables because PowerShell sets and maintains them for you. You do not need to define them &mdash; they are always available.</p>
+            <pre><code># Environment variables — system and user settings
+$env:USERPROFILE     # C:\Users\YourName
+$env:COMPUTERNAME    # Your PC's hostname
+$env:TEMP            # Temporary file directory
+
+# Script-specific automatic variables
+$PSScriptRoot        # Folder where the current script lives
+$PSVersionTable      # PowerShell version information
+$LASTEXITCODE        # Exit code from the last external command</code></pre>
+            <p>The <code>$PSScriptRoot</code> variable is particularly important for scripts that need to reference other files relative to their own location. It always points to the directory containing the currently executing script, regardless of what the current working directory happens to be. This is the correct way to build file paths in PowerShell &mdash; never assume that the working directory is the same as the script's directory.</p>
+
+            <h3>Script Variables</h3>
+            <p>Script variables are the values you define for your script's own use. They store configuration values, paths, counters, and other data that your script needs during execution.</p>
+            <pre><code># Configuration values
+$WifiNetwork = "YOUR_WIFI_NAME"
+$MaxRetries = 3
+$RetryDelay = 300  # 5 minutes in seconds
+
+# Paths — use Join-Path for cross-version compatibility
+$LogPath = "$env:USERPROFILE\Logs"
+$LogFile = "$LogPath\AutoUpdateChocolatey.log"
+$ConfigPath = Join-Path $PSScriptRoot "config.json"</code></pre>
+            <p>Notice the use of <code>Join-Path</code> for constructing file paths. While simple string concatenation works most of the time, <code>Join-Path</code> correctly handles edge cases like trailing backslashes and is the idiomatic PowerShell way to build paths. It is especially important when combining paths from different sources, such as environment variables and relative paths.</p>
+
+            <h3>Reading from a Config File</h3>
+            <p>Hard-coding configuration values directly in scripts creates a maintenance burden &mdash; every time you need to change a setting, you have to edit the script itself. A better approach is to store settings in an external JSON file that the script reads at startup.</p>
+            <pre><code># Load settings from an external JSON file
+$configPath = Join-Path $PSScriptRoot "config.json"
+if (Test-Path $configPath) {
+    $config = Get-Content $configPath -Raw | ConvertFrom-Json
+    $WifiNetwork = $config.wifiNetwork
+    $MaxRetries = $config.maxRetries
+    Write-Host "[INFO] Loaded configuration from $configPath" -ForegroundColor Blue
+} else {
+    Write-Warning "No config.json found. Using defaults."
+    Write-Warning "Copy config.example.json to config.json to customize."
+}</code></pre>
+            <p>This pattern follows a best practice from software engineering: keep configuration separate from code. The project ships with a <code>config.example.json</code> that contains safe placeholder values. Users copy it to <code>config.json</code> and customize it for their environment. The real <code>config.json</code> is listed in <code>.gitignore</code> so personal settings like WiFi names and email addresses are never accidentally committed to version control.</p>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Exercise:</strong> Create a simple JSON config file with three settings (a string, a number, and a boolean). Write a PowerShell script that loads the file with <code>Get-Content</code> and <code>ConvertFrom-Json</code>, and prints each setting to the console.</p>
+              </div>
+            </div>
+
+            <!-- 3. Functions and Modularity -->
+            <h2 id="functions">3. Functions and Modularity</h2>
+            <p>Functions are the building blocks of maintainable PowerShell scripts. By encapsulating logic into discrete, named units, you create code that is easier to read, test, debug, and reuse. In the Chocolatey Scripts project, helper functions are defined at the top of each script and handle recurring tasks like status output and logging.</p>
+
+            <h3>Function Design Principles</h3>
+            <p>Every function should follow the Single Responsibility Principle: it should do one thing and do it well. The function's name should clearly communicate its purpose, and its inputs should be well-defined using <code>param()</code> blocks.</p>
+            <pre><code># Good: Clear name, param block, single responsibility
+function Write-Status {
+    param([string]$Message)
+    Write-Host "[INFO] $Message" -ForegroundColor Blue
+    Add-Content -Path $LogFile -Value "[INFO] $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+}
+
+function Write-Success {
+    param([string]$Message)
+    Write-Host "[SUCCESS] $Message" -ForegroundColor Green
+    Add-Content -Path $LogFile -Value "[SUCCESS] $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+}
+
+function Write-Error {
+    param([string]$Message)
+    Write-Host "[ERROR] $Message" -ForegroundColor Red
+    Add-Content -Path $LogFile -Value "[ERROR] $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+}</code></pre>
+            <p>Notice several important patterns in these functions. Each function has a single, focused purpose: output a message at a specific severity level. They all use <code>param()</code> blocks with type declarations for their inputs, making it clear what data they expect. And they all follow the same dual-output pattern: writing to the console with color coding for the user, and writing to a log file with timestamps for later review. This consistency makes the code predictable and easy to understand.</p>
+
+            <h3>Functions with Multiple Parameters</h3>
+            <p>More complex functions accept multiple parameters and may include error handling. Here is a real-world example from the Chocolatey Scripts notification system:</p>
+            <pre><code>function Send-EmailNotification {
+    param(
+        [string]$Subject,
+        [string]$Body
+    )
+
+    try {
+        $smtp = New-Object System.Net.Mail.SmtpClient($smtpServer, $smtpPort)
+        $smtp.EnableSsl = $true
+        $smtp.Credentials = New-Object System.Net.NetworkCredential(
+            $emailAddress, $smtpPassword
+        )
+
+        $mail = New-Object System.Net.Mail.MailMessage
+        $mail.From = $emailAddress
+        $mail.To.Add($emailAddress)
+        $mail.Subject = $Subject
+        $mail.Body = $Body
+
+        $smtp.Send($mail)
+        Write-Success "Email notification sent: $Subject"
+    }
+    catch {
+        Write-Error "Failed to send email: $($_.Exception.Message)"
+    }
+}</code></pre>
+            <p>This function demonstrates several key concepts. The <code>param()</code> block defines named parameters with types, making the function self-documenting. The <code>try/catch</code> block wraps the risky network operation so that a failure to send email does not crash the entire script. And the error message includes <code>$_.Exception.Message</code>, which extracts the specific error from the caught exception &mdash; giving the user actionable information about what went wrong.</p>
+
+            <h3>Key Design Concepts</h3>
+            <ul>
+              <li><strong>Single Responsibility</strong> &mdash; Each function should do exactly one thing. If you find yourself adding "and" to a function's description, it probably needs to be split into two functions.</li>
+              <li><strong>Named Parameters</strong> &mdash; Use <code>param()</code> blocks with descriptive names and type declarations. This makes your functions self-documenting and prevents type-related bugs.</li>
+              <li><strong>Error Handling</strong> &mdash; Wrap risky operations (network calls, file I/O, external commands) in <code>try/catch</code> blocks. Never let an unhandled exception crash your script when a graceful recovery or error message is possible.</li>
+              <li><strong>Consistent Output</strong> &mdash; Use helper functions like <code>Write-Status</code> and <code>Write-Success</code> for uniform messaging throughout your script. This makes the output predictable and easy to scan.</li>
+            </ul>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Exercise:</strong> Write a function called <code>Test-FileNotEmpty</code> that takes a file path as a parameter and returns <code>$true</code> if the file exists and is not empty, or <code>$false</code> otherwise. Use <code>Test-Path</code> and <code>Get-Item</code> in your implementation.</p>
+              </div>
+            </div>
+
+            <!-- 4. User Input and Interaction -->
+            <h2 id="user-input">4. User Input and Interaction</h2>
+            <p>Interactive scripts need to communicate clearly with the user and handle a wide variety of inputs gracefully. Users will type unexpected things, press Enter without typing anything, and make mistakes. A well-designed interactive function anticipates all of these scenarios and handles them without crashing or producing confusing results.</p>
+
+            <h3>Colored Console Output</h3>
+            <p>Color makes terminal output dramatically easier to read. The Chocolatey Scripts project uses PowerShell's <code>-ForegroundColor</code> parameter on <code>Write-Host</code> consistently throughout to signal different types of information.</p>
+            <pre><code># Color-coded messages help users scan output quickly
+Write-Host "[INFO] Checking system requirements..." -ForegroundColor Blue
+Write-Host "[SUCCESS] All checks passed" -ForegroundColor Green
+Write-Host "[WARNING] Package is outdated" -ForegroundColor Yellow
+Write-Host "[ERROR] Installation failed" -ForegroundColor Red</code></pre>
+            <p>Unlike Bash, where you need to remember escape sequences for colors, PowerShell provides named colors as a parameter. The available colors include <code>Blue</code>, <code>Green</code>, <code>Yellow</code>, <code>Red</code>, <code>Cyan</code>, <code>White</code>, and <code>DarkGray</code> among others. Using consistent color coding across your scripts means users can quickly scan output and focus on the messages that matter most to them.</p>
+
+            <h3>Interactive Prompts</h3>
+            <p>PowerShell provides <code>Read-Host</code> for getting input from the user. Combined with simple validation logic, you can build interactive menus that guide users through multi-step processes.</p>
+            <pre><code># Simple yes/no prompt
+$response = Read-Host "Do you want to continue? (Y/N)"
+if ($response -eq 'Y') {
+    Write-Status "Continuing with installation..."
+} else {
+    Write-Status "Installation cancelled by user."
+    exit 0
+}
+
+# Menu-driven selection from the setup wizard
+Write-Host ""
+Write-Host "Select an option:" -ForegroundColor Cyan
+Write-Host "  1. Install Chocolatey"
+Write-Host "  2. Update all packages"
+Write-Host "  3. Run health check"
+Write-Host "  4. Set up scheduled tasks"
+Write-Host ""
+$choice = Read-Host "Enter your choice (1-4)"
+
+switch ($choice) {
+    '1' { .\install-chocolatey.ps1 }
+    '2' { .\auto-update-chocolatey.ps1 }
+    '3' { .\health-check.ps1 }
+    '4' { .\setup-scheduled-tasks.ps1 }
+    default { Write-Warning "Invalid choice. Please enter a number between 1 and 4." }
+}</code></pre>
+            <p>The <code>switch</code> statement is PowerShell's equivalent of a case statement, and it is cleaner than a chain of <code>if/elseif</code> blocks when handling multiple options. The <code>default</code> case catches any input that does not match a valid option, providing helpful feedback instead of silently doing nothing.</p>
+
+            <h3>Learning Points</h3>
+            <ul>
+              <li><strong>Color coding</strong> makes output scannable at a glance. Establish a consistent color scheme and use it throughout all your scripts.</li>
+              <li><strong>Read-Host</strong> pauses the script and waits for user input. Always provide clear instructions about what input is expected.</li>
+              <li><strong>Menus</strong> guide users through complex multi-step processes and reduce the chance of errors by constraining the available options.</li>
+              <li><strong>Input validation</strong> catches mistakes early. Always include a <code>default</code> or fallback case that handles unexpected input gracefully.</li>
+            </ul>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Exercise:</strong> Create a menu function that presents 4 options to the user (Install, Update, Cleanup, Quit), validates that their selection is a number between 1 and 4, and loops until a valid selection is made. Use <code>Write-Host</code> with colors and a <code>while</code> loop.</p>
+              </div>
+            </div>
+
+            <!-- 5. Error Handling and Validation -->
+            <h2 id="error-handling">5. Error Handling and Validation</h2>
+            <p>Robust error handling separates amateur scripts from professional-grade automation. In a production environment, network connections drop, disks fill up, permissions change, and commands that worked yesterday fail today. Your script needs to anticipate these situations and respond intelligently rather than simply crashing.</p>
+
+            <h3>Defensive Programming</h3>
+            <p>Defensive programming means checking prerequisites before attempting operations. The <code>Test-Prerequisites</code> function examines the system environment at startup, identifies all issues, and reports them together rather than failing on the first problem found. This saves the user from a frustrating cycle of fixing one issue, rerunning the script, finding the next issue, and repeating.</p>
+            <pre><code>function Test-Prerequisites {
+    $errors = 0
+
+    # Check PowerShell version
+    if ($PSVersionTable.PSVersion.Major -lt 5) {
+        Write-Error "PowerShell 5.1 or later is required"
+        $errors++
+    }
+
+    # Check internet connectivity
+    if (-not (Test-Connection -ComputerName "chocolatey.org" -Count 1 -Quiet)) {
+        Write-Error "No internet connection detected"
+        $errors++
+    }
+
+    # Check disk space (need at least 1 GB free)
+    $drive = Get-PSDrive C
+    $freeGB = [math]::Round($drive.Free / 1GB, 2)
+    if ($freeGB -lt 1) {
+        Write-Error "Only $freeGB GB free. Need at least 1 GB."
+        $errors++
+    }
+
+    # Check admin privileges
+    if (-not (Test-Administrator)) {
+        Write-Error "Administrator privileges are required"
+        $errors++
+    }
+
+    return $errors -eq 0
+}</code></pre>
+            <p>The error counter pattern is a key technique. Rather than stopping at the first failure, the function accumulates all errors and reports them at once. If a user has three problems &mdash; wrong PowerShell version, no internet, and low disk space &mdash; they see all three issues in one run and can fix them all before trying again. The function returns <code>$true</code> only when the error count is zero, making it easy to use in an <code>if</code> statement.</p>
+
+            <h3>Retry Logic with Backoff</h3>
+            <p>Network operations are inherently unreliable. A server might be temporarily overloaded, a DNS lookup might time out, or a connection might be briefly interrupted. Rather than failing immediately, professional scripts retry the operation with increasing delays between attempts.</p>
+            <pre><code>function Test-WifiNetwork {
+    $retryCount = 0
+
+    while ($retryCount -lt $MaxRetries) {
+        try {
+            # Check if connected to the right network
+            $wifi = netsh wlan show interfaces |
+                    Select-String "^\s*SSID\s*:" |
+                    ForEach-Object { ($_ -split ":\s*", 2)[1].Trim() }
+
+            if ($wifi -eq $WifiNetwork) {
+                Write-Success "Connected to $WifiNetwork"
+                return $true
+            }
+            Write-Warning "Not connected to $WifiNetwork (currently on: $wifi)"
+        }
+        catch {
+            Write-Warning "WiFi check failed: $($_.Exception.Message)"
+        }
+
+        $retryCount++
+        if ($retryCount -lt $MaxRetries) {
+            Write-Status "Retrying in $RetryDelay seconds (attempt $($retryCount + 1) of $MaxRetries)..."
+            Start-Sleep -Seconds $RetryDelay
+        }
+    }
+
+    Write-Error "Not connected to $WifiNetwork after $MaxRetries attempts"
+    return $false
+}</code></pre>
+            <p>This function demonstrates several important patterns. The <code>while</code> loop with a counter limits the number of attempts, preventing infinite retries. The <code>try/catch</code> block inside the loop catches transient errors without breaking out of the retry logic. And the delay between retries gives temporary issues time to resolve &mdash; a WiFi network that dropped for a moment may be back up after the wait period.</p>
+
+            <h3>Key Patterns</h3>
+            <ul>
+              <li><strong>Check early, fail fast</strong> &mdash; Validate the environment before starting real work. It is much better to discover a problem before you have made any changes to the system.</li>
+              <li><strong>Accumulate errors</strong> &mdash; Report all problems at once instead of stopping at the first one. This respects the user's time by letting them fix everything in one pass.</li>
+              <li><strong>Retry transient failures</strong> &mdash; Network issues are often temporary. A short wait and retry often succeeds where an immediate failure would have been reported.</li>
+              <li><strong>Use exit codes</strong> &mdash; Return <code>$true</code>/<code>$false</code> from validation functions and use <code>exit 1</code> for script-level failures. This makes your scripts work well when called from other scripts or automation tools.</li>
+            </ul>
+
+            <!-- 6. Logging and Debugging -->
+            <h2 id="logging">6. Logging and Debugging</h2>
+            <p>A good logging system is your best friend when something goes wrong. It provides a complete record of what happened, when it happened, and in what order. The Chocolatey Scripts logging system writes to both the console (with colors for readability) and a file (with timestamps for debugging), ensuring you always have the information you need for troubleshooting.</p>
+
+            <h3>Setting Up the Log Directory</h3>
+            <p>Before writing any log entries, the script needs to ensure the log directory exists. This is a common bootstrapping step that should happen early in the script's execution.</p>
+            <pre><code># Create log directory if it doesn't exist
+$LogPath = "$env:USERPROFILE\Logs"
+if (-not (Test-Path $LogPath)) {
+    New-Item -ItemType Directory -Path $LogPath -Force | Out-Null
+}
+
+$LogFile = "$LogPath\ChocolateyInstall.log"
+Add-Content -Path $LogFile -Value "--- Session started at $(Get-Date) ---"</code></pre>
+            <p>The <code>| Out-Null</code> suppresses the output of <code>New-Item</code>, which normally displays the created directory object. In a script, this output would clutter the console with information the user does not need. The <code>-Force</code> flag creates parent directories as needed and does nothing if the directory already exists, making this code safe to run multiple times.</p>
+
+            <h3>Dual Output (Console + File)</h3>
+            <p>The core of the logging system is the dual-output pattern: every message is written to both the console and a log file. The console version uses colors for readability, while the file version adds timestamps and strips formatting for clean, parseable log files.</p>
+            <pre><code>function Write-Status {
+    param([string]$Message)
+    # Show in console with color for immediate feedback
+    Write-Host "[INFO] $Message" -ForegroundColor Blue
+    # Write to log file with timestamp for later review
+    Add-Content -Path $LogFile -Value "[INFO] $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+}
+
+function Write-Success {
+    param([string]$Message)
+    Write-Host "[SUCCESS] $Message" -ForegroundColor Green
+    Add-Content -Path $LogFile -Value "[SUCCESS] $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+}
+
+function Write-Warning {
+    param([string]$Message)
+    Write-Host "[WARNING] $Message" -ForegroundColor Yellow
+    Add-Content -Path $LogFile -Value "[WARNING] $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+}
+
+function Write-Error {
+    param([string]$Message)
+    Write-Host "[ERROR] $Message" -ForegroundColor Red
+    Add-Content -Path $LogFile -Value "[ERROR] $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+}</code></pre>
+            <p>The timestamp format <code>yyyy-MM-dd HH:mm:ss</code> is ISO 8601 compatible, which means log entries sort correctly when you sort them alphabetically and are unambiguous across locales. This is essential for debugging timing issues where you need to understand the exact sequence and duration of operations.</p>
+
+            <h3>Learning Points</h3>
+            <ul>
+              <li><strong>Always log to a file</strong> so you can review what happened after the fact. Console output scrolls away and is lost when the window closes.</li>
+              <li><strong>Timestamps are essential</strong> for debugging timing issues, understanding operation duration, and correlating events across multiple log files.</li>
+              <li><strong>Dual output</strong> keeps the user informed during execution while preserving a permanent, detailed record for later analysis.</li>
+              <li><strong>Consistent formatting</strong> with severity prefixes like <code>[INFO]</code>, <code>[ERROR]</code>, and <code>[SUCCESS]</code> makes it easy to grep or <code>Select-String</code> for specific types of entries.</li>
+            </ul>
+
+            <!-- 7. System Detection and Adaptation -->
+            <h2 id="system-detection">7. System Detection and Adaptation</h2>
+            <p>Windows automation scripts need to be aware of their environment. A laptop on battery power should not start downloading large updates. A desktop without a WiFi adapter does not need WiFi checks. Scripts that adapt to system conditions are more reliable and user-friendly than scripts that assume a fixed environment.</p>
+
+            <h3>Power Status Detection</h3>
+            <p>One of the smartest features of the auto-update script is its ability to check whether the computer is plugged into AC power before starting potentially long download operations. This prevents the script from draining a laptop's battery during a lengthy update process.</p>
+            <pre><code>function Test-ACPower {
+    try {
+        $battery = Get-CimInstance -ClassName Win32_Battery -ErrorAction Stop
+        if ($battery) {
+            # BatteryStatus &gt;= 2 means plugged into AC power
+            # 1 = discharging, 2 = AC connected, 3+ = charging
+            return $battery.BatteryStatus -ge 2
+        }
+        # No battery found = desktop computer = always on power
+        return $true
+    }
+    catch {
+        # Fallback for systems where CIM fails
+        $battery = Get-WmiObject Win32_Battery
+        if ($battery) {
+            return $battery.BatteryStatus -ge 2
+        }
+        # If we can't detect battery at all, assume AC power
+        return $true
+    }
+}</code></pre>
+            <p>This function demonstrates several important concepts. First, it uses <code>Get-CimInstance</code>, which is the modern replacement for <code>Get-WmiObject</code> in PowerShell. CIM is faster, more reliable, and is the recommended approach for new scripts. Second, it includes a fallback to <code>Get-WmiObject</code> for older systems that may not support CIM queries. Third, it handles the case where no battery is detected &mdash; desktop computers do not have batteries, so no battery means the machine is always on AC power. This kind of thorough thinking about edge cases is what makes production scripts reliable.</p>
+
+            <h3>Network Detection</h3>
+            <p>The WiFi detection function uses Windows' built-in <code>netsh</code> command to determine the currently connected wireless network. This allows the auto-update script to only run when the computer is connected to a trusted network.</p>
+            <pre><code>function Test-WifiNetwork {
+    # Get the current SSID from the wireless adapter
+    $wifi = netsh wlan show interfaces |
+            Select-String "^\s*SSID\s*:" |
+            ForEach-Object { ($_ -split ":\s*", 2)[1].Trim() }
+
+    if ($wifi -eq $WifiNetwork) {
+        Write-Success "Connected to $WifiNetwork"
+        return $true
+    } else {
+        Write-Warning "Not on expected network. Connected to: $wifi"
+        return $false
+    }
+}</code></pre>
+            <p>The parsing of <code>netsh</code> output uses <code>Select-String</code> (PowerShell's equivalent of grep) to find the line containing the SSID, then splits on the colon delimiter to extract just the network name. The <code>Trim()</code> call removes any leading or trailing whitespace. This approach is more reliable than trying to match the entire line, because the output format of <code>netsh</code> can vary slightly between Windows versions.</p>
+
+            <h3>Concepts Demonstrated</h3>
+            <ul>
+              <li><strong>CIM over WMI</strong> &mdash; <code>Get-CimInstance</code> is the modern replacement for <code>Get-WmiObject</code>. Use CIM for new scripts and WMI only as a fallback.</li>
+              <li><strong>Graceful fallbacks</strong> &mdash; Try the modern approach first, fall back to legacy if needed. This maximizes compatibility across different Windows versions.</li>
+              <li><strong>Environment awareness</strong> &mdash; Check power and network status before running long operations. Scripts that respect system conditions are more reliable and user-friendly.</li>
+              <li><strong>Edge case handling</strong> &mdash; Desktop computers have no batteries. Wired connections have no SSIDs. Account for these variations in your detection logic.</li>
+            </ul>
+
+            <!-- 8. Configuration Management -->
+            <h2 id="config-management">8. Configuration Management</h2>
+            <p>Configuration management is the practice of externalizing settings so they can be changed without modifying code. The Chocolatey Scripts project uses JSON configuration files to separate user preferences from script logic, making the scripts both customizable and maintainable.</p>
+
+            <h3>JSON Configuration Files</h3>
+            <p>JSON is the configuration format of choice for the Chocolatey Scripts project. It is human-readable, widely supported, and PowerShell has built-in cmdlets for parsing it. Here is the structure of the config file:</p>
+            <pre><code>{
+  "wifiNetwork": "YOUR_WIFI_NAME",
+  "maxRetries": 3,
+  "retryDelaySeconds": 300,
+  "emailAddress": "your-email@example.com",
+  "smtpServer": "smtp.gmail.com",
+  "smtpPort": 587,
+  "notifications": {
+    "enableEmailNotifications": false,
+    "enableToastNotifications": true,
+    "notifyOnSuccess": true,
+    "notifyOnError": true,
+    "notifyOnWarning": false
+  },
+  "backupSettings": {
+    "backupPath": "%USERPROFILE%\\Documents\\ChocolateyBackups",
+    "autoBackupBeforeUpdate": true,
+    "keepBackups": 5
+  }
+}</code></pre>
+
+            <h3>Loading and Using Configuration</h3>
+            <p>The pattern for loading configuration is straightforward: check if the file exists, read it, parse the JSON, and apply the values. Always provide sensible defaults in case the config file is missing or a particular setting is not defined.</p>
+            <pre><code>$configPath = Join-Path $PSScriptRoot "config.json"
+
+if (Test-Path $configPath) {
+    $config = Get-Content $configPath -Raw | ConvertFrom-Json
+    Write-Status "Loaded configuration from $configPath"
+
+    # Apply settings with fallback defaults
+    $WifiNetwork = if ($config.wifiNetwork) { $config.wifiNetwork } else { "" }
+    $MaxRetries = if ($config.maxRetries) { $config.maxRetries } else { 3 }
+} else {
+    Write-Warning "No config.json found. Using defaults."
+    Write-Warning "Copy config.example.json to config.json to customize."
+}</code></pre>
+            <p>The <code>-Raw</code> parameter on <code>Get-Content</code> is important. Without it, PowerShell returns an array of lines rather than a single string, and <code>ConvertFrom-Json</code> needs a single string to parse correctly. This is a common source of confusing errors for PowerShell beginners &mdash; always use <code>-Raw</code> when reading JSON files.</p>
+
+            <h3>Best Practice</h3>
+            <p>Ship a <code>config.example.json</code> with safe placeholder values. Users copy it to <code>config.json</code> and customize. The real <code>config.json</code> is git-ignored so personal settings stay private. This pattern is standard across professional software projects and prevents accidental exposure of sensitive information like email addresses and WiFi network names.</p>
+
+            <!-- 9. Process Management and Automation -->
+            <h2 id="process-management">9. Process Management and Automation</h2>
+            <p>One of the most powerful features of the Chocolatey Scripts project is its ability to schedule tasks for unattended execution. Windows Task Scheduler provides a robust framework for running scripts automatically, and PowerShell gives you full control over creating, managing, and monitoring these scheduled tasks.</p>
+
+            <h3>Windows Scheduled Tasks</h3>
+            <p>Creating a scheduled task in PowerShell involves defining three components: the action (what to run), the trigger (when to run it), and the settings (under what conditions). Here is how the auto-update task is configured:</p>
+            <pre><code># Define the action — what command to run
+$action = New-ScheduledTaskAction `
+    -Execute "powershell.exe" `
+    -Argument "-File `"$PSScriptRoot\auto-update-chocolatey.ps1`""
+
+# Define the trigger — when to run
+$trigger = New-ScheduledTaskTrigger -Daily -At "3:00AM"
+
+# Define the settings — under what conditions
+$settings = New-ScheduledTaskSettingsSet `
+    -RunOnlyIfNetworkAvailable `
+    -StartWhenAvailable
+
+# Register the task with Windows Task Scheduler
+Register-ScheduledTask `
+    -TaskName "Chocolatey Auto Update" `
+    -Action $action `
+    -Trigger $trigger `
+    -Settings $settings `
+    -RunLevel Highest</code></pre>
+            <p>The <code>-RunLevel Highest</code> parameter ensures the task runs with administrator privileges, which Chocolatey requires for installing and updating packages. The <code>-RunOnlyIfNetworkAvailable</code> setting prevents the task from running when the computer is offline, and <code>-StartWhenAvailable</code> ensures the task runs at the next opportunity if the computer was off during the scheduled time.</p>
+
+            <h3>Idempotent Operations</h3>
+            <p>A critical concept in automation is idempotency: the ability to run an operation multiple times without causing problems. Every script in this project checks the current state before making changes, ensuring it is safe to run repeatedly.</p>
+            <pre><code># Safe to run multiple times — checks before acting
+if (Get-Command choco -ErrorAction SilentlyContinue) {
+    Write-Success "Chocolatey is already installed (version $(choco --version))"
+} else {
+    Write-Status "Installing Chocolatey..."
+    # installation logic here
+}</code></pre>
+            <p>The <code>-ErrorAction SilentlyContinue</code> parameter prevents <code>Get-Command</code> from throwing an error if <code>choco</code> is not found. Instead, it returns <code>$null</code>, which evaluates to <code>$false</code> in the <code>if</code> statement. This pattern is cleaner and more reliable than using <code>try/catch</code> for simple existence checks.</p>
+
+            <p>Idempotent scripts have several practical benefits: they can be safely resumed after interruptions, they do not duplicate installations, they detect existing state before making changes, and they can be run as part of automated pipelines without special handling for "already done" cases.</p>
+
+            <!-- 10. Testing and Safety Checks -->
+            <h2 id="testing">10. Testing and Safety Checks</h2>
+            <p>Testing is essential for maintaining confidence in your scripts as they evolve. The Chocolatey Scripts project includes a validation script that checks the entire environment before any changes are made, ensuring that prerequisites are met and the configuration is valid.</p>
+
+            <h3>Validation Scripts</h3>
+            <p>The <code>validate-setup.ps1</code> script performs a comprehensive check of your environment. It verifies that all required components are in place, the configuration is valid, and the system meets minimum requirements.</p>
+            <pre><code>function Test-Configuration {
+    $configPath = Join-Path $PSScriptRoot "config.json"
+
+    # Check that the config file exists
+    if (-not (Test-Path $configPath)) {
+        Write-Fail "config.json is missing"
+        Write-Host "  Run: Copy-Item config.example.json config.json" -ForegroundColor DarkGray
+        return $false
+    }
+
+    # Check that the config file contains valid JSON
+    try {
+        $config = Get-Content $configPath -Raw | ConvertFrom-Json
+        Write-Pass "config.json has valid JSON syntax"
+    }
+    catch {
+        Write-Fail "config.json has invalid JSON: $($_.Exception.Message)"
+        return $false
+    }
+
+    # Check for placeholder values that need customizing
+    if ($config.wifiNetwork -eq "YOUR_WIFI_NAME") {
+        Write-Warn "WiFi network is still set to the placeholder value"
+        Write-Host "  Update 'wifiNetwork' in config.json to your actual WiFi name" -ForegroundColor DarkGray
+    }
+
+    # Verify notification settings are consistent
+    if ($config.notifications.enableEmailNotifications -and
+        (-not $config.emailAddress -or $config.emailAddress -eq "your-email@example.com")) {
+        Write-Warn "Email notifications are enabled but email address is not configured"
+    }
+
+    return $true
+}</code></pre>
+            <p>Notice how the validation function not only reports problems but also suggests solutions. When the config file is missing, it shows the exact command to create one. When a placeholder value is detected, it tells the user which specific setting needs to be updated. This kind of helpful error reporting transforms a frustrating debugging experience into a guided setup process.</p>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Exercise:</strong> Write a validation function that checks whether Chocolatey is installed and reports its version. Use <code>Get-Command</code> with <code>-ErrorAction SilentlyContinue</code> to check for the <code>choco</code> command, and <code>choco --version</code> to retrieve the version number.</p>
+              </div>
+            </div>
+
+            <!-- 11. Security and Safety Patterns -->
+            <h2 id="security">11. Security and Safety Patterns</h2>
+            <p>Security is a fundamental concern when writing automation scripts that run with administrator privileges. PowerShell provides several built-in mechanisms for managing script security, and following best practices helps protect both your system and your users.</p>
+
+            <h3>Execution Policy Awareness</h3>
+            <p>PowerShell's execution policy controls which scripts are allowed to run. A well-written script checks the current policy at startup and provides guidance if the policy is too restrictive.</p>
+            <pre><code># Check if scripts are allowed to run
+$policy = Get-ExecutionPolicy
+if ($policy -eq "Restricted") {
+    Write-Warning "PowerShell execution policy is Restricted."
+    Write-Warning "Scripts cannot run under this policy."
+    Write-Host ""
+    Write-Host "To fix this, run the following command as Administrator:" -ForegroundColor Cyan
+    Write-Host "  Set-ExecutionPolicy RemoteSigned -Scope CurrentUser" -ForegroundColor White
+    exit 1
+}
+
+Write-Status "Execution policy: $policy"</code></pre>
+            <p>Checking the execution policy before doing anything else prevents the confusing scenario where a user tries to run a script and gets a generic "cannot be loaded" error. By detecting the issue and providing the exact command to fix it, you save the user from having to search the internet for a solution.</p>
+
+            <h3>Safe Package Installation</h3>
+            <p>When installing packages through Chocolatey, wrapping each installation in error handling ensures that a single failed package does not prevent the rest from being installed.</p>
+            <pre><code>function Install-ChocolateyPackage {
+    param([string]$PackageName)
+
+    try {
+        Write-Status "Installing $PackageName..."
+        choco install $PackageName -y --no-progress
+
+        if ($LASTEXITCODE -eq 0) {
+            Write-Success "$PackageName installed successfully"
+        } else {
+            Write-Error "$PackageName installation returned exit code $LASTEXITCODE"
+        }
+    }
+    catch {
+        Write-Error "Failed to install $PackageName : $($_.Exception.Message)"
+    }
+}</code></pre>
+            <p>The <code>$LASTEXITCODE</code> variable captures the exit code from the most recent external command (in this case, <code>choco</code>). An exit code of 0 means success, while any non-zero value indicates a problem. This two-layer error handling &mdash; <code>try/catch</code> for PowerShell exceptions and <code>$LASTEXITCODE</code> for external command failures &mdash; covers all the ways an installation can fail.</p>
+
+            <h3>Security Tips</h3>
+            <ul>
+              <li><strong>Review scripts before running</strong> &mdash; Never blindly execute code from the internet. Read through the script or use <code>Get-Content .\script.ps1 | more</code> to understand what it does.</li>
+              <li><strong>Use <code>-WhatIf</code> where supported</strong> &mdash; Many PowerShell cmdlets support the <code>-WhatIf</code> parameter, which shows what would happen without actually making changes.</li>
+              <li><strong>Run as admin only when necessary</strong> &mdash; Do not stay elevated for tasks that do not need it. Close the admin PowerShell window when you are done.</li>
+              <li><strong>Keep Chocolatey updated</strong> &mdash; Run <code>choco upgrade chocolatey</code> regularly to get security patches and bug fixes for the package manager itself.</li>
+              <li><strong>Verify package sources</strong> &mdash; Use <code>choco info package-name</code> to review package details before installing unfamiliar packages.</li>
+            </ul>
+
+            <!-- 12. Documentation and Maintenance -->
+            <h2 id="documentation">12. Documentation and Maintenance</h2>
+            <p>Good documentation makes your scripts maintainable for the long term. PowerShell has a built-in help system that you should use extensively, along with inline comments that explain the reasoning behind your code decisions.</p>
+
+            <h3>Comment-Based Help</h3>
+            <p>PowerShell's Comment-Based Help system allows users to run <code>Get-Help</code> on your scripts and see structured documentation. This is the professional standard for PowerShell scripts and should be included in every script you create.</p>
+            <pre><code>&lt;#
+.SYNOPSIS
+    One-line description of what the script does.
+
+.DESCRIPTION
+    Detailed explanation of behavior, prerequisites, and side effects.
+    Include information about what the script modifies on the system
+    and any conditions that must be true before running.
+
+.PARAMETER Name
+    Description of each parameter the script accepts, including
+    valid values, defaults, and any constraints.
+
+.EXAMPLE
+    .\install-chocolatey.ps1
+    Installs Chocolatey with default settings.
+
+.EXAMPLE
+    .\install-chocolatey.ps1 -Verbose
+    Installs Chocolatey with detailed progress output.
+
+.NOTES
+    Author:  CodeCraftedApps
+    Version: 1.0.0
+    Requires: PowerShell 5.1+, Administrator privileges
+    Logs to: $env:USERPROFILE\Logs\ChocolateyInstall.log
+#&gt;</code></pre>
+            <p>The <code>.EXAMPLE</code> sections are particularly valuable because they show users how to actually run the script. Include multiple examples that demonstrate different use cases and parameter combinations. Users can access these examples with <code>Get-Help .\script.ps1 -Examples</code>.</p>
+
+            <h3>Inline Comments</h3>
+            <p>Inline comments should explain <em>why</em> the code does something, not <em>what</em> it does. The code itself shows what is happening; the comment should explain the reasoning or context that is not obvious from the code alone.</p>
+            <pre><code># Good: Explain WHY, not WHAT
+# BatteryStatus &gt;= 2 means AC power (1 = discharging, 2+ = charging/plugged in)
+return $battery.BatteryStatus -ge 2
+
+# Bad: Just restating the code
+# Check if status is greater than or equal to 2
+return $battery.BatteryStatus -ge 2</code></pre>
+            <p>The first comment adds information that you cannot derive from the code alone: the meaning of the battery status codes. The second comment simply restates what the code does, which is obvious to anyone who can read PowerShell. Good comments answer the question "why is this necessary?" or "what does this magic number mean?"</p>
+
+            <h3>Maintenance Best Practices</h3>
+            <ul>
+              <li><strong>Keep scripts focused</strong> &mdash; Each script should have one clear purpose. This makes them easier to understand, test, and debug.</li>
+              <li><strong>Use consistent naming</strong> &mdash; Follow PowerShell's Verb-Noun naming convention for functions (e.g., <code>Test-Administrator</code>, <code>Write-Status</code>, <code>Install-ChocolateyPackage</code>).</li>
+              <li><strong>Version your scripts</strong> &mdash; Include version numbers in your script metadata and update them when you make changes.</li>
+              <li><strong>Use PSScriptAnalyzer</strong> &mdash; Run <code>Invoke-ScriptAnalyzer -Path .\your-script.ps1</code> to check for best practice violations and common pitfalls.</li>
+            </ul>
+
+            <!-- Practical Exercises -->
+            <h2 id="exercises">Practical Exercises</h2>
+            <p>The best way to learn PowerShell scripting is to write PowerShell scripts. These exercises are designed to reinforce the concepts covered in this guide. Each exercise builds on the patterns you have seen in the Chocolatey Scripts source code. Try to complete them on your own before looking at the hints.</p>
+
+            <h3>Exercise 1: Directory Setup</h3>
+            <p>Write a function called <code>Ensure-Directory</code> that takes a directory path as an argument. If the directory exists, it should log a success message and return. If it does not exist, it should create it (including any parent directories) and log what it did. The function should handle errors such as permission denied and return appropriate values.</p>
+            <pre><code>function Ensure-Directory {
+    param([string]$Path)
+
+    # Your implementation here:
+    # 1. Validate that $Path is not empty
+    # 2. Check if the directory already exists (Test-Path)
+    # 3. If not, create it with New-Item -ItemType Directory -Force
+    # 4. Handle errors with try/catch
+    # 5. Log the result using Write-Status or Write-Success
+}</code></pre>
+
+            <h3>Exercise 2: Config Validation</h3>
+            <p>Create a function called <code>Test-ConfigFile</code> that loads a JSON config file and checks for required keys. It should verify the file exists, contains valid JSON, and includes specific required settings.</p>
+            <pre><code>function Test-ConfigFile {
+    param([string]$Path)
+
+    # Your implementation here:
+    # 1. Check if the file exists (Test-Path)
+    # 2. Read and parse JSON (Get-Content -Raw | ConvertFrom-Json)
+    # 3. Verify required keys are present
+    # 4. Check for placeholder values that need customizing
+    # 5. Return $true if valid, $false otherwise
+}</code></pre>
+
+            <h3>Exercise 3: Package Checker</h3>
+            <p>Build a function called <code>Get-PackageStatus</code> that checks if a Chocolatey package is installed and reports its version. This exercise combines external command execution with output parsing.</p>
+            <pre><code>function Get-PackageStatus {
+    param([string]$PackageName)
+
+    # Your implementation here:
+    # 1. Check if Chocolatey is installed (Get-Command choco)
+    # 2. Run 'choco list --local-only' to get installed packages
+    # 3. Parse the output to find the specified package
+    # 4. Report the package name and version if found
+    # 5. Report "not installed" if not found
+}</code></pre>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Testing your solutions:</strong> You can check your PowerShell syntax without running the script by using <code>powershell -Command "& { Get-Content .\your-script.ps1 | Out-Null }"</code>. For deeper analysis, install PSScriptAnalyzer with <code>Install-Module PSScriptAnalyzer</code> and run <code>Invoke-ScriptAnalyzer -Path .\your-script.ps1</code>.</p>
+              </div>
+            </div>
+
+            <!-- Next Steps and Resources -->
+            <h2 id="next-steps">Next Steps and Resources</h2>
+            <p>This guide has covered the core patterns used in professional PowerShell scripting: script structure and metadata, variables and configuration management, modular functions, interactive user input, defensive error handling, structured logging, system detection and adaptation, process automation with scheduled tasks, testing and validation, security best practices, and documentation standards. These are the same patterns used in production environments at organizations of all sizes.</p>
+
+            <p>To continue your learning journey, here are the recommended next steps:</p>
+            <ol>
+              <li><strong>Study the actual scripts</strong> in the <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">Chocolatey Scripts repository</a>. Now that you understand the patterns, reading the full source code will reinforce your knowledge and show you how the pieces fit together in a complete application.</li>
+              <li><strong>Copy <code>config.example.json</code> to <code>config.json</code></strong> and customize it for your environment. Experimenting with the configuration is a safe, low-risk way to learn how configuration-driven scripts work.</li>
+              <li><strong>Run <code>validate-setup.ps1</code></strong> to check your environment and see the validation patterns in action.</li>
+              <li><strong>Try modifying a script</strong> and test your changes. Start with small additions like adding a new package to the install list or changing a notification setting.</li>
+              <li><strong>Create your own scripts</strong> using the patterns from this guide. The best way to internalize these techniques is to use them to solve your own problems.</li>
+              <li><strong>Share improvements</strong> with the community by opening issues or pull requests on the GitHub repository.</li>
+            </ol>
+
+            <h3>Recommended Resources</h3>
+            <p>These external resources complement this guide and provide deeper dives into specific topics:</p>
+            <ul>
+              <li><a href="https://learn.microsoft.com/en-us/powershell/" target="_blank" rel="noopener noreferrer">PowerShell Documentation</a> &mdash; Microsoft's official PowerShell documentation. Comprehensive and authoritative, this is the definitive reference for every PowerShell feature and cmdlet.</li>
+              <li><a href="https://docs.chocolatey.org/" target="_blank" rel="noopener noreferrer">Chocolatey Documentation</a> &mdash; The official Chocolatey docs for everything related to package management on Windows.</li>
+              <li><a href="https://github.com/PowerShell/PSScriptAnalyzer" target="_blank" rel="noopener noreferrer">PSScriptAnalyzer</a> &mdash; A static analysis tool for PowerShell scripts. It identifies bugs, portability issues, and style problems with detailed explanations and fix suggestions.</li>
+              <li><a href="https://poshcode.gitbook.io/powershell-practice-and-style/" target="_blank" rel="noopener noreferrer">PowerShell Practice and Style Guide</a> &mdash; Community-driven guidelines for writing clean, consistent, readable PowerShell code. A great reference for naming conventions, formatting, and design patterns.</li>
+              <li><a href="https://community.chocolatey.org/packages" target="_blank" rel="noopener noreferrer">Chocolatey Package Repository</a> &mdash; Browse thousands of available packages to find software you can add to your automation scripts.</li>
+            </ul>
+
+            <div class="callout callout-info">
+              <div class="callout-icon">&#8505;</div>
+              <div class="callout-content">
+                <p><strong>Remember:</strong> PowerShell scripting is a skill that improves with practice. Do not try to memorize everything at once. Instead, bookmark this guide and the resources above, write scripts to solve real problems, and refer back when you need a refresher on a specific technique. Every professional PowerShell scripter started where you are now.</p>
+              </div>
+            </div>
+
+          </div>
+          <aside class="toc" aria-label="Table of Contents">
+            <h3>On This Page</h3>
+            <ol class="toc-list">
+              <li><a href="#basic-structure">Basic Script Structure</a></li>
+              <li><a href="#variables">Variables and Configuration</a></li>
+              <li><a href="#functions">Functions and Modularity</a></li>
+              <li><a href="#user-input">User Input and Interaction</a></li>
+              <li><a href="#error-handling">Error Handling and Validation</a></li>
+              <li><a href="#logging">Logging and Debugging</a></li>
+              <li><a href="#system-detection">System Detection and Adaptation</a></li>
+              <li><a href="#config-management">Configuration Management</a></li>
+              <li><a href="#process-management">Process Management and Automation</a></li>
+              <li><a href="#testing">Testing and Safety Checks</a></li>
+              <li><a href="#security">Security and Safety Patterns</a></li>
+              <li><a href="#documentation">Documentation and Maintenance</a></li>
+              <li><a href="#exercises">Practical Exercises</a></li>
+              <li><a href="#next-steps">Next Steps and Resources</a></li>
+            </ol>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="guides.html">Guides</a>
+          <a href="scripts.html">Scripts</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>

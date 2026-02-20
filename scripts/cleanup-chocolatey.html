@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chocolatey Cleanup - Chocolatey Scripts</title>
+  <meta name="description" content="Remove old package versions, clean caches, and free up disk space on your Windows system with this Chocolatey maintenance script.">
+  <meta name="keywords" content="chocolatey, cleanup, disk space, cache, old packages, windows maintenance, powershell, automation">
+  <meta name="author" content="CodeCraftedApps">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://chocolateyscripts.codecraftedapps.com/scripts/cleanup-chocolatey.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Chocolatey Cleanup - Chocolatey Scripts">
+  <meta property="og:description" content="Remove old package versions, clean caches, and free up disk space on your Windows system with this Chocolatey maintenance script.">
+  <meta property="og:url" content="https://chocolateyscripts.codecraftedapps.com/scripts/cleanup-chocolatey.html">
+  <meta property="og:site_name" content="Chocolatey Scripts">
+  <meta property="og:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Chocolatey Cleanup - Chocolatey Scripts">
+  <meta name="twitter:description" content="Remove old package versions, clean caches, and free up disk space on your Windows system with this Chocolatey maintenance script.">
+  <meta name="twitter:image" content="https://chocolateyscripts.codecraftedapps.com/favicon.png">
+  <meta name="theme-color" content="#0a0e14">
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu">&#9776;</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Chocolatey Cleanup
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Chocolatey Cleanup</h1>
+        <p>Remove old package versions, clean caches, and free up disk space.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">cleanup-chocolatey.ps1</span>
+          <span class="script-meta-item">Maintenance</span>
+          <span class="script-meta-item">Windows 10/11</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/chocolateyScripts/main/cleanup-chocolatey.ps1" class="btn-primary" target="_blank" rel="noopener noreferrer">Download Script</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts/blob/main/cleanup-chocolatey.ps1" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="content-body">
+
+          <h2>What This Script Does</h2>
+
+          <p>The <code>cleanup-chocolatey.ps1</code> script performs a comprehensive cleanup of your Chocolatey installation, removing accumulated debris that builds up over time as packages are installed, updated, and removed. Over weeks and months of regular Chocolatey use, old package versions, cached installer downloads, orphaned dependencies, and temporary files can consume significant disk space. This script targets all of these categories of waste and reclaims that space in a single automated operation, typically recovering between 500 megabytes and 2 gigabytes of disk space depending on how many packages you have installed and how long it has been since the last cleanup.</p>
+
+          <p>The most significant source of wasted space in a Chocolatey installation comes from old package versions. When Chocolatey updates a package, it does not automatically remove the previous version by default. This behavior is intentional because it allows users to roll back to a previous version if an update causes problems. However, after an update has been running successfully for a while, the old version serves no purpose and simply consumes disk space. The cleanup script identifies all packages that have older versions retained alongside the current version and removes those outdated copies. This process is safe because Chocolatey tracks which version is currently active, and the script only removes versions that are explicitly marked as superseded.</p>
+
+          <p>Cached package downloads represent another substantial source of disk usage. Every time Chocolatey installs or updates a package, it downloads the installer or package file to a local cache directory. These cached files are kept so that packages can be reinstalled without re-downloading them, which is useful in environments with limited or unreliable internet connectivity. However, for most users, these cached files are never accessed again after the initial installation. The cleanup script clears this cache entirely, freeing up the space consumed by what are effectively duplicate copies of software you have already installed. If you ever need to reinstall a package, Chocolatey will simply re-download it from the repository.</p>
+
+          <p>Orphaned dependencies are packages that were originally installed as dependencies of another package but are no longer needed because the parent package has been removed. For example, if you install a package that depends on a specific version of the Visual C++ runtime, and then later uninstall that package, the Visual C++ runtime may remain installed even though nothing else requires it. The cleanup script identifies these orphaned dependencies by analyzing the dependency graph of all installed packages and flagging any that are not directly installed or required by any other installed package. It then presents a summary of these orphaned packages in the log output. Note that the script takes a conservative approach here and logs orphaned dependencies for review rather than automatically removing them, since some packages may have been intentionally installed even though they appear as orphans in the dependency analysis.</p>
+
+          <p>Temporary files generated during package installation and update operations are the fourth category of cleanup targets. Chocolatey creates temporary directories during package operations to stage files, extract archives, and run installation scripts. While these temporary directories are normally cleaned up after each operation, failures or interruptions during installation can leave behind temporary directories that never get removed. The cleanup script scans the Chocolatey temporary directory for any leftover artifacts and removes them. These remnants are typically small individually, but on systems that have experienced multiple interrupted installations, they can accumulate to a noticeable amount.</p>
+
+          <p>The script operates with a clear before-and-after measurement approach. At the start of execution, it calculates the total disk space consumed by the Chocolatey installation directory and its caches. After performing all cleanup operations, it measures the same directories again and reports the total amount of space reclaimed. This measurement gives you concrete, quantifiable feedback on the value of running the cleanup. The disk space figures are reported in both the console output and the log file, making it easy to track cleanup effectiveness over time.</p>
+
+          <p>After completing all cleanup operations, the script automatically runs the <code>choco doctor</code> health check command. This step verifies that the cleanup process did not inadvertently affect any active packages or configurations. The health check validates the Chocolatey installation integrity, checks that all currently installed packages are in a consistent state, and reports any issues that need attention. Running the health check after cleanup provides confidence that the system is in a clean, healthy state when the script completes.</p>
+
+          <p>The script is designed to be completely idempotent and safe to run multiple times. If you run the cleanup script on a system that was recently cleaned, it will simply find nothing to remove and report that the Chocolatey installation is already in a clean state. There is no risk of the script removing files that should not be deleted, removing packages that are still in use, or corrupting the Chocolatey installation in any way. This safety characteristic makes it suitable for inclusion in scheduled maintenance routines where it might run weekly or monthly regardless of whether cleanup is actually needed.</p>
+
+          <p>Error handling in the cleanup script follows the same resilient pattern used throughout the toolkit. Each cleanup operation is performed independently, so a failure in one area does not prevent the other areas from being cleaned. For example, if a file lock prevents the removal of a particular cached package, the script logs the issue and continues cleaning other cached packages and performing the remaining cleanup operations. The final summary report indicates which operations succeeded and which encountered issues, giving you a complete picture of what was accomplished.</p>
+
+          <p>All activity is logged to <code>%USERPROFILE%\Logs\ChocolateyCleanup.log</code> with detailed timestamps and descriptions of every action taken. The log includes the list of old package versions removed, the number and total size of cached files deleted, any orphaned dependencies identified, the count of temporary files cleaned up, the disk space before and after measurements, and the results of the post-cleanup health check. This log serves as both a troubleshooting resource and an audit trail of maintenance activities.</p>
+
+          <p>For optimal results, consider running this script on a regular schedule. Monthly cleanup is sufficient for most users, but systems with many frequently-updated packages may benefit from weekly cleanup. The <code>setup-scheduled-tasks.ps1</code> script can configure a Windows Scheduled Task to run the cleanup automatically, ensuring your Chocolatey installation stays lean without requiring manual intervention.</p>
+
+          <h2>Usage</h2>
+
+          <p>Open an elevated PowerShell window and navigate to the script directory.</p>
+
+          <pre><code># Run the cleanup script
+.\cleanup-chocolatey.ps1</code></pre>
+
+          <p>The script will output progress information as it works through each cleanup phase:</p>
+
+          <pre><code># Example output
+[2026-02-20 10:30:15] Starting Chocolatey cleanup...
+[2026-02-20 10:30:15] Disk usage before cleanup: 4.2 GB
+[2026-02-20 10:30:16] Removing old package versions...
+[2026-02-20 10:30:22] Removed 14 old package versions
+[2026-02-20 10:30:22] Clearing package cache...
+[2026-02-20 10:30:25] Cleared 856 MB of cached downloads
+[2026-02-20 10:30:25] Cleaning temporary files...
+[2026-02-20 10:30:26] Removed 12 temporary artifacts
+[2026-02-20 10:30:26] Running health check...
+[2026-02-20 10:30:30] Health check passed
+[2026-02-20 10:30:30] Disk usage after cleanup: 2.8 GB
+[2026-02-20 10:30:30] Total space reclaimed: 1.4 GB</code></pre>
+
+          <h2>What Gets Changed</h2>
+
+          <ul>
+            <li><strong>Old package versions</strong> &mdash; Superseded versions of installed packages are removed from the Chocolatey lib directory.</li>
+            <li><strong>Package cache</strong> &mdash; Downloaded installer files in the Chocolatey cache directory are deleted.</li>
+            <li><strong>Temporary files</strong> &mdash; Leftover temporary directories from interrupted installations are removed.</li>
+            <li><strong>Orphan detection</strong> &mdash; Orphaned dependencies are identified and logged for manual review.</li>
+            <li><strong>Health check</strong> &mdash; A post-cleanup <code>choco doctor</code> health check validates installation integrity.</li>
+            <li><strong>Log file</strong> &mdash; Creates or appends to <code>%USERPROFILE%\Logs\ChocolateyCleanup.log</code>.</li>
+          </ul>
+
+          <h2>Related Scripts</h2>
+
+          <div class="hub-grid">
+            <a href="health-check.html" class="hub-card">
+              <h3>Health Diagnostics</h3>
+              <p>Run comprehensive diagnostics to verify your Chocolatey installation is healthy after cleanup.</p>
+            </a>
+            <a href="auto-update-chocolatey.html" class="hub-card">
+              <h3>Auto-Update Chocolatey</h3>
+              <p>The auto-update script includes its own cleanup step, but this dedicated script goes deeper.</p>
+            </a>
+            <a href="setup-scheduled-tasks.html" class="hub-card">
+              <h3>Scheduled Tasks Setup</h3>
+              <p>Schedule monthly cleanup tasks to keep your system tidy automatically.</p>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Chocolatey<span>Scripts</span></a>
+          <p class="footer-tagline">Chocolatey packages and scripts for automated software management on Windows.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/chocolateyScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#5C9FD8" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>
