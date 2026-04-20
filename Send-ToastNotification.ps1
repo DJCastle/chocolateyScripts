@@ -1,4 +1,6 @@
 #Requires -Version 5.1
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
 
 <#
 .SYNOPSIS
