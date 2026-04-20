@@ -104,8 +104,13 @@ function New-AutoUpdateTask {
             -RunOnlyIfNetworkAvailable `
             -ExecutionTimeLimit (New-TimeSpan -Hours 2)
 
-        # Create principal (run as SYSTEM with highest privileges)
-        $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+        # Run as the current interactive user with elevated (admin) privileges.
+        # SYSTEM was avoided because it cannot decrypt user-scoped DPAPI secrets
+        # (e.g. the SMTP credential stored via Export-Clixml), and because
+        # running SYSTEM with an Invoke-Expression-style installer path is a
+        # higher-blast-radius privilege boundary than needed for package updates.
+        $currentUserId = "$env:USERDOMAIN\$env:USERNAME"
+        $principal = New-ScheduledTaskPrincipal -UserId $currentUserId -LogonType Interactive -RunLevel Highest
 
         # Register task
         Register-ScheduledTask -TaskName $taskName `
@@ -182,8 +187,13 @@ function New-CleanupTask {
             -StartWhenAvailable `
             -ExecutionTimeLimit (New-TimeSpan -Hours 1)
 
-        # Create principal (run as SYSTEM with highest privileges)
-        $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+        # Run as the current interactive user with elevated (admin) privileges.
+        # SYSTEM was avoided because it cannot decrypt user-scoped DPAPI secrets
+        # (e.g. the SMTP credential stored via Export-Clixml), and because
+        # running SYSTEM with an Invoke-Expression-style installer path is a
+        # higher-blast-radius privilege boundary than needed for package updates.
+        $currentUserId = "$env:USERDOMAIN\$env:USERNAME"
+        $principal = New-ScheduledTaskPrincipal -UserId $currentUserId -LogonType Interactive -RunLevel Highest
 
         # Register task
         Register-ScheduledTask -TaskName $taskName `

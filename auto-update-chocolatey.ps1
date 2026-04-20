@@ -131,16 +131,34 @@ function Send-EmailNotification {
         $smtpPort = if ($Config.smtpPort) { $Config.smtpPort } else { 587 }
         $smtpUser = $EmailAddress
 
-        # Load SMTP credentials securely from credential file
-        # To create: Get-Credential | Export-Clixml (Join-Path $ScriptDir "smtp-credential.xml")
+        # Load SMTP credentials from a DPAPI-protected credential file.
+        #
+        # IMPORTANT: Export-Clixml encrypts with DPAPI scoped to the Windows user
+        # who created it, on the machine where it was created. The scheduled task
+        # therefore MUST run as that same user (see setup-scheduled-tasks.ps1,
+        # which now registers the task as the interactive user with RunLevel
+        # Highest). The previous SYSTEM task could not decrypt this file.
+        #
+        # To create the credential file, run as your own user (not elevated):
+        #   Get-Credential | Export-Clixml (Join-Path $PSScriptRoot "smtp-credential.xml")
+        # Use your email as the username and a provider App Password as password.
         $credPath = Join-Path $ScriptDir "smtp-credential.xml"
         if (-not (Test-Path $credPath)) {
-            Write-LogError "SMTP credential file not found. To set up email notifications, run:"
-            Write-Host '  Get-Credential | Export-Clixml "smtp-credential.xml"' -ForegroundColor Cyan
-            Write-Host "  Use your email as the username and an App Password as the password." -ForegroundColor Cyan
+            Write-LogError "SMTP credential file not found at: $credPath"
+            Write-Host "  To enable email notifications, run this as your own user (not elevated):" -ForegroundColor Cyan
+            Write-Host '    Get-Credential | Export-Clixml "smtp-credential.xml"' -ForegroundColor Cyan
+            Write-Host "  Username = your email; password = provider App Password." -ForegroundColor Cyan
             return $false
         }
-        $credential = Import-Clixml $credPath
+        try {
+            $credential = Import-Clixml $credPath
+        } catch {
+            Write-LogError "Failed to decrypt SMTP credential file. This usually means the"
+            Write-LogError "scheduled task is running as a different user than the one that"
+            Write-LogError "created the file (DPAPI is per-user). Re-create it, or re-run"
+            Write-LogError "setup-scheduled-tasks.ps1 to register the task as the current user."
+            return $false
+        }
 
         $smtp = New-Object System.Net.Mail.MailMessage
         $smtp.From = $EmailAddress
