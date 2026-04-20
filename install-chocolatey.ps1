@@ -94,13 +94,29 @@ function Set-ExecutionPolicySafe {
 # Install Chocolatey
 function Install-Chocolatey {
     Write-Status "Installing Chocolatey..."
-    
+
+    $installerUrl = 'https://community.chocolatey.org/install.ps1'
+    $tempScript = Join-Path $env:TEMP ("chocolatey-install-{0}.ps1" -f ([guid]::NewGuid()))
+
     try {
-        # Download and run the Chocolatey installation script
         Set-ExecutionPolicy Bypass -Scope Process -Force
         [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-        
+
+        # Download to disk (not stream-exec) so we can verify the publisher
+        # signature before running. Protects against a compromised CDN.
+        Invoke-WebRequest -Uri $installerUrl -OutFile $tempScript -UseBasicParsing -ErrorAction Stop
+
+        $signature = Get-AuthenticodeSignature -FilePath $tempScript
+        if ($signature.Status -ne 'Valid') {
+            throw "Authenticode signature on $installerUrl is not valid (status: $($signature.Status)). Refusing to run."
+        }
+        if ($signature.SignerCertificate.Subject -notlike '*Chocolatey Software*') {
+            throw "Installer is signed by '$($signature.SignerCertificate.Subject)', not Chocolatey Software, Inc. Refusing to run."
+        }
+        Write-Status "Installer signature verified: $($signature.SignerCertificate.Subject)"
+
+        & $tempScript
+
         if (Test-ChocolateyInstalled) {
             Write-Success "Chocolatey installed successfully"
             return $true
@@ -113,6 +129,11 @@ function Install-Chocolatey {
     catch {
         Write-LogError "Failed to install Chocolatey: $($_.Exception.Message)"
         return $false
+    }
+    finally {
+        if (Test-Path -LiteralPath $tempScript) {
+            Remove-Item -LiteralPath $tempScript -Force -ErrorAction SilentlyContinue
+        }
     }
 }
 
